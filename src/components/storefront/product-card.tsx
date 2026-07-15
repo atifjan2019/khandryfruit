@@ -1,0 +1,67 @@
+import { ArrowUpRight } from "lucide-react";
+import type { AppLocale } from "@/config/site";
+import { formatMoney, unitPricePerKg } from "@/lib/commerce/money";
+import { Link } from "@/i18n/navigation";
+import type { CatalogueProduct } from "@/types/commerce";
+
+export function ProductCard({
+  product,
+  locale,
+}: {
+  product: CatalogueProduct;
+  locale: AppLocale;
+}) {
+  const variant = product.variants[0];
+  if (!variant) return null;
+  return (
+    <article className="product-card">
+      <Link
+        href={`/product/${product.slug}`}
+        locale={locale}
+        className="product-visual"
+        aria-label={product.name}
+      >
+        <span
+          className={`fruit-shape fruit-${product.categorySlug}`}
+          aria-hidden="true"
+        />
+        {product.status === "DRAFT" && (
+          <span className="draft-badge">
+            {locale === "de" ? "Entwurf" : "Draft"}
+          </span>
+        )}
+        <span className="origin-chip">{product.originRegion}</span>
+      </Link>
+      <div className="product-card-body">
+        <p className="eyebrow">{product.category}</p>
+        <h3>
+          <Link href={`/product/${product.slug}`} locale={locale}>
+            {product.name}
+          </Link>
+        </h3>
+        <p>{product.shortDescription}</p>
+        <div className="product-price">
+          <span>
+            {locale === "de" ? "ab" : "from"}{" "}
+            <strong>{formatMoney(variant.priceCents, locale)}</strong>
+          </span>
+          <small>
+            {formatMoney(
+              unitPricePerKg(variant.priceCents, variant.weightGrams),
+              locale,
+            )}
+            /kg
+          </small>
+        </div>
+        <Link
+          className="text-link"
+          href={`/product/${product.slug}`}
+          locale={locale}
+        >
+          {locale === "de" ? "Produkt ansehen" : "View product"}{" "}
+          <ArrowUpRight size={16} />
+        </Link>
+      </div>
+    </article>
+  );
+}

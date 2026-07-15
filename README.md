@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Khan Dry Fruit ecommerce
 
-## Getting Started
+A bilingual German/English Next.js 16 commerce application for Khan Dry Fruit. It uses Prisma 7 with PostgreSQL, Better Auth, Stripe Checkout, server-validated cart calculations, transaction-safe stock reservations, a feature-oriented App Router structure, and provider abstractions for storage, email and shipping.
 
-First, run the development server:
+The application is deliberately not marked production-ready. Legal text, business registration/address, VAT status, LUCID and food-business registration, live product food data, shipping contracts/rates, production imagery and live integration credentials are launch blockers.
+
+## Local storefront
 
 ```bash
+npm install
+npm run db:generate
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` (redirects to `/de`). Without `DATABASE_URL`, the storefront uses clearly labelled development catalogue data; authentication, checkout and admin writes remain disabled.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Supabase setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a Supabase project and copy:
 
-## Learn More
+- transaction-pooler URL to `DATABASE_URL` for Vercel runtime requests;
+- direct/session connection URL to `DIRECT_URL` for Prisma migrations.
 
-To learn more about Next.js, take a look at the following resources:
+Then:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run db:deploy
+npm run db:seed
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Local seed accounts use `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, `SEED_CUSTOMER_EMAIL` and `SEED_CUSTOMER_PASSWORD`. They are development-only. Change/remove them before staging or production.
 
-## Deploy on Vercel
+## Better Auth on Vercel + Supabase
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Better Auth—not Supabase Auth—is the authentication authority. It stores `user`, `session`, `account` and `verification` tables in Supabase PostgreSQL. Set these Vercel variables:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+DATABASE_URL=<Supabase transaction pooler URL>
+DIRECT_URL=<Supabase direct/session URL>
+BETTER_AUTH_SECRET=<openssl rand -base64 32>
+BETTER_AUTH_URL=https://your-domain.example
+NEXT_PUBLIC_SITE_URL=https://your-domain.example
+```
+
+Do not enable a second Supabase Auth login flow. Add each Vercel preview/production URL to Better Auth trusted origins when preview authentication is required; production should use the final HTTPS domain. Cookies become secure automatically in production. Admin access requires a server-side role of `CONTENT_EDITOR`, `ORDER_MANAGER`, `ADMIN` or `SUPER_ADMIN`.
+
+## Stripe test flow
+
+Set `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and `STRIPE_WEBHOOK_SECRET`. Forward events locally:
+
+```bash
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+```
+
+Use Stripe test card `4242 4242 4242 4242`, a future expiry and any CVC. Checkout refuses draft products. A product must pass food-data publication validation and be changed to `ACTIVE` before Stripe checkout. Payment is confirmed only by signed, idempotent webhooks.
+
+## Commands
+
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run test:e2e
+npm run build
+npm run check
+```
+
+See `DEPLOYMENT.md`, `ARCHITECTURE.md`, `SECURITY.md`, `TESTING.md`, `ASSUMPTIONS.md`, `CONTENT-REQUIREMENTS.md`, `LAUNCH-CHECKLIST.md` and `REQUIREMENTS-MATRIX.md`.

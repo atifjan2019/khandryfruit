@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "shop": "Shop",
+    "bestsellers": "Bestseller",
+    "giftBoxes": "Geschenkboxen",
+    "wholesale": "Großhandel",
+    "story": "Unsere Geschichte",
+    "recipes": "Rezepte",
+    "contact": "Kontakt",
+    "search": "Suchen",
+    "account": "Konto",
+    "wishlist": "Wunschliste",
+    "cart": "Warenkorb"
+  },
+  "home": {
+    "eyebrow": "Ausgewählte Spezialitäten · Duisburg",
+    "title": "Premium-Trockenfrüchte aus Afghanistan",
+    "subtitle": "Entdecken Sie ausgewählte Rosinen, Feigen, Aprikosen, Maulbeeren und weitere Spezialitäten, sorgfältig verpackt und deutschlandweit geliefert.",
+    "shopCta": "Jetzt einkaufen",
+    "sourceCta": "Unsere Herkunft entdecken",
+    "categories": "Nach Sorte entdecken",
+    "bestsellers": "Besonders beliebt",
+    "storyTitle": "Vier Regionen. Eine sorgfältige Auswahl.",
+    "storyBody": "Unsere bestätigten Herkunftsbeispiele reichen von Feigen aus Kandahar über Pfirsiche aus Logar und Rosinen aus Kabul bis zu Maulbeeren aus Shamali.",
+    "qualityTitle": "Was bei uns zählt",
+    "newsletterTitle": "Neuigkeiten aus unserer Vorratskammer",
+    "newsletterBody": "Erhalten Sie Produktneuheiten, Rezepte und Geschenkideen. Anmeldung freiwillig, jederzeit abmeldbar."
+  },
+  "common": {
+    "from": "ab",
+    "includingVat": "inkl. MwSt., sofern anwendbar",
+    "addToCart": "In den Warenkorb",
+    "viewProduct": "Produkt ansehen",
+    "developmentExample": "Entwicklungsbeispiel – Produktdaten vor Veröffentlichung prüfen",
+    "securePayment": "Sichere Zahlung über Stripe",
+    "learnMore": "Mehr erfahren"
+  }
+}
