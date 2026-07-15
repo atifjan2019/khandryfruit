@@ -32,12 +32,19 @@ export type WholesaleApplicationMinAggregateOutputType = {
   email: string | null
   phone: string | null
   businessAddress: string | null
+  city: string | null
+  postalCode: string | null
+  countryCode: string | null
   vatId: string | null
   registrationNumber: string | null
   businessType: string | null
   website: string | null
   monthlyOrderVolume: string | null
   message: string | null
+  preferredContactMethod: string | null
+  accuracyConfirmedAt: Date | null
+  internalNotes: string | null
+  reviewedAt: Date | null
   status: $Enums.WholesaleApplicationStatus | null
   agreementAcceptedAt: Date | null
   createdAt: Date | null
@@ -52,12 +59,19 @@ export type WholesaleApplicationMaxAggregateOutputType = {
   email: string | null
   phone: string | null
   businessAddress: string | null
+  city: string | null
+  postalCode: string | null
+  countryCode: string | null
   vatId: string | null
   registrationNumber: string | null
   businessType: string | null
   website: string | null
   monthlyOrderVolume: string | null
   message: string | null
+  preferredContactMethod: string | null
+  accuracyConfirmedAt: Date | null
+  internalNotes: string | null
+  reviewedAt: Date | null
   status: $Enums.WholesaleApplicationStatus | null
   agreementAcceptedAt: Date | null
   createdAt: Date | null
@@ -72,6 +86,9 @@ export type WholesaleApplicationCountAggregateOutputType = {
   email: number
   phone: number
   businessAddress: number
+  city: number
+  postalCode: number
+  countryCode: number
   vatId: number
   registrationNumber: number
   businessType: number
@@ -80,6 +97,10 @@ export type WholesaleApplicationCountAggregateOutputType = {
   productsOfInterest: number
   deliveryCountries: number
   message: number
+  preferredContactMethod: number
+  accuracyConfirmedAt: number
+  internalNotes: number
+  reviewedAt: number
   status: number
   agreementAcceptedAt: number
   createdAt: number
@@ -96,12 +117,19 @@ export type WholesaleApplicationMinAggregateInputType = {
   email?: true
   phone?: true
   businessAddress?: true
+  city?: true
+  postalCode?: true
+  countryCode?: true
   vatId?: true
   registrationNumber?: true
   businessType?: true
   website?: true
   monthlyOrderVolume?: true
   message?: true
+  preferredContactMethod?: true
+  accuracyConfirmedAt?: true
+  internalNotes?: true
+  reviewedAt?: true
   status?: true
   agreementAcceptedAt?: true
   createdAt?: true
@@ -116,12 +144,19 @@ export type WholesaleApplicationMaxAggregateInputType = {
   email?: true
   phone?: true
   businessAddress?: true
+  city?: true
+  postalCode?: true
+  countryCode?: true
   vatId?: true
   registrationNumber?: true
   businessType?: true
   website?: true
   monthlyOrderVolume?: true
   message?: true
+  preferredContactMethod?: true
+  accuracyConfirmedAt?: true
+  internalNotes?: true
+  reviewedAt?: true
   status?: true
   agreementAcceptedAt?: true
   createdAt?: true
@@ -136,6 +171,9 @@ export type WholesaleApplicationCountAggregateInputType = {
   email?: true
   phone?: true
   businessAddress?: true
+  city?: true
+  postalCode?: true
+  countryCode?: true
   vatId?: true
   registrationNumber?: true
   businessType?: true
@@ -144,6 +182,10 @@ export type WholesaleApplicationCountAggregateInputType = {
   productsOfInterest?: true
   deliveryCountries?: true
   message?: true
+  preferredContactMethod?: true
+  accuracyConfirmedAt?: true
+  internalNotes?: true
+  reviewedAt?: true
   status?: true
   agreementAcceptedAt?: true
   createdAt?: true
@@ -231,6 +273,9 @@ export type WholesaleApplicationGroupByOutputType = {
   email: string
   phone: string
   businessAddress: string
+  city: string | null
+  postalCode: string | null
+  countryCode: string
   vatId: string | null
   registrationNumber: string | null
   businessType: string
@@ -239,6 +284,10 @@ export type WholesaleApplicationGroupByOutputType = {
   productsOfInterest: string[]
   deliveryCountries: string[]
   message: string | null
+  preferredContactMethod: string | null
+  accuracyConfirmedAt: Date | null
+  internalNotes: string | null
+  reviewedAt: Date | null
   status: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date
   createdAt: Date
@@ -274,6 +323,9 @@ export type WholesaleApplicationWhereInput = {
   email?: Prisma.StringFilter<"WholesaleApplication"> | string
   phone?: Prisma.StringFilter<"WholesaleApplication"> | string
   businessAddress?: Prisma.StringFilter<"WholesaleApplication"> | string
+  city?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  countryCode?: Prisma.StringFilter<"WholesaleApplication"> | string
   vatId?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
   registrationNumber?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
   businessType?: Prisma.StringFilter<"WholesaleApplication"> | string
@@ -282,6 +334,10 @@ export type WholesaleApplicationWhereInput = {
   productsOfInterest?: Prisma.StringNullableListFilter<"WholesaleApplication">
   deliveryCountries?: Prisma.StringNullableListFilter<"WholesaleApplication">
   message?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  preferredContactMethod?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  accuracyConfirmedAt?: Prisma.DateTimeNullableFilter<"WholesaleApplication"> | Date | string | null
+  internalNotes?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"WholesaleApplication"> | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFilter<"WholesaleApplication"> | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFilter<"WholesaleApplication"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"WholesaleApplication"> | Date | string
@@ -297,6 +353,9 @@ export type WholesaleApplicationOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   businessAddress?: Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
   vatId?: Prisma.SortOrderInput | Prisma.SortOrder
   registrationNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   businessType?: Prisma.SortOrder
@@ -305,6 +364,10 @@ export type WholesaleApplicationOrderByWithRelationInput = {
   productsOfInterest?: Prisma.SortOrder
   deliveryCountries?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  accuracyConfirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  internalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   agreementAcceptedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -323,6 +386,9 @@ export type WholesaleApplicationWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringFilter<"WholesaleApplication"> | string
   phone?: Prisma.StringFilter<"WholesaleApplication"> | string
   businessAddress?: Prisma.StringFilter<"WholesaleApplication"> | string
+  city?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  countryCode?: Prisma.StringFilter<"WholesaleApplication"> | string
   vatId?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
   registrationNumber?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
   businessType?: Prisma.StringFilter<"WholesaleApplication"> | string
@@ -331,6 +397,10 @@ export type WholesaleApplicationWhereUniqueInput = Prisma.AtLeast<{
   productsOfInterest?: Prisma.StringNullableListFilter<"WholesaleApplication">
   deliveryCountries?: Prisma.StringNullableListFilter<"WholesaleApplication">
   message?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  preferredContactMethod?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  accuracyConfirmedAt?: Prisma.DateTimeNullableFilter<"WholesaleApplication"> | Date | string | null
+  internalNotes?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"WholesaleApplication"> | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFilter<"WholesaleApplication"> | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFilter<"WholesaleApplication"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"WholesaleApplication"> | Date | string
@@ -346,6 +416,9 @@ export type WholesaleApplicationOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   businessAddress?: Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  postalCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
   vatId?: Prisma.SortOrderInput | Prisma.SortOrder
   registrationNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   businessType?: Prisma.SortOrder
@@ -354,6 +427,10 @@ export type WholesaleApplicationOrderByWithAggregationInput = {
   productsOfInterest?: Prisma.SortOrder
   deliveryCountries?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  accuracyConfirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  internalNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   agreementAcceptedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -374,6 +451,9 @@ export type WholesaleApplicationScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"WholesaleApplication"> | string
   phone?: Prisma.StringWithAggregatesFilter<"WholesaleApplication"> | string
   businessAddress?: Prisma.StringWithAggregatesFilter<"WholesaleApplication"> | string
+  city?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
+  postalCode?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
+  countryCode?: Prisma.StringWithAggregatesFilter<"WholesaleApplication"> | string
   vatId?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
   registrationNumber?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
   businessType?: Prisma.StringWithAggregatesFilter<"WholesaleApplication"> | string
@@ -382,6 +462,10 @@ export type WholesaleApplicationScalarWhereWithAggregatesInput = {
   productsOfInterest?: Prisma.StringNullableListFilter<"WholesaleApplication">
   deliveryCountries?: Prisma.StringNullableListFilter<"WholesaleApplication">
   message?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
+  preferredContactMethod?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
+  accuracyConfirmedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WholesaleApplication"> | Date | string | null
+  internalNotes?: Prisma.StringNullableWithAggregatesFilter<"WholesaleApplication"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WholesaleApplication"> | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusWithAggregatesFilter<"WholesaleApplication"> | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeWithAggregatesFilter<"WholesaleApplication"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"WholesaleApplication"> | Date | string
@@ -395,6 +479,9 @@ export type WholesaleApplicationCreateInput = {
   email: string
   phone: string
   businessAddress: string
+  city?: string | null
+  postalCode?: string | null
+  countryCode?: string
   vatId?: string | null
   registrationNumber?: string | null
   businessType: string
@@ -403,6 +490,10 @@ export type WholesaleApplicationCreateInput = {
   productsOfInterest?: Prisma.WholesaleApplicationCreateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationCreatedeliveryCountriesInput | string[]
   message?: string | null
+  preferredContactMethod?: string | null
+  accuracyConfirmedAt?: Date | string | null
+  internalNotes?: string | null
+  reviewedAt?: Date | string | null
   status?: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date | string
   createdAt?: Date | string
@@ -418,6 +509,9 @@ export type WholesaleApplicationUncheckedCreateInput = {
   email: string
   phone: string
   businessAddress: string
+  city?: string | null
+  postalCode?: string | null
+  countryCode?: string
   vatId?: string | null
   registrationNumber?: string | null
   businessType: string
@@ -426,6 +520,10 @@ export type WholesaleApplicationUncheckedCreateInput = {
   productsOfInterest?: Prisma.WholesaleApplicationCreateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationCreatedeliveryCountriesInput | string[]
   message?: string | null
+  preferredContactMethod?: string | null
+  accuracyConfirmedAt?: Date | string | null
+  internalNotes?: string | null
+  reviewedAt?: Date | string | null
   status?: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date | string
   createdAt?: Date | string
@@ -439,6 +537,9 @@ export type WholesaleApplicationUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -447,6 +548,10 @@ export type WholesaleApplicationUpdateInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +567,9 @@ export type WholesaleApplicationUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -470,6 +578,10 @@ export type WholesaleApplicationUncheckedUpdateInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -484,6 +596,9 @@ export type WholesaleApplicationCreateManyInput = {
   email: string
   phone: string
   businessAddress: string
+  city?: string | null
+  postalCode?: string | null
+  countryCode?: string
   vatId?: string | null
   registrationNumber?: string | null
   businessType: string
@@ -492,6 +607,10 @@ export type WholesaleApplicationCreateManyInput = {
   productsOfInterest?: Prisma.WholesaleApplicationCreateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationCreatedeliveryCountriesInput | string[]
   message?: string | null
+  preferredContactMethod?: string | null
+  accuracyConfirmedAt?: Date | string | null
+  internalNotes?: string | null
+  reviewedAt?: Date | string | null
   status?: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date | string
   createdAt?: Date | string
@@ -505,6 +624,9 @@ export type WholesaleApplicationUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -513,6 +635,10 @@ export type WholesaleApplicationUpdateManyMutationInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -527,6 +653,9 @@ export type WholesaleApplicationUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -535,6 +664,10 @@ export type WholesaleApplicationUncheckedUpdateManyInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -559,6 +692,9 @@ export type WholesaleApplicationCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   businessAddress?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
   vatId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   businessType?: Prisma.SortOrder
@@ -567,6 +703,10 @@ export type WholesaleApplicationCountOrderByAggregateInput = {
   productsOfInterest?: Prisma.SortOrder
   deliveryCountries?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrder
+  accuracyConfirmedAt?: Prisma.SortOrder
+  internalNotes?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   agreementAcceptedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -581,12 +721,19 @@ export type WholesaleApplicationMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   businessAddress?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
   vatId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   businessType?: Prisma.SortOrder
   website?: Prisma.SortOrder
   monthlyOrderVolume?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrder
+  accuracyConfirmedAt?: Prisma.SortOrder
+  internalNotes?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   agreementAcceptedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -601,12 +748,19 @@ export type WholesaleApplicationMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   businessAddress?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  postalCode?: Prisma.SortOrder
+  countryCode?: Prisma.SortOrder
   vatId?: Prisma.SortOrder
   registrationNumber?: Prisma.SortOrder
   businessType?: Prisma.SortOrder
   website?: Prisma.SortOrder
   monthlyOrderVolume?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrder
+  accuracyConfirmedAt?: Prisma.SortOrder
+  internalNotes?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   agreementAcceptedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -684,6 +838,9 @@ export type WholesaleApplicationCreateWithoutUserInput = {
   email: string
   phone: string
   businessAddress: string
+  city?: string | null
+  postalCode?: string | null
+  countryCode?: string
   vatId?: string | null
   registrationNumber?: string | null
   businessType: string
@@ -692,6 +849,10 @@ export type WholesaleApplicationCreateWithoutUserInput = {
   productsOfInterest?: Prisma.WholesaleApplicationCreateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationCreatedeliveryCountriesInput | string[]
   message?: string | null
+  preferredContactMethod?: string | null
+  accuracyConfirmedAt?: Date | string | null
+  internalNotes?: string | null
+  reviewedAt?: Date | string | null
   status?: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date | string
   createdAt?: Date | string
@@ -705,6 +866,9 @@ export type WholesaleApplicationUncheckedCreateWithoutUserInput = {
   email: string
   phone: string
   businessAddress: string
+  city?: string | null
+  postalCode?: string | null
+  countryCode?: string
   vatId?: string | null
   registrationNumber?: string | null
   businessType: string
@@ -713,6 +877,10 @@ export type WholesaleApplicationUncheckedCreateWithoutUserInput = {
   productsOfInterest?: Prisma.WholesaleApplicationCreateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationCreatedeliveryCountriesInput | string[]
   message?: string | null
+  preferredContactMethod?: string | null
+  accuracyConfirmedAt?: Date | string | null
+  internalNotes?: string | null
+  reviewedAt?: Date | string | null
   status?: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date | string
   createdAt?: Date | string
@@ -756,6 +924,9 @@ export type WholesaleApplicationScalarWhereInput = {
   email?: Prisma.StringFilter<"WholesaleApplication"> | string
   phone?: Prisma.StringFilter<"WholesaleApplication"> | string
   businessAddress?: Prisma.StringFilter<"WholesaleApplication"> | string
+  city?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  postalCode?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  countryCode?: Prisma.StringFilter<"WholesaleApplication"> | string
   vatId?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
   registrationNumber?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
   businessType?: Prisma.StringFilter<"WholesaleApplication"> | string
@@ -764,6 +935,10 @@ export type WholesaleApplicationScalarWhereInput = {
   productsOfInterest?: Prisma.StringNullableListFilter<"WholesaleApplication">
   deliveryCountries?: Prisma.StringNullableListFilter<"WholesaleApplication">
   message?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  preferredContactMethod?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  accuracyConfirmedAt?: Prisma.DateTimeNullableFilter<"WholesaleApplication"> | Date | string | null
+  internalNotes?: Prisma.StringNullableFilter<"WholesaleApplication"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"WholesaleApplication"> | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFilter<"WholesaleApplication"> | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFilter<"WholesaleApplication"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"WholesaleApplication"> | Date | string
@@ -777,6 +952,9 @@ export type WholesaleApplicationCreateManyUserInput = {
   email: string
   phone: string
   businessAddress: string
+  city?: string | null
+  postalCode?: string | null
+  countryCode?: string
   vatId?: string | null
   registrationNumber?: string | null
   businessType: string
@@ -785,6 +963,10 @@ export type WholesaleApplicationCreateManyUserInput = {
   productsOfInterest?: Prisma.WholesaleApplicationCreateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationCreatedeliveryCountriesInput | string[]
   message?: string | null
+  preferredContactMethod?: string | null
+  accuracyConfirmedAt?: Date | string | null
+  internalNotes?: string | null
+  reviewedAt?: Date | string | null
   status?: $Enums.WholesaleApplicationStatus
   agreementAcceptedAt: Date | string
   createdAt?: Date | string
@@ -798,6 +980,9 @@ export type WholesaleApplicationUpdateWithoutUserInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -806,6 +991,10 @@ export type WholesaleApplicationUpdateWithoutUserInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -819,6 +1008,9 @@ export type WholesaleApplicationUncheckedUpdateWithoutUserInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -827,6 +1019,10 @@ export type WholesaleApplicationUncheckedUpdateWithoutUserInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -840,6 +1036,9 @@ export type WholesaleApplicationUncheckedUpdateManyWithoutUserInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   businessAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   vatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -848,6 +1047,10 @@ export type WholesaleApplicationUncheckedUpdateManyWithoutUserInput = {
   productsOfInterest?: Prisma.WholesaleApplicationUpdateproductsOfInterestInput | string[]
   deliveryCountries?: Prisma.WholesaleApplicationUpdatedeliveryCountriesInput | string[]
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accuracyConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumWholesaleApplicationStatusFieldUpdateOperationsInput | $Enums.WholesaleApplicationStatus
   agreementAcceptedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -864,6 +1067,9 @@ export type WholesaleApplicationSelect<ExtArgs extends runtime.Types.Extensions.
   email?: boolean
   phone?: boolean
   businessAddress?: boolean
+  city?: boolean
+  postalCode?: boolean
+  countryCode?: boolean
   vatId?: boolean
   registrationNumber?: boolean
   businessType?: boolean
@@ -872,6 +1078,10 @@ export type WholesaleApplicationSelect<ExtArgs extends runtime.Types.Extensions.
   productsOfInterest?: boolean
   deliveryCountries?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  accuracyConfirmedAt?: boolean
+  internalNotes?: boolean
+  reviewedAt?: boolean
   status?: boolean
   agreementAcceptedAt?: boolean
   createdAt?: boolean
@@ -887,6 +1097,9 @@ export type WholesaleApplicationSelectCreateManyAndReturn<ExtArgs extends runtim
   email?: boolean
   phone?: boolean
   businessAddress?: boolean
+  city?: boolean
+  postalCode?: boolean
+  countryCode?: boolean
   vatId?: boolean
   registrationNumber?: boolean
   businessType?: boolean
@@ -895,6 +1108,10 @@ export type WholesaleApplicationSelectCreateManyAndReturn<ExtArgs extends runtim
   productsOfInterest?: boolean
   deliveryCountries?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  accuracyConfirmedAt?: boolean
+  internalNotes?: boolean
+  reviewedAt?: boolean
   status?: boolean
   agreementAcceptedAt?: boolean
   createdAt?: boolean
@@ -910,6 +1127,9 @@ export type WholesaleApplicationSelectUpdateManyAndReturn<ExtArgs extends runtim
   email?: boolean
   phone?: boolean
   businessAddress?: boolean
+  city?: boolean
+  postalCode?: boolean
+  countryCode?: boolean
   vatId?: boolean
   registrationNumber?: boolean
   businessType?: boolean
@@ -918,6 +1138,10 @@ export type WholesaleApplicationSelectUpdateManyAndReturn<ExtArgs extends runtim
   productsOfInterest?: boolean
   deliveryCountries?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  accuracyConfirmedAt?: boolean
+  internalNotes?: boolean
+  reviewedAt?: boolean
   status?: boolean
   agreementAcceptedAt?: boolean
   createdAt?: boolean
@@ -933,6 +1157,9 @@ export type WholesaleApplicationSelectScalar = {
   email?: boolean
   phone?: boolean
   businessAddress?: boolean
+  city?: boolean
+  postalCode?: boolean
+  countryCode?: boolean
   vatId?: boolean
   registrationNumber?: boolean
   businessType?: boolean
@@ -941,13 +1168,17 @@ export type WholesaleApplicationSelectScalar = {
   productsOfInterest?: boolean
   deliveryCountries?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  accuracyConfirmedAt?: boolean
+  internalNotes?: boolean
+  reviewedAt?: boolean
   status?: boolean
   agreementAcceptedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type WholesaleApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "contactName" | "email" | "phone" | "businessAddress" | "vatId" | "registrationNumber" | "businessType" | "website" | "monthlyOrderVolume" | "productsOfInterest" | "deliveryCountries" | "message" | "status" | "agreementAcceptedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["wholesaleApplication"]>
+export type WholesaleApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "contactName" | "email" | "phone" | "businessAddress" | "city" | "postalCode" | "countryCode" | "vatId" | "registrationNumber" | "businessType" | "website" | "monthlyOrderVolume" | "productsOfInterest" | "deliveryCountries" | "message" | "preferredContactMethod" | "accuracyConfirmedAt" | "internalNotes" | "reviewedAt" | "status" | "agreementAcceptedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["wholesaleApplication"]>
 export type WholesaleApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.WholesaleApplication$userArgs<ExtArgs>
 }
@@ -971,6 +1202,9 @@ export type $WholesaleApplicationPayload<ExtArgs extends runtime.Types.Extension
     email: string
     phone: string
     businessAddress: string
+    city: string | null
+    postalCode: string | null
+    countryCode: string
     vatId: string | null
     registrationNumber: string | null
     businessType: string
@@ -979,6 +1213,10 @@ export type $WholesaleApplicationPayload<ExtArgs extends runtime.Types.Extension
     productsOfInterest: string[]
     deliveryCountries: string[]
     message: string | null
+    preferredContactMethod: string | null
+    accuracyConfirmedAt: Date | null
+    internalNotes: string | null
+    reviewedAt: Date | null
     status: $Enums.WholesaleApplicationStatus
     agreementAcceptedAt: Date
     createdAt: Date
@@ -1414,6 +1652,9 @@ export interface WholesaleApplicationFieldRefs {
   readonly email: Prisma.FieldRef<"WholesaleApplication", 'String'>
   readonly phone: Prisma.FieldRef<"WholesaleApplication", 'String'>
   readonly businessAddress: Prisma.FieldRef<"WholesaleApplication", 'String'>
+  readonly city: Prisma.FieldRef<"WholesaleApplication", 'String'>
+  readonly postalCode: Prisma.FieldRef<"WholesaleApplication", 'String'>
+  readonly countryCode: Prisma.FieldRef<"WholesaleApplication", 'String'>
   readonly vatId: Prisma.FieldRef<"WholesaleApplication", 'String'>
   readonly registrationNumber: Prisma.FieldRef<"WholesaleApplication", 'String'>
   readonly businessType: Prisma.FieldRef<"WholesaleApplication", 'String'>
@@ -1422,6 +1663,10 @@ export interface WholesaleApplicationFieldRefs {
   readonly productsOfInterest: Prisma.FieldRef<"WholesaleApplication", 'String[]'>
   readonly deliveryCountries: Prisma.FieldRef<"WholesaleApplication", 'String[]'>
   readonly message: Prisma.FieldRef<"WholesaleApplication", 'String'>
+  readonly preferredContactMethod: Prisma.FieldRef<"WholesaleApplication", 'String'>
+  readonly accuracyConfirmedAt: Prisma.FieldRef<"WholesaleApplication", 'DateTime'>
+  readonly internalNotes: Prisma.FieldRef<"WholesaleApplication", 'String'>
+  readonly reviewedAt: Prisma.FieldRef<"WholesaleApplication", 'DateTime'>
   readonly status: Prisma.FieldRef<"WholesaleApplication", 'WholesaleApplicationStatus'>
   readonly agreementAcceptedAt: Prisma.FieldRef<"WholesaleApplication", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"WholesaleApplication", 'DateTime'>

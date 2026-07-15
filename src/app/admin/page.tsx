@@ -1,41 +1,29 @@
+import Link from "next/link";
+import { AlertTriangle, ArrowUpRight, Boxes, CircleDollarSign, ClipboardList, PackageCheck, Star, Store, Users } from "lucide-react";
 import { db } from "@/lib/db/client";
+import { formatMoney } from "@/lib/commerce/money";
+import { countBlockedProducts } from "@/server/services/product-readiness";
+
 export default async function AdminPage() {
-  const [products, orders, lowStock, applications] = await Promise.all([
-    db.product.count(),
-    db.order.count(),
-    db.inventory.count({ where: { onHand: { lte: 5 } } }),
-    db.wholesaleApplication.count({ where: { status: "SUBMITTED" } }),
+  await import("@/server/policies/authorization").then(({ requireAdmin }) => requireAdmin("dashboard"));
+  const [paidTotals, paidOrders, pendingOrders, customers, applications, inventory, drafts, pendingReviews, recentOrders, recentApplications, adjustments, audits, bestsellers, blocked] = await Promise.all([
+    db.order.aggregate({ where: { paymentStatus: "PAID" }, _sum: { totalCents: true }, _avg: { totalCents: true } }),
+    db.order.count({ where: { paymentStatus: "PAID" } }), db.order.count({ where: { status: { in: ["PENDING_PAYMENT", "PAYMENT_FAILED"] } } }), db.user.count({ where: { role: { in: ["CUSTOMER", "WHOLESALE_CUSTOMER"] } } }), db.wholesaleApplication.count({ where: { status: { in: ["SUBMITTED", "UNDER_REVIEW", "MORE_INFORMATION_REQUIRED"] } } }), db.inventory.findMany({ include: { variant: { include: { product: { include: { translations: { where: { locale: "de" } } } } } } } }), db.product.count({ where: { status: "DRAFT", deletedAt: null } }), db.review.count({ where: { status: "PENDING" } }),
+    db.order.findMany({ take: 6, orderBy: { createdAt: "desc" }, include: { user: true } }), db.wholesaleApplication.findMany({ take: 5, orderBy: { createdAt: "desc" } }), db.inventoryAdjustment.findMany({ take: 5, orderBy: { createdAt: "desc" }, include: { inventory: { include: { variant: { include: { product: { include: { translations: { where: { locale: "de" } } } } } } } } } }), db.auditLog.findMany({ take: 6, orderBy: { createdAt: "desc" }, include: { actor: true } }), db.orderItem.groupBy({ by: ["productId", "productName"], _sum: { quantity: true, lineTotalCents: true }, orderBy: { _sum: { quantity: "desc" } }, take: 5 }), countBlockedProducts()
   ]);
-  return (
-    <div className="admin-page">
-      <header>
-        <p className="eyebrow">Overview</p>
-        <h1>Store dashboard</h1>
-        <p>Operational data from the connected Supabase database.</p>
-      </header>
-      <div className="metric-grid">
-        {[
-          ["Products", products],
-          ["Orders", orders],
-          ["Low stock", lowStock],
-          ["Trade applications", applications],
-        ].map(([label, value]) => (
-          <section key={label}>
-            <span>{label}</span>
-            <strong>{value}</strong>
-          </section>
-        ))}
-      </div>
-      <section className="admin-panel">
-        <h2>Launch readiness</h2>
-        <ul>
-          <li className="blocked">Business address required</li>
-          <li className="blocked">VAT mode requires confirmation</li>
-          <li className="blocked">Legal documents require approval</li>
-          <li className="blocked">Shipping rates require confirmation</li>
-          <li className="blocked">Published product food data incomplete</li>
-        </ul>
-      </section>
-    </div>
-  );
+  const lowStock = inventory.filter((item) => item.onHand - item.reserved <= item.lowStockThreshold);
+  const metrics = [
+    ["Revenue", formatMoney(paidTotals._sum.totalCents ?? 0, "en"), CircleDollarSign], ["Paid orders", paidOrders, PackageCheck], ["Pending orders", pendingOrders, ClipboardList], ["Average order", formatMoney(Math.round(paidTotals._avg.totalCents ?? 0), "en"), CircleDollarSign], ["Customers", customers, Users], ["Wholesale applications", applications, Store], ["Low-stock variants", lowStock.length, AlertTriangle], ["Draft products", drafts, Boxes], ["Publication blocked", blocked, AlertTriangle], ["Pending reviews", pendingReviews, Star]
+  ] as const;
+  return <div className="admin-page-v2"><div className="admin-page-heading"><div><p className="eyebrow">Store overview</p><h1>Dashboard</h1><p>Live operational data from the connected database. No estimated analytics are shown.</p></div><Link className="button" href="/admin/products/new">Add product</Link></div>
+    <div className="admin-metric-grid">{metrics.map(([label, value, Icon]) => <section key={label}><span className="metric-icon"><Icon size={19} /></span><small>{label}</small><strong>{value}</strong></section>)}</div>
+    <div className="admin-dashboard-grid"><AdminTable title="Recent orders" href="/admin/orders" empty="No orders have been placed yet.">{recentOrders.map((order) => <Link className="admin-list-row" href={`/admin/orders/${order.id}`} key={order.id}><span><strong>{order.number}</strong><small>{order.user?.name ?? order.email}</small></span><span><small>{order.status.replaceAll("_", " ")}</small><strong>{formatMoney(order.totalCents, "en")}</strong></span></Link>)}</AdminTable>
+    <AdminTable title="Bestselling products" href="/admin/products" empty="Sales data will appear after paid orders.">{bestsellers.map((item) => <div className="admin-list-row" key={item.productId}><span><strong>{item.productName}</strong><small>{item._sum.quantity ?? 0} units sold</small></span><strong>{formatMoney(item._sum.lineTotalCents ?? 0, "en")}</strong></div>)}</AdminTable>
+    <AdminTable title="Low-stock products" href="/admin/inventory" empty="No variants are at or below their threshold.">{lowStock.slice(0, 5).map((item) => <div className="admin-list-row" key={item.id}><span><strong>{item.variant.product.translations[0]?.name ?? item.variant.sku}</strong><small>{item.variant.sku}</small></span><strong className="text-danger">{item.onHand - item.reserved} available</strong></div>)}</AdminTable>
+    <AdminTable title="Wholesale applications" href="/admin/wholesale" empty="No wholesale applications yet.">{recentApplications.map((item) => <div className="admin-list-row" key={item.id}><span><strong>{item.companyName}</strong><small>{item.contactName}</small></span><span className="admin-status">{item.status.replaceAll("_", " ")}</span></div>)}</AdminTable>
+    <AdminTable title="Inventory activity" href="/admin/inventory" empty="No inventory adjustments yet.">{adjustments.map((item) => <div className="admin-list-row" key={item.id}><span><strong>{item.inventory.variant.product.translations[0]?.name ?? item.inventory.variant.sku}</strong><small>{item.reason}</small></span><strong>{item.quantity > 0 ? "+" : ""}{item.quantity}</strong></div>)}</AdminTable>
+    <AdminTable title="Recent audit activity" href="/admin/audit-logs" empty="No sensitive admin actions recorded yet.">{audits.map((item) => <div className="admin-list-row" key={item.id}><span><strong>{item.action.replaceAll("_", " ")}</strong><small>{item.actor?.name ?? "System"} · {item.entityType}</small></span><time>{item.createdAt.toLocaleDateString("en-DE")}</time></div>)}</AdminTable></div>
+  </div>;
 }
+
+function AdminTable({ title, href, empty, children }: { title: string; href: string; empty: string; children: React.ReactNode }) { const hasChildren = Array.isArray(children) ? children.length > 0 : Boolean(children); return <section className="admin-card"><header><h2>{title}</h2><Link href={href}>View all <ArrowUpRight size={14} /></Link></header><div>{hasChildren ? children : <p className="admin-empty">{empty}</p>}</div></section>; }

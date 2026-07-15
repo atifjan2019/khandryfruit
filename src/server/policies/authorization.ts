@@ -1,8 +1,10 @@
 import "server-only";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { forbidden, redirect, unauthorized } from "next/navigation";
 
+import type { AdminArea } from "@/config/admin";
+import { canAccessAdmin } from "@/config/admin";
 import { auth } from "@/lib/auth/auth";
 
 const ADMIN_ROLES = new Set([
@@ -22,10 +24,10 @@ export async function requireUser(locale = "de") {
   return session;
 }
 
-export async function requireAdmin() {
+export async function requireAdmin(area: AdminArea = "dashboard") {
   const session = await getSession();
-  if (!session || !ADMIN_ROLES.has(String(session.user.role)))
-    redirect("/de/sign-in");
+  if (!session) unauthorized();
+  if (!canAccessAdmin(String(session.user.role), area)) forbidden();
   return session;
 }
 

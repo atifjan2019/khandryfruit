@@ -100,6 +100,11 @@ export const ModelName = {
   GiftBox: 'GiftBox',
   GiftBoxItem: 'GiftBoxItem',
   GiftMessage: 'GiftMessage',
+  GiftPackagingOption: 'GiftPackagingOption',
+  GiftBoxConfiguration: 'GiftBoxConfiguration',
+  GiftBoxConfigurationItem: 'GiftBoxConfigurationItem',
+  CartGiftBoxItem: 'CartGiftBoxItem',
+  OrderGiftBoxItem: 'OrderGiftBoxItem',
   WholesaleApplication: 'WholesaleApplication',
   WholesaleAccount: 'WholesaleAccount',
   PriceList: 'PriceList',
@@ -117,6 +122,7 @@ export const ModelName = {
   ContactEnquiry: 'ContactEnquiry',
   SiteSetting: 'SiteSetting',
   FeatureFlag: 'FeatureFlag',
+  ProductSearchAlias: 'ProductSearchAlias',
   Redirect: 'Redirect',
   AuditLog: 'AuditLog',
   JobRun: 'JobRun'
@@ -342,6 +348,7 @@ export const ProductVariantScalarFieldEnum = {
   barcode: 'barcode',
   stripePriceId: 'stripePriceId',
   active: 'active',
+  sortOrder: 'sortOrder',
   maxOrderQuantity: 'maxOrderQuantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -501,6 +508,7 @@ export const InventoryAdjustmentScalarFieldEnum = {
   type: 'type',
   quantity: 'quantity',
   reason: 'reason',
+  internalNote: 'internalNote',
   reference: 'reference',
   actorId: 'actorId',
   createdAt: 'createdAt'
@@ -825,8 +833,16 @@ export const GiftBoxScalarFieldEnum = {
   internalName: 'internalName',
   nameDe: 'nameDe',
   nameEn: 'nameEn',
+  slugDe: 'slugDe',
+  slugEn: 'slugEn',
   descriptionDe: 'descriptionDe',
   descriptionEn: 'descriptionEn',
+  seoTitleDe: 'seoTitleDe',
+  seoTitleEn: 'seoTitleEn',
+  metaDescriptionDe: 'metaDescriptionDe',
+  metaDescriptionEn: 'metaDescriptionEn',
+  imageUrl: 'imageUrl',
+  sizeName: 'sizeName',
   fixed: 'fixed',
   active: 'active',
   basePriceCents: 'basePriceCents',
@@ -864,6 +880,88 @@ export const GiftMessageScalarFieldEnum = {
 export type GiftMessageScalarFieldEnum = (typeof GiftMessageScalarFieldEnum)[keyof typeof GiftMessageScalarFieldEnum]
 
 
+export const GiftPackagingOptionScalarFieldEnum = {
+  id: 'id',
+  nameDe: 'nameDe',
+  nameEn: 'nameEn',
+  descriptionDe: 'descriptionDe',
+  descriptionEn: 'descriptionEn',
+  priceCents: 'priceCents',
+  active: 'active',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GiftPackagingOptionScalarFieldEnum = (typeof GiftPackagingOptionScalarFieldEnum)[keyof typeof GiftPackagingOptionScalarFieldEnum]
+
+
+export const GiftBoxConfigurationScalarFieldEnum = {
+  id: 'id',
+  giftBoxId: 'giftBoxId',
+  userId: 'userId',
+  guestToken: 'guestToken',
+  sizeName: 'sizeName',
+  capacityUnits: 'capacityUnits',
+  packagingOptionId: 'packagingOptionId',
+  giftMessage: 'giftMessage',
+  occasion: 'occasion',
+  itemsTotalCents: 'itemsTotalCents',
+  boxChargeCents: 'boxChargeCents',
+  packagingCents: 'packagingCents',
+  totalCents: 'totalCents',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GiftBoxConfigurationScalarFieldEnum = (typeof GiftBoxConfigurationScalarFieldEnum)[keyof typeof GiftBoxConfigurationScalarFieldEnum]
+
+
+export const GiftBoxConfigurationItemScalarFieldEnum = {
+  id: 'id',
+  configurationId: 'configurationId',
+  productId: 'productId',
+  variantId: 'variantId',
+  quantity: 'quantity',
+  capacityUnits: 'capacityUnits',
+  unitPriceCents: 'unitPriceCents'
+} as const
+
+export type GiftBoxConfigurationItemScalarFieldEnum = (typeof GiftBoxConfigurationItemScalarFieldEnum)[keyof typeof GiftBoxConfigurationItemScalarFieldEnum]
+
+
+export const CartGiftBoxItemScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  configurationId: 'configurationId',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartGiftBoxItemScalarFieldEnum = (typeof CartGiftBoxItemScalarFieldEnum)[keyof typeof CartGiftBoxItemScalarFieldEnum]
+
+
+export const OrderGiftBoxItemScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  configurationId: 'configurationId',
+  giftBoxName: 'giftBoxName',
+  sizeName: 'sizeName',
+  packagingName: 'packagingName',
+  giftMessage: 'giftMessage',
+  occasion: 'occasion',
+  quantity: 'quantity',
+  unitPriceCents: 'unitPriceCents',
+  totalCents: 'totalCents',
+  snapshot: 'snapshot'
+} as const
+
+export type OrderGiftBoxItemScalarFieldEnum = (typeof OrderGiftBoxItemScalarFieldEnum)[keyof typeof OrderGiftBoxItemScalarFieldEnum]
+
+
 export const WholesaleApplicationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -872,6 +970,9 @@ export const WholesaleApplicationScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   businessAddress: 'businessAddress',
+  city: 'city',
+  postalCode: 'postalCode',
+  countryCode: 'countryCode',
   vatId: 'vatId',
   registrationNumber: 'registrationNumber',
   businessType: 'businessType',
@@ -880,6 +981,10 @@ export const WholesaleApplicationScalarFieldEnum = {
   productsOfInterest: 'productsOfInterest',
   deliveryCountries: 'deliveryCountries',
   message: 'message',
+  preferredContactMethod: 'preferredContactMethod',
+  accuracyConfirmedAt: 'accuracyConfirmedAt',
+  internalNotes: 'internalNotes',
+  reviewedAt: 'reviewedAt',
   status: 'status',
   agreementAcceptedAt: 'agreementAcceptedAt',
   createdAt: 'createdAt',
@@ -1091,11 +1196,15 @@ export const ContactEnquiryScalarFieldEnum = {
   phone: 'phone',
   orderNumber: 'orderNumber',
   type: 'type',
+  subject: 'subject',
   message: 'message',
+  preferredContactMethod: 'preferredContactMethod',
+  status: 'status',
   locale: 'locale',
   consentAt: 'consentAt',
   resolvedAt: 'resolvedAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ContactEnquiryScalarFieldEnum = (typeof ContactEnquiryScalarFieldEnum)[keyof typeof ContactEnquiryScalarFieldEnum]
@@ -1126,6 +1235,17 @@ export const FeatureFlagScalarFieldEnum = {
 } as const
 
 export type FeatureFlagScalarFieldEnum = (typeof FeatureFlagScalarFieldEnum)[keyof typeof FeatureFlagScalarFieldEnum]
+
+
+export const ProductSearchAliasScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  locale: 'locale',
+  alias: 'alias',
+  createdAt: 'createdAt'
+} as const
+
+export type ProductSearchAliasScalarFieldEnum = (typeof ProductSearchAliasScalarFieldEnum)[keyof typeof ProductSearchAliasScalarFieldEnum]
 
 
 export const RedirectScalarFieldEnum = {

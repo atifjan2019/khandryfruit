@@ -31,11 +31,15 @@ export type ContactEnquiryMinAggregateOutputType = {
   phone: string | null
   orderNumber: string | null
   type: string | null
+  subject: string | null
   message: string | null
+  preferredContactMethod: string | null
+  status: string | null
   locale: $Enums.Locale | null
   consentAt: Date | null
   resolvedAt: Date | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ContactEnquiryMaxAggregateOutputType = {
@@ -45,11 +49,15 @@ export type ContactEnquiryMaxAggregateOutputType = {
   phone: string | null
   orderNumber: string | null
   type: string | null
+  subject: string | null
   message: string | null
+  preferredContactMethod: string | null
+  status: string | null
   locale: $Enums.Locale | null
   consentAt: Date | null
   resolvedAt: Date | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ContactEnquiryCountAggregateOutputType = {
@@ -59,11 +67,15 @@ export type ContactEnquiryCountAggregateOutputType = {
   phone: number
   orderNumber: number
   type: number
+  subject: number
   message: number
+  preferredContactMethod: number
+  status: number
   locale: number
   consentAt: number
   resolvedAt: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -75,11 +87,15 @@ export type ContactEnquiryMinAggregateInputType = {
   phone?: true
   orderNumber?: true
   type?: true
+  subject?: true
   message?: true
+  preferredContactMethod?: true
+  status?: true
   locale?: true
   consentAt?: true
   resolvedAt?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type ContactEnquiryMaxAggregateInputType = {
@@ -89,11 +105,15 @@ export type ContactEnquiryMaxAggregateInputType = {
   phone?: true
   orderNumber?: true
   type?: true
+  subject?: true
   message?: true
+  preferredContactMethod?: true
+  status?: true
   locale?: true
   consentAt?: true
   resolvedAt?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type ContactEnquiryCountAggregateInputType = {
@@ -103,11 +123,15 @@ export type ContactEnquiryCountAggregateInputType = {
   phone?: true
   orderNumber?: true
   type?: true
+  subject?: true
   message?: true
+  preferredContactMethod?: true
+  status?: true
   locale?: true
   consentAt?: true
   resolvedAt?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -190,11 +214,15 @@ export type ContactEnquiryGroupByOutputType = {
   phone: string | null
   orderNumber: string | null
   type: string
+  subject: string | null
   message: string
+  preferredContactMethod: string | null
+  status: string
   locale: $Enums.Locale
   consentAt: Date
   resolvedAt: Date | null
   createdAt: Date
+  updatedAt: Date
   _count: ContactEnquiryCountAggregateOutputType | null
   _min: ContactEnquiryMinAggregateOutputType | null
   _max: ContactEnquiryMaxAggregateOutputType | null
@@ -225,11 +253,15 @@ export type ContactEnquiryWhereInput = {
   phone?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
   orderNumber?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
   type?: Prisma.StringFilter<"ContactEnquiry"> | string
+  subject?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
   message?: Prisma.StringFilter<"ContactEnquiry"> | string
+  preferredContactMethod?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
+  status?: Prisma.StringFilter<"ContactEnquiry"> | string
   locale?: Prisma.EnumLocaleFilter<"ContactEnquiry"> | $Enums.Locale
   consentAt?: Prisma.DateTimeFilter<"ContactEnquiry"> | Date | string
   resolvedAt?: Prisma.DateTimeNullableFilter<"ContactEnquiry"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ContactEnquiry"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ContactEnquiry"> | Date | string
 }
 
 export type ContactEnquiryOrderByWithRelationInput = {
@@ -239,11 +271,15 @@ export type ContactEnquiryOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   orderNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
+  subject?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   consentAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ContactEnquiryWhereUniqueInput = Prisma.AtLeast<{
@@ -256,11 +292,15 @@ export type ContactEnquiryWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
   orderNumber?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
   type?: Prisma.StringFilter<"ContactEnquiry"> | string
+  subject?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
   message?: Prisma.StringFilter<"ContactEnquiry"> | string
+  preferredContactMethod?: Prisma.StringNullableFilter<"ContactEnquiry"> | string | null
+  status?: Prisma.StringFilter<"ContactEnquiry"> | string
   locale?: Prisma.EnumLocaleFilter<"ContactEnquiry"> | $Enums.Locale
   consentAt?: Prisma.DateTimeFilter<"ContactEnquiry"> | Date | string
   resolvedAt?: Prisma.DateTimeNullableFilter<"ContactEnquiry"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ContactEnquiry"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ContactEnquiry"> | Date | string
 }, "id">
 
 export type ContactEnquiryOrderByWithAggregationInput = {
@@ -270,11 +310,15 @@ export type ContactEnquiryOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   orderNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
+  subject?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   consentAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ContactEnquiryCountOrderByAggregateInput
   _max?: Prisma.ContactEnquiryMaxOrderByAggregateInput
   _min?: Prisma.ContactEnquiryMinOrderByAggregateInput
@@ -290,11 +334,15 @@ export type ContactEnquiryScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"ContactEnquiry"> | string | null
   orderNumber?: Prisma.StringNullableWithAggregatesFilter<"ContactEnquiry"> | string | null
   type?: Prisma.StringWithAggregatesFilter<"ContactEnquiry"> | string
+  subject?: Prisma.StringNullableWithAggregatesFilter<"ContactEnquiry"> | string | null
   message?: Prisma.StringWithAggregatesFilter<"ContactEnquiry"> | string
+  preferredContactMethod?: Prisma.StringNullableWithAggregatesFilter<"ContactEnquiry"> | string | null
+  status?: Prisma.StringWithAggregatesFilter<"ContactEnquiry"> | string
   locale?: Prisma.EnumLocaleWithAggregatesFilter<"ContactEnquiry"> | $Enums.Locale
   consentAt?: Prisma.DateTimeWithAggregatesFilter<"ContactEnquiry"> | Date | string
   resolvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ContactEnquiry"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ContactEnquiry"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ContactEnquiry"> | Date | string
 }
 
 export type ContactEnquiryCreateInput = {
@@ -304,11 +352,15 @@ export type ContactEnquiryCreateInput = {
   phone?: string | null
   orderNumber?: string | null
   type: string
+  subject?: string | null
   message: string
+  preferredContactMethod?: string | null
+  status?: string
   locale: $Enums.Locale
   consentAt: Date | string
   resolvedAt?: Date | string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContactEnquiryUncheckedCreateInput = {
@@ -318,11 +370,15 @@ export type ContactEnquiryUncheckedCreateInput = {
   phone?: string | null
   orderNumber?: string | null
   type: string
+  subject?: string | null
   message: string
+  preferredContactMethod?: string | null
+  status?: string
   locale: $Enums.Locale
   consentAt: Date | string
   resolvedAt?: Date | string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContactEnquiryUpdateInput = {
@@ -332,11 +388,15 @@ export type ContactEnquiryUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
   consentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContactEnquiryUncheckedUpdateInput = {
@@ -346,11 +406,15 @@ export type ContactEnquiryUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
   consentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContactEnquiryCreateManyInput = {
@@ -360,11 +424,15 @@ export type ContactEnquiryCreateManyInput = {
   phone?: string | null
   orderNumber?: string | null
   type: string
+  subject?: string | null
   message: string
+  preferredContactMethod?: string | null
+  status?: string
   locale: $Enums.Locale
   consentAt: Date | string
   resolvedAt?: Date | string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContactEnquiryUpdateManyMutationInput = {
@@ -374,11 +442,15 @@ export type ContactEnquiryUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
   consentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContactEnquiryUncheckedUpdateManyInput = {
@@ -388,11 +460,15 @@ export type ContactEnquiryUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredContactMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
   consentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContactEnquiryCountOrderByAggregateInput = {
@@ -402,11 +478,15 @@ export type ContactEnquiryCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   consentAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ContactEnquiryMaxOrderByAggregateInput = {
@@ -416,11 +496,15 @@ export type ContactEnquiryMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   consentAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ContactEnquiryMinOrderByAggregateInput = {
@@ -430,11 +514,15 @@ export type ContactEnquiryMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   orderNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  subject?: Prisma.SortOrder
   message?: Prisma.SortOrder
+  preferredContactMethod?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   consentAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 
@@ -446,11 +534,15 @@ export type ContactEnquirySelect<ExtArgs extends runtime.Types.Extensions.Intern
   phone?: boolean
   orderNumber?: boolean
   type?: boolean
+  subject?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  status?: boolean
   locale?: boolean
   consentAt?: boolean
   resolvedAt?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["contactEnquiry"]>
 
 export type ContactEnquirySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -460,11 +552,15 @@ export type ContactEnquirySelectCreateManyAndReturn<ExtArgs extends runtime.Type
   phone?: boolean
   orderNumber?: boolean
   type?: boolean
+  subject?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  status?: boolean
   locale?: boolean
   consentAt?: boolean
   resolvedAt?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["contactEnquiry"]>
 
 export type ContactEnquirySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -474,11 +570,15 @@ export type ContactEnquirySelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   phone?: boolean
   orderNumber?: boolean
   type?: boolean
+  subject?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  status?: boolean
   locale?: boolean
   consentAt?: boolean
   resolvedAt?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["contactEnquiry"]>
 
 export type ContactEnquirySelectScalar = {
@@ -488,14 +588,18 @@ export type ContactEnquirySelectScalar = {
   phone?: boolean
   orderNumber?: boolean
   type?: boolean
+  subject?: boolean
   message?: boolean
+  preferredContactMethod?: boolean
+  status?: boolean
   locale?: boolean
   consentAt?: boolean
   resolvedAt?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ContactEnquiryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "orderNumber" | "type" | "message" | "locale" | "consentAt" | "resolvedAt" | "createdAt", ExtArgs["result"]["contactEnquiry"]>
+export type ContactEnquiryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "orderNumber" | "type" | "subject" | "message" | "preferredContactMethod" | "status" | "locale" | "consentAt" | "resolvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["contactEnquiry"]>
 
 export type $ContactEnquiryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContactEnquiry"
@@ -507,11 +611,15 @@ export type $ContactEnquiryPayload<ExtArgs extends runtime.Types.Extensions.Inte
     phone: string | null
     orderNumber: string | null
     type: string
+    subject: string | null
     message: string
+    preferredContactMethod: string | null
+    status: string
     locale: $Enums.Locale
     consentAt: Date
     resolvedAt: Date | null
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["contactEnquiry"]>
   composites: {}
 }
@@ -941,11 +1049,15 @@ export interface ContactEnquiryFieldRefs {
   readonly phone: Prisma.FieldRef<"ContactEnquiry", 'String'>
   readonly orderNumber: Prisma.FieldRef<"ContactEnquiry", 'String'>
   readonly type: Prisma.FieldRef<"ContactEnquiry", 'String'>
+  readonly subject: Prisma.FieldRef<"ContactEnquiry", 'String'>
   readonly message: Prisma.FieldRef<"ContactEnquiry", 'String'>
+  readonly preferredContactMethod: Prisma.FieldRef<"ContactEnquiry", 'String'>
+  readonly status: Prisma.FieldRef<"ContactEnquiry", 'String'>
   readonly locale: Prisma.FieldRef<"ContactEnquiry", 'Locale'>
   readonly consentAt: Prisma.FieldRef<"ContactEnquiry", 'DateTime'>
   readonly resolvedAt: Prisma.FieldRef<"ContactEnquiry", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"ContactEnquiry", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"ContactEnquiry", 'DateTime'>
 }
     
 

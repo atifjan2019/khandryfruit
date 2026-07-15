@@ -265,6 +265,7 @@ export type UserWhereInput = {
   reviews?: Prisma.ReviewListRelationFilter
   wholesaleAccount?: Prisma.XOR<Prisma.WholesaleAccountNullableScalarRelationFilter, Prisma.WholesaleAccountWhereInput> | null
   wholesaleApplications?: Prisma.WholesaleApplicationListRelationFilter
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   statusChanges?: Prisma.OrderStatusHistoryListRelationFilter
 }
@@ -295,6 +296,7 @@ export type UserOrderByWithRelationInput = {
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   wholesaleAccount?: Prisma.WholesaleAccountOrderByWithRelationInput
   wholesaleApplications?: Prisma.WholesaleApplicationOrderByRelationAggregateInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   statusChanges?: Prisma.OrderStatusHistoryOrderByRelationAggregateInput
 }
@@ -328,6 +330,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   reviews?: Prisma.ReviewListRelationFilter
   wholesaleAccount?: Prisma.XOR<Prisma.WholesaleAccountNullableScalarRelationFilter, Prisma.WholesaleAccountWhereInput> | null
   wholesaleApplications?: Prisma.WholesaleApplicationListRelationFilter
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   statusChanges?: Prisma.OrderStatusHistoryListRelationFilter
 }, "id" | "email">
@@ -398,6 +401,7 @@ export type UserCreateInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -428,6 +432,7 @@ export type UserUncheckedCreateInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -458,6 +463,7 @@ export type UserUpdateInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -488,6 +494,7 @@ export type UserUncheckedUpdateInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -778,6 +785,22 @@ export type UserUpdateOneWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewsInput, Prisma.UserUpdateWithoutReviewsInput>, Prisma.UserUncheckedUpdateWithoutReviewsInput>
 }
 
+export type UserCreateNestedOneWithoutGiftBoxConfigurationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGiftBoxConfigurationsInput, Prisma.UserUncheckedCreateWithoutGiftBoxConfigurationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGiftBoxConfigurationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutGiftBoxConfigurationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGiftBoxConfigurationsInput, Prisma.UserUncheckedCreateWithoutGiftBoxConfigurationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGiftBoxConfigurationsInput
+  upsert?: Prisma.UserUpsertWithoutGiftBoxConfigurationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGiftBoxConfigurationsInput, Prisma.UserUpdateWithoutGiftBoxConfigurationsInput>, Prisma.UserUncheckedUpdateWithoutGiftBoxConfigurationsInput>
+}
+
 export type UserCreateNestedOneWithoutWholesaleApplicationsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutWholesaleApplicationsInput, Prisma.UserUncheckedCreateWithoutWholesaleApplicationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutWholesaleApplicationsInput
@@ -849,6 +872,7 @@ export type UserCreateWithoutSessionsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -878,6 +902,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -923,6 +948,7 @@ export type UserUpdateWithoutSessionsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -952,6 +978,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -981,6 +1008,7 @@ export type UserCreateWithoutAccountsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1010,6 +1038,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1055,6 +1084,7 @@ export type UserUpdateWithoutAccountsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -1084,6 +1114,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -1113,6 +1144,7 @@ export type UserCreateWithoutProfileInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1142,6 +1174,7 @@ export type UserUncheckedCreateWithoutProfileInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1187,6 +1220,7 @@ export type UserUpdateWithoutProfileInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -1216,6 +1250,7 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -1245,6 +1280,7 @@ export type UserCreateWithoutAddressesInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1274,6 +1310,7 @@ export type UserUncheckedCreateWithoutAddressesInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1319,6 +1356,7 @@ export type UserUpdateWithoutAddressesInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -1348,6 +1386,7 @@ export type UserUncheckedUpdateWithoutAddressesInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -1377,6 +1416,7 @@ export type UserCreateWithoutCartsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1406,6 +1446,7 @@ export type UserUncheckedCreateWithoutCartsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1451,6 +1492,7 @@ export type UserUpdateWithoutCartsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -1480,6 +1522,7 @@ export type UserUncheckedUpdateWithoutCartsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -1509,6 +1552,7 @@ export type UserCreateWithoutWishlistsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1538,6 +1582,7 @@ export type UserUncheckedCreateWithoutWishlistsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1583,6 +1628,7 @@ export type UserUpdateWithoutWishlistsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -1612,6 +1658,7 @@ export type UserUncheckedUpdateWithoutWishlistsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -1641,6 +1688,7 @@ export type UserCreateWithoutOrdersInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1670,6 +1718,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1715,6 +1764,7 @@ export type UserUpdateWithoutOrdersInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -1744,6 +1794,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -1774,6 +1825,7 @@ export type UserCreateWithoutStatusChangesInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
 }
 
@@ -1803,6 +1855,7 @@ export type UserUncheckedCreateWithoutStatusChangesInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
@@ -1848,6 +1901,7 @@ export type UserUpdateWithoutStatusChangesInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
 }
 
@@ -1877,6 +1931,7 @@ export type UserUncheckedUpdateWithoutStatusChangesInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
@@ -1905,6 +1960,7 @@ export type UserCreateWithoutCouponUsagesInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -1934,6 +1990,7 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -1979,6 +2036,7 @@ export type UserUpdateWithoutCouponUsagesInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -2008,6 +2066,7 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -2037,6 +2096,7 @@ export type UserCreateWithoutReviewsInput = {
   couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -2066,6 +2126,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -2111,6 +2172,7 @@ export type UserUpdateWithoutReviewsInput = {
   couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -2138,6 +2200,143 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   wishlists?: Prisma.WishlistUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
+  wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutGiftBoxConfigurationsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string
+  locale?: $Enums.Locale
+  disabled?: boolean
+  deletionRequestedAt?: Date | string | null
+  marketingConsentAt?: Date | string | null
+  marketingConsentSource?: string | null
+  consentVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
+  profile?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
+  carts?: Prisma.CartCreateNestedManyWithoutUserInput
+  wishlists?: Prisma.WishlistCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
+  wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutGiftBoxConfigurationsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string
+  locale?: $Enums.Locale
+  disabled?: boolean
+  deletionRequestedAt?: Date | string | null
+  marketingConsentAt?: Date | string | null
+  marketingConsentSource?: string | null
+  consentVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
+  profile?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutUserInput
+  wishlists?: Prisma.WishlistUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
+  wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutGiftBoxConfigurationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGiftBoxConfigurationsInput, Prisma.UserUncheckedCreateWithoutGiftBoxConfigurationsInput>
+}
+
+export type UserUpsertWithoutGiftBoxConfigurationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGiftBoxConfigurationsInput, Prisma.UserUncheckedUpdateWithoutGiftBoxConfigurationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGiftBoxConfigurationsInput, Prisma.UserUncheckedCreateWithoutGiftBoxConfigurationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGiftBoxConfigurationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGiftBoxConfigurationsInput, Prisma.UserUncheckedUpdateWithoutGiftBoxConfigurationsInput>
+}
+
+export type UserUpdateWithoutGiftBoxConfigurationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+  disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  marketingConsentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  marketingConsentSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
+  profile?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
+  carts?: Prisma.CartUpdateManyWithoutUserNestedInput
+  wishlists?: Prisma.WishlistUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
+  wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGiftBoxConfigurationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.EnumLocaleFieldUpdateOperationsInput | $Enums.Locale
+  disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  marketingConsentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  marketingConsentSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
+  profile?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutUserNestedInput
+  wishlists?: Prisma.WishlistUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
@@ -2169,6 +2368,7 @@ export type UserCreateWithoutWholesaleApplicationsInput = {
   couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -2198,6 +2398,7 @@ export type UserUncheckedCreateWithoutWholesaleApplicationsInput = {
   couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -2243,6 +2444,7 @@ export type UserUpdateWithoutWholesaleApplicationsInput = {
   couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -2272,6 +2474,7 @@ export type UserUncheckedUpdateWithoutWholesaleApplicationsInput = {
   couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -2301,6 +2504,7 @@ export type UserCreateWithoutWholesaleAccountInput = {
   couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
@@ -2330,6 +2534,7 @@ export type UserUncheckedCreateWithoutWholesaleAccountInput = {
   couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
@@ -2375,6 +2580,7 @@ export type UserUpdateWithoutWholesaleAccountInput = {
   couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
@@ -2404,6 +2610,7 @@ export type UserUncheckedUpdateWithoutWholesaleAccountInput = {
   couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
@@ -2434,6 +2641,7 @@ export type UserCreateWithoutAuditLogsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutUserInput
   statusChanges?: Prisma.OrderStatusHistoryCreateNestedManyWithoutActorInput
 }
 
@@ -2463,6 +2671,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedCreateNestedOneWithoutUserInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedCreateNestedManyWithoutUserInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutUserInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutActorInput
 }
 
@@ -2508,6 +2717,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutUserNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUpdateManyWithoutActorNestedInput
 }
 
@@ -2537,6 +2747,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   wholesaleAccount?: Prisma.WholesaleAccountUncheckedUpdateOneWithoutUserNestedInput
   wholesaleApplications?: Prisma.WholesaleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  giftBoxConfigurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutUserNestedInput
   statusChanges?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutActorNestedInput
 }
 
@@ -2555,6 +2766,7 @@ export type UserCountOutputType = {
   couponUsages: number
   reviews: number
   wholesaleApplications: number
+  giftBoxConfigurations: number
   auditLogs: number
   statusChanges: number
 }
@@ -2569,6 +2781,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   couponUsages?: boolean | UserCountOutputTypeCountCouponUsagesArgs
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
   wholesaleApplications?: boolean | UserCountOutputTypeCountWholesaleApplicationsArgs
+  giftBoxConfigurations?: boolean | UserCountOutputTypeCountGiftBoxConfigurationsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   statusChanges?: boolean | UserCountOutputTypeCountStatusChangesArgs
 }
@@ -2649,6 +2862,13 @@ export type UserCountOutputTypeCountWholesaleApplicationsArgs<ExtArgs extends ru
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountGiftBoxConfigurationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GiftBoxConfigurationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditLogWhereInput
 }
@@ -2687,6 +2907,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   wholesaleAccount?: boolean | Prisma.User$wholesaleAccountArgs<ExtArgs>
   wholesaleApplications?: boolean | Prisma.User$wholesaleApplicationsArgs<ExtArgs>
+  giftBoxConfigurations?: boolean | Prisma.User$giftBoxConfigurationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   statusChanges?: boolean | Prisma.User$statusChangesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2756,6 +2977,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   wholesaleAccount?: boolean | Prisma.User$wholesaleAccountArgs<ExtArgs>
   wholesaleApplications?: boolean | Prisma.User$wholesaleApplicationsArgs<ExtArgs>
+  giftBoxConfigurations?: boolean | Prisma.User$giftBoxConfigurationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   statusChanges?: boolean | Prisma.User$statusChangesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2777,6 +2999,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     wholesaleAccount: Prisma.$WholesaleAccountPayload<ExtArgs> | null
     wholesaleApplications: Prisma.$WholesaleApplicationPayload<ExtArgs>[]
+    giftBoxConfigurations: Prisma.$GiftBoxConfigurationPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     statusChanges: Prisma.$OrderStatusHistoryPayload<ExtArgs>[]
   }
@@ -3200,6 +3423,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   wholesaleAccount<T extends Prisma.User$wholesaleAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$wholesaleAccountArgs<ExtArgs>>): Prisma.Prisma__WholesaleAccountClient<runtime.Types.Result.GetResult<Prisma.$WholesaleAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   wholesaleApplications<T extends Prisma.User$wholesaleApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$wholesaleApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WholesaleApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  giftBoxConfigurations<T extends Prisma.User$giftBoxConfigurationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$giftBoxConfigurationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GiftBoxConfigurationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   statusChanges<T extends Prisma.User$statusChangesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$statusChangesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -3889,6 +4113,30 @@ export type User$wholesaleApplicationsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.WholesaleApplicationScalarFieldEnum | Prisma.WholesaleApplicationScalarFieldEnum[]
+}
+
+/**
+ * User.giftBoxConfigurations
+ */
+export type User$giftBoxConfigurationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GiftBoxConfiguration
+   */
+  select?: Prisma.GiftBoxConfigurationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GiftBoxConfiguration
+   */
+  omit?: Prisma.GiftBoxConfigurationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GiftBoxConfigurationInclude<ExtArgs> | null
+  where?: Prisma.GiftBoxConfigurationWhereInput
+  orderBy?: Prisma.GiftBoxConfigurationOrderByWithRelationInput | Prisma.GiftBoxConfigurationOrderByWithRelationInput[]
+  cursor?: Prisma.GiftBoxConfigurationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GiftBoxConfigurationScalarFieldEnum | Prisma.GiftBoxConfigurationScalarFieldEnum[]
 }
 
 /**

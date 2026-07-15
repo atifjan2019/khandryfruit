@@ -47,8 +47,16 @@ export type GiftBoxMinAggregateOutputType = {
   internalName: string | null
   nameDe: string | null
   nameEn: string | null
+  slugDe: string | null
+  slugEn: string | null
   descriptionDe: string | null
   descriptionEn: string | null
+  seoTitleDe: string | null
+  seoTitleEn: string | null
+  metaDescriptionDe: string | null
+  metaDescriptionEn: string | null
+  imageUrl: string | null
+  sizeName: string | null
   fixed: boolean | null
   active: boolean | null
   basePriceCents: number | null
@@ -65,8 +73,16 @@ export type GiftBoxMaxAggregateOutputType = {
   internalName: string | null
   nameDe: string | null
   nameEn: string | null
+  slugDe: string | null
+  slugEn: string | null
   descriptionDe: string | null
   descriptionEn: string | null
+  seoTitleDe: string | null
+  seoTitleEn: string | null
+  metaDescriptionDe: string | null
+  metaDescriptionEn: string | null
+  imageUrl: string | null
+  sizeName: string | null
   fixed: boolean | null
   active: boolean | null
   basePriceCents: number | null
@@ -83,8 +99,16 @@ export type GiftBoxCountAggregateOutputType = {
   internalName: number
   nameDe: number
   nameEn: number
+  slugDe: number
+  slugEn: number
   descriptionDe: number
   descriptionEn: number
+  seoTitleDe: number
+  seoTitleEn: number
+  metaDescriptionDe: number
+  metaDescriptionEn: number
+  imageUrl: number
+  sizeName: number
   fixed: number
   active: number
   basePriceCents: number
@@ -120,8 +144,16 @@ export type GiftBoxMinAggregateInputType = {
   internalName?: true
   nameDe?: true
   nameEn?: true
+  slugDe?: true
+  slugEn?: true
   descriptionDe?: true
   descriptionEn?: true
+  seoTitleDe?: true
+  seoTitleEn?: true
+  metaDescriptionDe?: true
+  metaDescriptionEn?: true
+  imageUrl?: true
+  sizeName?: true
   fixed?: true
   active?: true
   basePriceCents?: true
@@ -138,8 +170,16 @@ export type GiftBoxMaxAggregateInputType = {
   internalName?: true
   nameDe?: true
   nameEn?: true
+  slugDe?: true
+  slugEn?: true
   descriptionDe?: true
   descriptionEn?: true
+  seoTitleDe?: true
+  seoTitleEn?: true
+  metaDescriptionDe?: true
+  metaDescriptionEn?: true
+  imageUrl?: true
+  sizeName?: true
   fixed?: true
   active?: true
   basePriceCents?: true
@@ -156,8 +196,16 @@ export type GiftBoxCountAggregateInputType = {
   internalName?: true
   nameDe?: true
   nameEn?: true
+  slugDe?: true
+  slugEn?: true
   descriptionDe?: true
   descriptionEn?: true
+  seoTitleDe?: true
+  seoTitleEn?: true
+  metaDescriptionDe?: true
+  metaDescriptionEn?: true
+  imageUrl?: true
+  sizeName?: true
   fixed?: true
   active?: true
   basePriceCents?: true
@@ -262,8 +310,16 @@ export type GiftBoxGroupByOutputType = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl: string | null
+  sizeName: string
   fixed: boolean
   active: boolean
   basePriceCents: number
@@ -304,8 +360,16 @@ export type GiftBoxWhereInput = {
   internalName?: Prisma.StringFilter<"GiftBox"> | string
   nameDe?: Prisma.StringFilter<"GiftBox"> | string
   nameEn?: Prisma.StringFilter<"GiftBox"> | string
+  slugDe?: Prisma.StringFilter<"GiftBox"> | string
+  slugEn?: Prisma.StringFilter<"GiftBox"> | string
   descriptionDe?: Prisma.StringFilter<"GiftBox"> | string
   descriptionEn?: Prisma.StringFilter<"GiftBox"> | string
+  seoTitleDe?: Prisma.StringFilter<"GiftBox"> | string
+  seoTitleEn?: Prisma.StringFilter<"GiftBox"> | string
+  metaDescriptionDe?: Prisma.StringFilter<"GiftBox"> | string
+  metaDescriptionEn?: Prisma.StringFilter<"GiftBox"> | string
+  imageUrl?: Prisma.StringNullableFilter<"GiftBox"> | string | null
+  sizeName?: Prisma.StringFilter<"GiftBox"> | string
   fixed?: Prisma.BoolFilter<"GiftBox"> | boolean
   active?: Prisma.BoolFilter<"GiftBox"> | boolean
   basePriceCents?: Prisma.IntFilter<"GiftBox"> | number
@@ -318,6 +382,7 @@ export type GiftBoxWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"GiftBox"> | Date | string
   items?: Prisma.GiftBoxItemListRelationFilter
   messages?: Prisma.GiftMessageListRelationFilter
+  configurations?: Prisma.GiftBoxConfigurationListRelationFilter
 }
 
 export type GiftBoxOrderByWithRelationInput = {
@@ -325,8 +390,16 @@ export type GiftBoxOrderByWithRelationInput = {
   internalName?: Prisma.SortOrder
   nameDe?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
+  slugDe?: Prisma.SortOrder
+  slugEn?: Prisma.SortOrder
   descriptionDe?: Prisma.SortOrder
   descriptionEn?: Prisma.SortOrder
+  seoTitleDe?: Prisma.SortOrder
+  seoTitleEn?: Prisma.SortOrder
+  metaDescriptionDe?: Prisma.SortOrder
+  metaDescriptionEn?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  sizeName?: Prisma.SortOrder
   fixed?: Prisma.SortOrder
   active?: Prisma.SortOrder
   basePriceCents?: Prisma.SortOrder
@@ -339,10 +412,13 @@ export type GiftBoxOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   items?: Prisma.GiftBoxItemOrderByRelationAggregateInput
   messages?: Prisma.GiftMessageOrderByRelationAggregateInput
+  configurations?: Prisma.GiftBoxConfigurationOrderByRelationAggregateInput
 }
 
 export type GiftBoxWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  slugDe?: string
+  slugEn?: string
   AND?: Prisma.GiftBoxWhereInput | Prisma.GiftBoxWhereInput[]
   OR?: Prisma.GiftBoxWhereInput[]
   NOT?: Prisma.GiftBoxWhereInput | Prisma.GiftBoxWhereInput[]
@@ -351,6 +427,12 @@ export type GiftBoxWhereUniqueInput = Prisma.AtLeast<{
   nameEn?: Prisma.StringFilter<"GiftBox"> | string
   descriptionDe?: Prisma.StringFilter<"GiftBox"> | string
   descriptionEn?: Prisma.StringFilter<"GiftBox"> | string
+  seoTitleDe?: Prisma.StringFilter<"GiftBox"> | string
+  seoTitleEn?: Prisma.StringFilter<"GiftBox"> | string
+  metaDescriptionDe?: Prisma.StringFilter<"GiftBox"> | string
+  metaDescriptionEn?: Prisma.StringFilter<"GiftBox"> | string
+  imageUrl?: Prisma.StringNullableFilter<"GiftBox"> | string | null
+  sizeName?: Prisma.StringFilter<"GiftBox"> | string
   fixed?: Prisma.BoolFilter<"GiftBox"> | boolean
   active?: Prisma.BoolFilter<"GiftBox"> | boolean
   basePriceCents?: Prisma.IntFilter<"GiftBox"> | number
@@ -363,15 +445,24 @@ export type GiftBoxWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"GiftBox"> | Date | string
   items?: Prisma.GiftBoxItemListRelationFilter
   messages?: Prisma.GiftMessageListRelationFilter
-}, "id">
+  configurations?: Prisma.GiftBoxConfigurationListRelationFilter
+}, "id" | "slugDe" | "slugEn">
 
 export type GiftBoxOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   internalName?: Prisma.SortOrder
   nameDe?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
+  slugDe?: Prisma.SortOrder
+  slugEn?: Prisma.SortOrder
   descriptionDe?: Prisma.SortOrder
   descriptionEn?: Prisma.SortOrder
+  seoTitleDe?: Prisma.SortOrder
+  seoTitleEn?: Prisma.SortOrder
+  metaDescriptionDe?: Prisma.SortOrder
+  metaDescriptionEn?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  sizeName?: Prisma.SortOrder
   fixed?: Prisma.SortOrder
   active?: Prisma.SortOrder
   basePriceCents?: Prisma.SortOrder
@@ -397,8 +488,16 @@ export type GiftBoxScalarWhereWithAggregatesInput = {
   internalName?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
   nameDe?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
   nameEn?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  slugDe?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  slugEn?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
   descriptionDe?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
   descriptionEn?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  seoTitleDe?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  seoTitleEn?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  metaDescriptionDe?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  metaDescriptionEn?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"GiftBox"> | string | null
+  sizeName?: Prisma.StringWithAggregatesFilter<"GiftBox"> | string
   fixed?: Prisma.BoolWithAggregatesFilter<"GiftBox"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"GiftBox"> | boolean
   basePriceCents?: Prisma.IntWithAggregatesFilter<"GiftBox"> | number
@@ -416,8 +515,16 @@ export type GiftBoxCreateInput = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -430,6 +537,7 @@ export type GiftBoxCreateInput = {
   updatedAt?: Date | string
   items?: Prisma.GiftBoxItemCreateNestedManyWithoutGiftBoxInput
   messages?: Prisma.GiftMessageCreateNestedManyWithoutGiftBoxInput
+  configurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutGiftBoxInput
 }
 
 export type GiftBoxUncheckedCreateInput = {
@@ -437,8 +545,16 @@ export type GiftBoxUncheckedCreateInput = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -451,6 +567,7 @@ export type GiftBoxUncheckedCreateInput = {
   updatedAt?: Date | string
   items?: Prisma.GiftBoxItemUncheckedCreateNestedManyWithoutGiftBoxInput
   messages?: Prisma.GiftMessageUncheckedCreateNestedManyWithoutGiftBoxInput
+  configurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutGiftBoxInput
 }
 
 export type GiftBoxUpdateInput = {
@@ -458,8 +575,16 @@ export type GiftBoxUpdateInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -472,6 +597,7 @@ export type GiftBoxUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.GiftBoxItemUpdateManyWithoutGiftBoxNestedInput
   messages?: Prisma.GiftMessageUpdateManyWithoutGiftBoxNestedInput
+  configurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutGiftBoxNestedInput
 }
 
 export type GiftBoxUncheckedUpdateInput = {
@@ -479,8 +605,16 @@ export type GiftBoxUncheckedUpdateInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -493,6 +627,7 @@ export type GiftBoxUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.GiftBoxItemUncheckedUpdateManyWithoutGiftBoxNestedInput
   messages?: Prisma.GiftMessageUncheckedUpdateManyWithoutGiftBoxNestedInput
+  configurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutGiftBoxNestedInput
 }
 
 export type GiftBoxCreateManyInput = {
@@ -500,8 +635,16 @@ export type GiftBoxCreateManyInput = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -519,8 +662,16 @@ export type GiftBoxUpdateManyMutationInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -538,8 +689,16 @@ export type GiftBoxUncheckedUpdateManyInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -557,8 +716,16 @@ export type GiftBoxCountOrderByAggregateInput = {
   internalName?: Prisma.SortOrder
   nameDe?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
+  slugDe?: Prisma.SortOrder
+  slugEn?: Prisma.SortOrder
   descriptionDe?: Prisma.SortOrder
   descriptionEn?: Prisma.SortOrder
+  seoTitleDe?: Prisma.SortOrder
+  seoTitleEn?: Prisma.SortOrder
+  metaDescriptionDe?: Prisma.SortOrder
+  metaDescriptionEn?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
+  sizeName?: Prisma.SortOrder
   fixed?: Prisma.SortOrder
   active?: Prisma.SortOrder
   basePriceCents?: Prisma.SortOrder
@@ -584,8 +751,16 @@ export type GiftBoxMaxOrderByAggregateInput = {
   internalName?: Prisma.SortOrder
   nameDe?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
+  slugDe?: Prisma.SortOrder
+  slugEn?: Prisma.SortOrder
   descriptionDe?: Prisma.SortOrder
   descriptionEn?: Prisma.SortOrder
+  seoTitleDe?: Prisma.SortOrder
+  seoTitleEn?: Prisma.SortOrder
+  metaDescriptionDe?: Prisma.SortOrder
+  metaDescriptionEn?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
+  sizeName?: Prisma.SortOrder
   fixed?: Prisma.SortOrder
   active?: Prisma.SortOrder
   basePriceCents?: Prisma.SortOrder
@@ -602,8 +777,16 @@ export type GiftBoxMinOrderByAggregateInput = {
   internalName?: Prisma.SortOrder
   nameDe?: Prisma.SortOrder
   nameEn?: Prisma.SortOrder
+  slugDe?: Prisma.SortOrder
+  slugEn?: Prisma.SortOrder
   descriptionDe?: Prisma.SortOrder
   descriptionEn?: Prisma.SortOrder
+  seoTitleDe?: Prisma.SortOrder
+  seoTitleEn?: Prisma.SortOrder
+  metaDescriptionDe?: Prisma.SortOrder
+  metaDescriptionEn?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
+  sizeName?: Prisma.SortOrder
   fixed?: Prisma.SortOrder
   active?: Prisma.SortOrder
   basePriceCents?: Prisma.SortOrder
@@ -672,13 +855,35 @@ export type GiftBoxUpdateOneWithoutMessagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GiftBoxUpdateToOneWithWhereWithoutMessagesInput, Prisma.GiftBoxUpdateWithoutMessagesInput>, Prisma.GiftBoxUncheckedUpdateWithoutMessagesInput>
 }
 
+export type GiftBoxCreateNestedOneWithoutConfigurationsInput = {
+  create?: Prisma.XOR<Prisma.GiftBoxCreateWithoutConfigurationsInput, Prisma.GiftBoxUncheckedCreateWithoutConfigurationsInput>
+  connectOrCreate?: Prisma.GiftBoxCreateOrConnectWithoutConfigurationsInput
+  connect?: Prisma.GiftBoxWhereUniqueInput
+}
+
+export type GiftBoxUpdateOneRequiredWithoutConfigurationsNestedInput = {
+  create?: Prisma.XOR<Prisma.GiftBoxCreateWithoutConfigurationsInput, Prisma.GiftBoxUncheckedCreateWithoutConfigurationsInput>
+  connectOrCreate?: Prisma.GiftBoxCreateOrConnectWithoutConfigurationsInput
+  upsert?: Prisma.GiftBoxUpsertWithoutConfigurationsInput
+  connect?: Prisma.GiftBoxWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GiftBoxUpdateToOneWithWhereWithoutConfigurationsInput, Prisma.GiftBoxUpdateWithoutConfigurationsInput>, Prisma.GiftBoxUncheckedUpdateWithoutConfigurationsInput>
+}
+
 export type GiftBoxCreateWithoutItemsInput = {
   id?: string
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -690,6 +895,7 @@ export type GiftBoxCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.GiftMessageCreateNestedManyWithoutGiftBoxInput
+  configurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutGiftBoxInput
 }
 
 export type GiftBoxUncheckedCreateWithoutItemsInput = {
@@ -697,8 +903,16 @@ export type GiftBoxUncheckedCreateWithoutItemsInput = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -710,6 +924,7 @@ export type GiftBoxUncheckedCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.GiftMessageUncheckedCreateNestedManyWithoutGiftBoxInput
+  configurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutGiftBoxInput
 }
 
 export type GiftBoxCreateOrConnectWithoutItemsInput = {
@@ -733,8 +948,16 @@ export type GiftBoxUpdateWithoutItemsInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -746,6 +969,7 @@ export type GiftBoxUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.GiftMessageUpdateManyWithoutGiftBoxNestedInput
+  configurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutGiftBoxNestedInput
 }
 
 export type GiftBoxUncheckedUpdateWithoutItemsInput = {
@@ -753,8 +977,16 @@ export type GiftBoxUncheckedUpdateWithoutItemsInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -766,6 +998,7 @@ export type GiftBoxUncheckedUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.GiftMessageUncheckedUpdateManyWithoutGiftBoxNestedInput
+  configurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutGiftBoxNestedInput
 }
 
 export type GiftBoxCreateWithoutMessagesInput = {
@@ -773,8 +1006,16 @@ export type GiftBoxCreateWithoutMessagesInput = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -786,6 +1027,7 @@ export type GiftBoxCreateWithoutMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.GiftBoxItemCreateNestedManyWithoutGiftBoxInput
+  configurations?: Prisma.GiftBoxConfigurationCreateNestedManyWithoutGiftBoxInput
 }
 
 export type GiftBoxUncheckedCreateWithoutMessagesInput = {
@@ -793,8 +1035,16 @@ export type GiftBoxUncheckedCreateWithoutMessagesInput = {
   internalName: string
   nameDe: string
   nameEn: string
+  slugDe: string
+  slugEn: string
   descriptionDe: string
   descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
   fixed?: boolean
   active?: boolean
   basePriceCents: number
@@ -806,6 +1056,7 @@ export type GiftBoxUncheckedCreateWithoutMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.GiftBoxItemUncheckedCreateNestedManyWithoutGiftBoxInput
+  configurations?: Prisma.GiftBoxConfigurationUncheckedCreateNestedManyWithoutGiftBoxInput
 }
 
 export type GiftBoxCreateOrConnectWithoutMessagesInput = {
@@ -829,8 +1080,16 @@ export type GiftBoxUpdateWithoutMessagesInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -842,6 +1101,7 @@ export type GiftBoxUpdateWithoutMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.GiftBoxItemUpdateManyWithoutGiftBoxNestedInput
+  configurations?: Prisma.GiftBoxConfigurationUpdateManyWithoutGiftBoxNestedInput
 }
 
 export type GiftBoxUncheckedUpdateWithoutMessagesInput = {
@@ -849,8 +1109,16 @@ export type GiftBoxUncheckedUpdateWithoutMessagesInput = {
   internalName?: Prisma.StringFieldUpdateOperationsInput | string
   nameDe?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
   fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
@@ -862,6 +1130,139 @@ export type GiftBoxUncheckedUpdateWithoutMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.GiftBoxItemUncheckedUpdateManyWithoutGiftBoxNestedInput
+  configurations?: Prisma.GiftBoxConfigurationUncheckedUpdateManyWithoutGiftBoxNestedInput
+}
+
+export type GiftBoxCreateWithoutConfigurationsInput = {
+  id?: string
+  internalName: string
+  nameDe: string
+  nameEn: string
+  slugDe: string
+  slugEn: string
+  descriptionDe: string
+  descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
+  fixed?: boolean
+  active?: boolean
+  basePriceCents: number
+  capacityUnits: number
+  minItems: number
+  maxItems: number
+  premiumPackingCents?: number
+  occasions?: Prisma.GiftBoxCreateoccasionsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.GiftBoxItemCreateNestedManyWithoutGiftBoxInput
+  messages?: Prisma.GiftMessageCreateNestedManyWithoutGiftBoxInput
+}
+
+export type GiftBoxUncheckedCreateWithoutConfigurationsInput = {
+  id?: string
+  internalName: string
+  nameDe: string
+  nameEn: string
+  slugDe: string
+  slugEn: string
+  descriptionDe: string
+  descriptionEn: string
+  seoTitleDe: string
+  seoTitleEn: string
+  metaDescriptionDe: string
+  metaDescriptionEn: string
+  imageUrl?: string | null
+  sizeName?: string
+  fixed?: boolean
+  active?: boolean
+  basePriceCents: number
+  capacityUnits: number
+  minItems: number
+  maxItems: number
+  premiumPackingCents?: number
+  occasions?: Prisma.GiftBoxCreateoccasionsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.GiftBoxItemUncheckedCreateNestedManyWithoutGiftBoxInput
+  messages?: Prisma.GiftMessageUncheckedCreateNestedManyWithoutGiftBoxInput
+}
+
+export type GiftBoxCreateOrConnectWithoutConfigurationsInput = {
+  where: Prisma.GiftBoxWhereUniqueInput
+  create: Prisma.XOR<Prisma.GiftBoxCreateWithoutConfigurationsInput, Prisma.GiftBoxUncheckedCreateWithoutConfigurationsInput>
+}
+
+export type GiftBoxUpsertWithoutConfigurationsInput = {
+  update: Prisma.XOR<Prisma.GiftBoxUpdateWithoutConfigurationsInput, Prisma.GiftBoxUncheckedUpdateWithoutConfigurationsInput>
+  create: Prisma.XOR<Prisma.GiftBoxCreateWithoutConfigurationsInput, Prisma.GiftBoxUncheckedCreateWithoutConfigurationsInput>
+  where?: Prisma.GiftBoxWhereInput
+}
+
+export type GiftBoxUpdateToOneWithWhereWithoutConfigurationsInput = {
+  where?: Prisma.GiftBoxWhereInput
+  data: Prisma.XOR<Prisma.GiftBoxUpdateWithoutConfigurationsInput, Prisma.GiftBoxUncheckedUpdateWithoutConfigurationsInput>
+}
+
+export type GiftBoxUpdateWithoutConfigurationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  internalName?: Prisma.StringFieldUpdateOperationsInput | string
+  nameDe?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
+  descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
+  fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  capacityUnits?: Prisma.IntFieldUpdateOperationsInput | number
+  minItems?: Prisma.IntFieldUpdateOperationsInput | number
+  maxItems?: Prisma.IntFieldUpdateOperationsInput | number
+  premiumPackingCents?: Prisma.IntFieldUpdateOperationsInput | number
+  occasions?: Prisma.GiftBoxUpdateoccasionsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.GiftBoxItemUpdateManyWithoutGiftBoxNestedInput
+  messages?: Prisma.GiftMessageUpdateManyWithoutGiftBoxNestedInput
+}
+
+export type GiftBoxUncheckedUpdateWithoutConfigurationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  internalName?: Prisma.StringFieldUpdateOperationsInput | string
+  nameDe?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  slugDe?: Prisma.StringFieldUpdateOperationsInput | string
+  slugEn?: Prisma.StringFieldUpdateOperationsInput | string
+  descriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  descriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleDe?: Prisma.StringFieldUpdateOperationsInput | string
+  seoTitleEn?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionDe?: Prisma.StringFieldUpdateOperationsInput | string
+  metaDescriptionEn?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sizeName?: Prisma.StringFieldUpdateOperationsInput | string
+  fixed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  basePriceCents?: Prisma.IntFieldUpdateOperationsInput | number
+  capacityUnits?: Prisma.IntFieldUpdateOperationsInput | number
+  minItems?: Prisma.IntFieldUpdateOperationsInput | number
+  maxItems?: Prisma.IntFieldUpdateOperationsInput | number
+  premiumPackingCents?: Prisma.IntFieldUpdateOperationsInput | number
+  occasions?: Prisma.GiftBoxUpdateoccasionsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.GiftBoxItemUncheckedUpdateManyWithoutGiftBoxNestedInput
+  messages?: Prisma.GiftMessageUncheckedUpdateManyWithoutGiftBoxNestedInput
 }
 
 
@@ -872,11 +1273,13 @@ export type GiftBoxUncheckedUpdateWithoutMessagesInput = {
 export type GiftBoxCountOutputType = {
   items: number
   messages: number
+  configurations: number
 }
 
 export type GiftBoxCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | GiftBoxCountOutputTypeCountItemsArgs
   messages?: boolean | GiftBoxCountOutputTypeCountMessagesArgs
+  configurations?: boolean | GiftBoxCountOutputTypeCountConfigurationsArgs
 }
 
 /**
@@ -903,14 +1306,29 @@ export type GiftBoxCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Type
   where?: Prisma.GiftMessageWhereInput
 }
 
+/**
+ * GiftBoxCountOutputType without action
+ */
+export type GiftBoxCountOutputTypeCountConfigurationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GiftBoxConfigurationWhereInput
+}
+
 
 export type GiftBoxSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   internalName?: boolean
   nameDe?: boolean
   nameEn?: boolean
+  slugDe?: boolean
+  slugEn?: boolean
   descriptionDe?: boolean
   descriptionEn?: boolean
+  seoTitleDe?: boolean
+  seoTitleEn?: boolean
+  metaDescriptionDe?: boolean
+  metaDescriptionEn?: boolean
+  imageUrl?: boolean
+  sizeName?: boolean
   fixed?: boolean
   active?: boolean
   basePriceCents?: boolean
@@ -923,6 +1341,7 @@ export type GiftBoxSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   items?: boolean | Prisma.GiftBox$itemsArgs<ExtArgs>
   messages?: boolean | Prisma.GiftBox$messagesArgs<ExtArgs>
+  configurations?: boolean | Prisma.GiftBox$configurationsArgs<ExtArgs>
   _count?: boolean | Prisma.GiftBoxCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["giftBox"]>
 
@@ -931,8 +1350,16 @@ export type GiftBoxSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   internalName?: boolean
   nameDe?: boolean
   nameEn?: boolean
+  slugDe?: boolean
+  slugEn?: boolean
   descriptionDe?: boolean
   descriptionEn?: boolean
+  seoTitleDe?: boolean
+  seoTitleEn?: boolean
+  metaDescriptionDe?: boolean
+  metaDescriptionEn?: boolean
+  imageUrl?: boolean
+  sizeName?: boolean
   fixed?: boolean
   active?: boolean
   basePriceCents?: boolean
@@ -950,8 +1377,16 @@ export type GiftBoxSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   internalName?: boolean
   nameDe?: boolean
   nameEn?: boolean
+  slugDe?: boolean
+  slugEn?: boolean
   descriptionDe?: boolean
   descriptionEn?: boolean
+  seoTitleDe?: boolean
+  seoTitleEn?: boolean
+  metaDescriptionDe?: boolean
+  metaDescriptionEn?: boolean
+  imageUrl?: boolean
+  sizeName?: boolean
   fixed?: boolean
   active?: boolean
   basePriceCents?: boolean
@@ -969,8 +1404,16 @@ export type GiftBoxSelectScalar = {
   internalName?: boolean
   nameDe?: boolean
   nameEn?: boolean
+  slugDe?: boolean
+  slugEn?: boolean
   descriptionDe?: boolean
   descriptionEn?: boolean
+  seoTitleDe?: boolean
+  seoTitleEn?: boolean
+  metaDescriptionDe?: boolean
+  metaDescriptionEn?: boolean
+  imageUrl?: boolean
+  sizeName?: boolean
   fixed?: boolean
   active?: boolean
   basePriceCents?: boolean
@@ -983,10 +1426,11 @@ export type GiftBoxSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GiftBoxOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "internalName" | "nameDe" | "nameEn" | "descriptionDe" | "descriptionEn" | "fixed" | "active" | "basePriceCents" | "capacityUnits" | "minItems" | "maxItems" | "premiumPackingCents" | "occasions" | "createdAt" | "updatedAt", ExtArgs["result"]["giftBox"]>
+export type GiftBoxOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "internalName" | "nameDe" | "nameEn" | "slugDe" | "slugEn" | "descriptionDe" | "descriptionEn" | "seoTitleDe" | "seoTitleEn" | "metaDescriptionDe" | "metaDescriptionEn" | "imageUrl" | "sizeName" | "fixed" | "active" | "basePriceCents" | "capacityUnits" | "minItems" | "maxItems" | "premiumPackingCents" | "occasions" | "createdAt" | "updatedAt", ExtArgs["result"]["giftBox"]>
 export type GiftBoxInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | Prisma.GiftBox$itemsArgs<ExtArgs>
   messages?: boolean | Prisma.GiftBox$messagesArgs<ExtArgs>
+  configurations?: boolean | Prisma.GiftBox$configurationsArgs<ExtArgs>
   _count?: boolean | Prisma.GiftBoxCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GiftBoxIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -997,14 +1441,23 @@ export type $GiftBoxPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     items: Prisma.$GiftBoxItemPayload<ExtArgs>[]
     messages: Prisma.$GiftMessagePayload<ExtArgs>[]
+    configurations: Prisma.$GiftBoxConfigurationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     internalName: string
     nameDe: string
     nameEn: string
+    slugDe: string
+    slugEn: string
     descriptionDe: string
     descriptionEn: string
+    seoTitleDe: string
+    seoTitleEn: string
+    metaDescriptionDe: string
+    metaDescriptionEn: string
+    imageUrl: string | null
+    sizeName: string
     fixed: boolean
     active: boolean
     basePriceCents: number
@@ -1411,6 +1864,7 @@ export interface Prisma__GiftBoxClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   items<T extends Prisma.GiftBox$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GiftBox$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GiftBoxItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.GiftBox$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GiftBox$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GiftMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  configurations<T extends Prisma.GiftBox$configurationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GiftBox$configurationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GiftBoxConfigurationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1444,8 +1898,16 @@ export interface GiftBoxFieldRefs {
   readonly internalName: Prisma.FieldRef<"GiftBox", 'String'>
   readonly nameDe: Prisma.FieldRef<"GiftBox", 'String'>
   readonly nameEn: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly slugDe: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly slugEn: Prisma.FieldRef<"GiftBox", 'String'>
   readonly descriptionDe: Prisma.FieldRef<"GiftBox", 'String'>
   readonly descriptionEn: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly seoTitleDe: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly seoTitleEn: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly metaDescriptionDe: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly metaDescriptionEn: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"GiftBox", 'String'>
+  readonly sizeName: Prisma.FieldRef<"GiftBox", 'String'>
   readonly fixed: Prisma.FieldRef<"GiftBox", 'Boolean'>
   readonly active: Prisma.FieldRef<"GiftBox", 'Boolean'>
   readonly basePriceCents: Prisma.FieldRef<"GiftBox", 'Int'>
@@ -1894,6 +2356,30 @@ export type GiftBox$messagesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.GiftMessageScalarFieldEnum | Prisma.GiftMessageScalarFieldEnum[]
+}
+
+/**
+ * GiftBox.configurations
+ */
+export type GiftBox$configurationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GiftBoxConfiguration
+   */
+  select?: Prisma.GiftBoxConfigurationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GiftBoxConfiguration
+   */
+  omit?: Prisma.GiftBoxConfigurationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GiftBoxConfigurationInclude<ExtArgs> | null
+  where?: Prisma.GiftBoxConfigurationWhereInput
+  orderBy?: Prisma.GiftBoxConfigurationOrderByWithRelationInput | Prisma.GiftBoxConfigurationOrderByWithRelationInput[]
+  cursor?: Prisma.GiftBoxConfigurationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GiftBoxConfigurationScalarFieldEnum | Prisma.GiftBoxConfigurationScalarFieldEnum[]
 }
 
 /**

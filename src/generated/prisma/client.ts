@@ -287,6 +287,31 @@ export type GiftBoxItem = Prisma.GiftBoxItemModel
  */
 export type GiftMessage = Prisma.GiftMessageModel
 /**
+ * Model GiftPackagingOption
+ * 
+ */
+export type GiftPackagingOption = Prisma.GiftPackagingOptionModel
+/**
+ * Model GiftBoxConfiguration
+ * 
+ */
+export type GiftBoxConfiguration = Prisma.GiftBoxConfigurationModel
+/**
+ * Model GiftBoxConfigurationItem
+ * 
+ */
+export type GiftBoxConfigurationItem = Prisma.GiftBoxConfigurationItemModel
+/**
+ * Model CartGiftBoxItem
+ * 
+ */
+export type CartGiftBoxItem = Prisma.CartGiftBoxItemModel
+/**
+ * Model OrderGiftBoxItem
+ * 
+ */
+export type OrderGiftBoxItem = Prisma.OrderGiftBoxItemModel
+/**
  * Model WholesaleApplication
  * 
  */
@@ -371,6 +396,11 @@ export type SiteSetting = Prisma.SiteSettingModel
  * 
  */
 export type FeatureFlag = Prisma.FeatureFlagModel
+/**
+ * Model ProductSearchAlias
+ * 
+ */
+export type ProductSearchAlias = Prisma.ProductSearchAliasModel
 /**
  * Model Redirect
  * 

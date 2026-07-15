@@ -40,6 +40,7 @@ export type InventoryAdjustmentMinAggregateOutputType = {
   type: $Enums.AdjustmentType | null
   quantity: number | null
   reason: string | null
+  internalNote: string | null
   reference: string | null
   actorId: string | null
   createdAt: Date | null
@@ -51,6 +52,7 @@ export type InventoryAdjustmentMaxAggregateOutputType = {
   type: $Enums.AdjustmentType | null
   quantity: number | null
   reason: string | null
+  internalNote: string | null
   reference: string | null
   actorId: string | null
   createdAt: Date | null
@@ -62,6 +64,7 @@ export type InventoryAdjustmentCountAggregateOutputType = {
   type: number
   quantity: number
   reason: number
+  internalNote: number
   reference: number
   actorId: number
   createdAt: number
@@ -83,6 +86,7 @@ export type InventoryAdjustmentMinAggregateInputType = {
   type?: true
   quantity?: true
   reason?: true
+  internalNote?: true
   reference?: true
   actorId?: true
   createdAt?: true
@@ -94,6 +98,7 @@ export type InventoryAdjustmentMaxAggregateInputType = {
   type?: true
   quantity?: true
   reason?: true
+  internalNote?: true
   reference?: true
   actorId?: true
   createdAt?: true
@@ -105,6 +110,7 @@ export type InventoryAdjustmentCountAggregateInputType = {
   type?: true
   quantity?: true
   reason?: true
+  internalNote?: true
   reference?: true
   actorId?: true
   createdAt?: true
@@ -203,6 +209,7 @@ export type InventoryAdjustmentGroupByOutputType = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote: string | null
   reference: string | null
   actorId: string | null
   createdAt: Date
@@ -237,6 +244,7 @@ export type InventoryAdjustmentWhereInput = {
   type?: Prisma.EnumAdjustmentTypeFilter<"InventoryAdjustment"> | $Enums.AdjustmentType
   quantity?: Prisma.IntFilter<"InventoryAdjustment"> | number
   reason?: Prisma.StringFilter<"InventoryAdjustment"> | string
+  internalNote?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   reference?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   actorId?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"InventoryAdjustment"> | Date | string
@@ -249,6 +257,7 @@ export type InventoryAdjustmentOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reason?: Prisma.SortOrder
+  internalNote?: Prisma.SortOrderInput | Prisma.SortOrder
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
   actorId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -264,6 +273,7 @@ export type InventoryAdjustmentWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumAdjustmentTypeFilter<"InventoryAdjustment"> | $Enums.AdjustmentType
   quantity?: Prisma.IntFilter<"InventoryAdjustment"> | number
   reason?: Prisma.StringFilter<"InventoryAdjustment"> | string
+  internalNote?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   reference?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   actorId?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"InventoryAdjustment"> | Date | string
@@ -276,6 +286,7 @@ export type InventoryAdjustmentOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reason?: Prisma.SortOrder
+  internalNote?: Prisma.SortOrderInput | Prisma.SortOrder
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
   actorId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -295,6 +306,7 @@ export type InventoryAdjustmentScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumAdjustmentTypeWithAggregatesFilter<"InventoryAdjustment"> | $Enums.AdjustmentType
   quantity?: Prisma.IntWithAggregatesFilter<"InventoryAdjustment"> | number
   reason?: Prisma.StringWithAggregatesFilter<"InventoryAdjustment"> | string
+  internalNote?: Prisma.StringNullableWithAggregatesFilter<"InventoryAdjustment"> | string | null
   reference?: Prisma.StringNullableWithAggregatesFilter<"InventoryAdjustment"> | string | null
   actorId?: Prisma.StringNullableWithAggregatesFilter<"InventoryAdjustment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InventoryAdjustment"> | Date | string
@@ -305,6 +317,7 @@ export type InventoryAdjustmentCreateInput = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote?: string | null
   reference?: string | null
   actorId?: string | null
   createdAt?: Date | string
@@ -317,6 +330,7 @@ export type InventoryAdjustmentUncheckedCreateInput = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote?: string | null
   reference?: string | null
   actorId?: string | null
   createdAt?: Date | string
@@ -327,6 +341,7 @@ export type InventoryAdjustmentUpdateInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -339,6 +354,7 @@ export type InventoryAdjustmentUncheckedUpdateInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -350,6 +366,7 @@ export type InventoryAdjustmentCreateManyInput = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote?: string | null
   reference?: string | null
   actorId?: string | null
   createdAt?: Date | string
@@ -360,6 +377,7 @@ export type InventoryAdjustmentUpdateManyMutationInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,6 +389,7 @@ export type InventoryAdjustmentUncheckedUpdateManyInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -392,6 +411,7 @@ export type InventoryAdjustmentCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reason?: Prisma.SortOrder
+  internalNote?: Prisma.SortOrder
   reference?: Prisma.SortOrder
   actorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -407,6 +427,7 @@ export type InventoryAdjustmentMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reason?: Prisma.SortOrder
+  internalNote?: Prisma.SortOrder
   reference?: Prisma.SortOrder
   actorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -418,6 +439,7 @@ export type InventoryAdjustmentMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   reason?: Prisma.SortOrder
+  internalNote?: Prisma.SortOrder
   reference?: Prisma.SortOrder
   actorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -478,6 +500,7 @@ export type InventoryAdjustmentCreateWithoutInventoryInput = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote?: string | null
   reference?: string | null
   actorId?: string | null
   createdAt?: Date | string
@@ -488,6 +511,7 @@ export type InventoryAdjustmentUncheckedCreateWithoutInventoryInput = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote?: string | null
   reference?: string | null
   actorId?: string | null
   createdAt?: Date | string
@@ -528,6 +552,7 @@ export type InventoryAdjustmentScalarWhereInput = {
   type?: Prisma.EnumAdjustmentTypeFilter<"InventoryAdjustment"> | $Enums.AdjustmentType
   quantity?: Prisma.IntFilter<"InventoryAdjustment"> | number
   reason?: Prisma.StringFilter<"InventoryAdjustment"> | string
+  internalNote?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   reference?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   actorId?: Prisma.StringNullableFilter<"InventoryAdjustment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"InventoryAdjustment"> | Date | string
@@ -538,6 +563,7 @@ export type InventoryAdjustmentCreateManyInventoryInput = {
   type: $Enums.AdjustmentType
   quantity: number
   reason: string
+  internalNote?: string | null
   reference?: string | null
   actorId?: string | null
   createdAt?: Date | string
@@ -548,6 +574,7 @@ export type InventoryAdjustmentUpdateWithoutInventoryInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -558,6 +585,7 @@ export type InventoryAdjustmentUncheckedUpdateWithoutInventoryInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -568,6 +596,7 @@ export type InventoryAdjustmentUncheckedUpdateManyWithoutInventoryInput = {
   type?: Prisma.EnumAdjustmentTypeFieldUpdateOperationsInput | $Enums.AdjustmentType
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
+  internalNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -581,6 +610,7 @@ export type InventoryAdjustmentSelect<ExtArgs extends runtime.Types.Extensions.I
   type?: boolean
   quantity?: boolean
   reason?: boolean
+  internalNote?: boolean
   reference?: boolean
   actorId?: boolean
   createdAt?: boolean
@@ -593,6 +623,7 @@ export type InventoryAdjustmentSelectCreateManyAndReturn<ExtArgs extends runtime
   type?: boolean
   quantity?: boolean
   reason?: boolean
+  internalNote?: boolean
   reference?: boolean
   actorId?: boolean
   createdAt?: boolean
@@ -605,6 +636,7 @@ export type InventoryAdjustmentSelectUpdateManyAndReturn<ExtArgs extends runtime
   type?: boolean
   quantity?: boolean
   reason?: boolean
+  internalNote?: boolean
   reference?: boolean
   actorId?: boolean
   createdAt?: boolean
@@ -617,12 +649,13 @@ export type InventoryAdjustmentSelectScalar = {
   type?: boolean
   quantity?: boolean
   reason?: boolean
+  internalNote?: boolean
   reference?: boolean
   actorId?: boolean
   createdAt?: boolean
 }
 
-export type InventoryAdjustmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "inventoryId" | "type" | "quantity" | "reason" | "reference" | "actorId" | "createdAt", ExtArgs["result"]["inventoryAdjustment"]>
+export type InventoryAdjustmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "inventoryId" | "type" | "quantity" | "reason" | "internalNote" | "reference" | "actorId" | "createdAt", ExtArgs["result"]["inventoryAdjustment"]>
 export type InventoryAdjustmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inventory?: boolean | Prisma.InventoryDefaultArgs<ExtArgs>
 }
@@ -644,6 +677,7 @@ export type $InventoryAdjustmentPayload<ExtArgs extends runtime.Types.Extensions
     type: $Enums.AdjustmentType
     quantity: number
     reason: string
+    internalNote: string | null
     reference: string | null
     actorId: string | null
     createdAt: Date
@@ -1076,6 +1110,7 @@ export interface InventoryAdjustmentFieldRefs {
   readonly type: Prisma.FieldRef<"InventoryAdjustment", 'AdjustmentType'>
   readonly quantity: Prisma.FieldRef<"InventoryAdjustment", 'Int'>
   readonly reason: Prisma.FieldRef<"InventoryAdjustment", 'String'>
+  readonly internalNote: Prisma.FieldRef<"InventoryAdjustment", 'String'>
   readonly reference: Prisma.FieldRef<"InventoryAdjustment", 'String'>
   readonly actorId: Prisma.FieldRef<"InventoryAdjustment", 'String'>
   readonly createdAt: Prisma.FieldRef<"InventoryAdjustment", 'DateTime'>
