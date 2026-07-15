@@ -1,22 +1,171 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart3, Boxes, ChevronRight, CircleUserRound, FileText, Gift, History, LayoutGrid, Menu, MessageSquareText, PackageOpen, Search, Settings, ShoppingBasket, Store, Tags, TicketPercent, Users, Warehouse, X } from "lucide-react";
+import type { Route } from "next";
+import {
+  BarChart3,
+  ChevronRight,
+  CircleUserRound,
+  FileText,
+  Gift,
+  History,
+  LayoutGrid,
+  Menu,
+  MessageSquareText,
+  PackageOpen,
+  Search,
+  Settings,
+  ShoppingBasket,
+  Store,
+  Tags,
+  TicketPercent,
+  Users,
+  Warehouse,
+  X,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { AdminArea } from "@/config/admin";
 import { signOut } from "@/lib/auth/client";
 
-const nav: Record<AdminArea, { label: string; icon: React.ComponentType<{ size?: number }> }> = {
-  dashboard: { label: "Dashboard", icon: BarChart3 }, products: { label: "Products", icon: ShoppingBasket }, categories: { label: "Categories", icon: Tags }, inventory: { label: "Inventory", icon: Warehouse }, orders: { label: "Orders", icon: PackageOpen }, customers: { label: "Customers", icon: Users }, wholesale: { label: "Wholesale", icon: Store }, "gift-boxes": { label: "Gift boxes", icon: Gift }, coupons: { label: "Coupons", icon: TicketPercent }, reviews: { label: "Reviews", icon: MessageSquareText }, content: { label: "Content", icon: FileText }, settings: { label: "Settings", icon: Settings }, "audit-logs": { label: "Audit logs", icon: History }
+const nav: Record<
+  AdminArea,
+  { label: string; icon: React.ComponentType<{ size?: number }> }
+> = {
+  dashboard: { label: "Dashboard", icon: BarChart3 },
+  products: { label: "Products", icon: ShoppingBasket },
+  categories: { label: "Categories", icon: Tags },
+  inventory: { label: "Inventory", icon: Warehouse },
+  orders: { label: "Orders", icon: PackageOpen },
+  customers: { label: "Customers", icon: Users },
+  wholesale: { label: "Wholesale", icon: Store },
+  "gift-boxes": { label: "Gift boxes", icon: Gift },
+  coupons: { label: "Coupons", icon: TicketPercent },
+  reviews: { label: "Reviews", icon: MessageSquareText },
+  content: { label: "Content", icon: FileText },
+  settings: { label: "Settings", icon: Settings },
+  "audit-logs": { label: "Audit logs", icon: History },
 };
 
-export function AdminShell({ children, areas, user }: { children: React.ReactNode; areas: AdminArea[]; user: { name: string; email: string; role: string } }) {
-  const [open, setOpen] = useState(false); const pathname = usePathname(); const router = useRouter(); const segments = pathname.split("/").filter(Boolean);
-  const logout = async () => { await signOut(); router.push("/de/sign-in"); router.refresh(); };
-  return <div className="admin-shell-v2">
-    <aside className={open ? "admin-sidebar open" : "admin-sidebar"}><div className="admin-sidebar-head"><Link href="/admin" className="brand"><span className="brand-mark">K</span><span><strong>Khan</strong><small>Store administration</small></span></Link><button onClick={() => setOpen(false)} className="admin-mobile-close" aria-label="Close navigation"><X /></button></div><nav aria-label="Administration">{areas.map((area) => { const Icon = nav[area].icon; const href = area === "dashboard" ? "/admin" : `/admin/${area}`; const active = pathname === href || (href !== "/admin" && pathname.startsWith(`${href}/`)); return <Link key={area} href={href} className={active ? "active" : ""} onClick={() => setOpen(false)}><Icon size={18} /><span>{nav[area].label}</span></Link>; })}</nav><Link className="admin-store-link" href="/de"><LayoutGrid size={17} /> View storefront</Link></aside>
-    {open && <button className="admin-overlay" aria-label="Close navigation" onClick={() => setOpen(false)} />}
-    <div className="admin-workspace"><header className="admin-topbar"><button className="admin-menu-button" onClick={() => setOpen(true)} aria-label="Open navigation"><Menu /></button><form action="/admin/products" className="admin-global-search"><Search size={17} /><label className="sr-only" htmlFor="admin-search">Search products</label><input id="admin-search" name="q" placeholder="Search products, orders or customers" /></form><span className={`environment-badge environment-${process.env.NODE_ENV}`}>{process.env.NODE_ENV === "production" ? "Production" : "Development"}</span><details className="admin-user-menu"><summary><CircleUserRound size={20} /><span><strong>{user.name}</strong><small>{user.role.replaceAll("_", " ").toLowerCase()}</small></span></summary><div><span>{user.email}</span><button onClick={logout}>Sign out</button></div></details></header><div className="admin-breadcrumbs"><Link href="/admin">Dashboard</Link>{segments.slice(1).map((segment, index) => <span key={`${segment}-${index}`}><ChevronRight size={13} /> {segment.replaceAll("-", " ")}</span>)}</div>{children}</div>
-  </div>;
+export function AdminShell({
+  children,
+  areas,
+  user,
+}: {
+  children: React.ReactNode;
+  areas: AdminArea[];
+  user: { name: string; email: string; role: string };
+}) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const segments = pathname.split("/").filter(Boolean);
+  const logout = async () => {
+    await signOut();
+    router.push("/de/sign-in");
+    router.refresh();
+  };
+  return (
+    <div className="admin-shell-v2">
+      <aside className={open ? "admin-sidebar open" : "admin-sidebar"}>
+        <div className="admin-sidebar-head">
+          <Link href="/admin" className="brand">
+            <span className="brand-mark">K</span>
+            <span>
+              <strong>Khan</strong>
+              <small>Store administration</small>
+            </span>
+          </Link>
+          <button
+            onClick={() => setOpen(false)}
+            className="admin-mobile-close"
+            aria-label="Close navigation"
+          >
+            <X />
+          </button>
+        </div>
+        <nav aria-label="Administration">
+          {areas.map((area) => {
+            const Icon = nav[area].icon;
+            const href = area === "dashboard" ? "/admin" : `/admin/${area}`;
+            const active =
+              pathname === href ||
+              (href !== "/admin" && pathname.startsWith(`${href}/`));
+            return (
+              <Link
+                key={area}
+                href={href as Route}
+                className={active ? "active" : ""}
+                onClick={() => setOpen(false)}
+              >
+                <Icon size={18} />
+                <span>{nav[area].label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+        <Link className="admin-store-link" href="/de">
+          <LayoutGrid size={17} /> View storefront
+        </Link>
+      </aside>
+      {open && (
+        <button
+          className="admin-overlay"
+          aria-label="Close navigation"
+          onClick={() => setOpen(false)}
+        />
+      )}
+      <div className="admin-workspace">
+        <header className="admin-topbar">
+          <button
+            className="admin-menu-button"
+            onClick={() => setOpen(true)}
+            aria-label="Open navigation"
+          >
+            <Menu />
+          </button>
+          <form action="/admin/products" className="admin-global-search">
+            <Search size={17} />
+            <label className="sr-only" htmlFor="admin-search">
+              Search products
+            </label>
+            <input
+              id="admin-search"
+              name="q"
+              placeholder="Search products, orders or customers"
+            />
+          </form>
+          <span
+            className={`environment-badge environment-${process.env.NODE_ENV}`}
+          >
+            {process.env.NODE_ENV === "production"
+              ? "Production"
+              : "Development"}
+          </span>
+          <details className="admin-user-menu">
+            <summary>
+              <CircleUserRound size={20} />
+              <span>
+                <strong>{user.name}</strong>
+                <small>{user.role.replaceAll("_", " ").toLowerCase()}</small>
+              </span>
+            </summary>
+            <div>
+              <span>{user.email}</span>
+              <button onClick={logout}>Sign out</button>
+            </div>
+          </details>
+        </header>
+        <div className="admin-breadcrumbs">
+          <Link href="/admin">Dashboard</Link>
+          {segments.slice(1).map((segment, index) => (
+            <span key={`${segment}-${index}`}>
+              <ChevronRight size={13} /> {segment.replaceAll("-", " ")}
+            </span>
+          ))}
+        </div>
+        {children}
+      </div>
+    </div>
+  );
 }

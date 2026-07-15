@@ -30,11 +30,14 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# environment files
 .env*
+!.env.example
 
-# vercel
-.vercel
+# generated service state
+/.vercel/
+/supabase/.temp/
+/src/generated/prisma/
 
 # typescript
 *.tsbuildinfo
