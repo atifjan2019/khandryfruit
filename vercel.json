@@ -4,5 +4,5 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "regions": ["fra1"],
-  "crons": [{ "path": "/api/cron/reservations", "schedule": "*/15 * * * *" }]
+  "crons": [{ "path": "/api/cron/reservations", "schedule": "0 3 * * *" }]
 }
