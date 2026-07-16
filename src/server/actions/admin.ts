@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import Papa from "papaparse";
 import { db } from "@/lib/db/client";
 import {
   assertOrderTransition,
@@ -305,6 +306,65 @@ export async function setProductStatusAction(formData: FormData) {
   }
 }
 
+export async function bulkProductAction(formData: FormData) {
+  const session = await requireAdmin("products");
+  try {
+    const productIds = z
+      .array(z.string().min(1))
+      .min(1)
+      .max(100)
+      .parse(formData.getAll("productIds"));
+    const status = z
+      .enum(["DRAFT", "ARCHIVED"])
+      .optional()
+      .parse(formData.get("status") || undefined);
+    const categoryId = z
+      .string()
+      .min(1)
+      .optional()
+      .parse(formData.get("categoryId") || undefined);
+    if (!status && !categoryId) throw new Error("NO_BULK_CHANGE_SELECTED");
+    const meta = await requestMeta();
+    await db.$transaction(async (tx) => {
+      if (status)
+        await tx.product.updateMany({
+          where: { id: { in: productIds }, deletedAt: null },
+          data: { status },
+        });
+      if (categoryId) {
+        const category = await tx.category.findFirst({
+          where: { id: categoryId, active: true },
+        });
+        if (!category) throw new Error("CATEGORY_NOT_FOUND");
+        for (const productId of productIds) {
+          await tx.productCategory.updateMany({
+            where: { productId },
+            data: { isPrimary: false },
+          });
+          await tx.productCategory.upsert({
+            where: { productId_categoryId: { productId, categoryId } },
+            create: { productId, categoryId, isPrimary: true },
+            update: { isPrimary: true },
+          });
+        }
+      }
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: "PRODUCTS_BULK_UPDATED",
+          entityType: "Product",
+          after: { productIds, status, categoryId },
+          ...meta,
+        },
+      });
+    });
+    revalidatePath("/admin/products");
+    return { success: true as const };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
 export async function createVariantAction(formData: FormData) {
   const session = await requireAdmin("products");
   try {
@@ -355,6 +415,159 @@ export async function createVariantAction(formData: FormData) {
   }
 }
 
+export async function updateVariantAction(formData: FormData) {
+  const session = await requireAdmin("products");
+  try {
+    const variantId = z.string().min(1).parse(formData.get("variantId"));
+    const input = adminVariantSchema
+      .omit({ productId: true, initialStock: true })
+      .parse(values(formData));
+    const meta = await requestMeta();
+    await db.$transaction(async (tx) => {
+      const before = await tx.productVariant.findUniqueOrThrow({
+        where: { id: variantId },
+        include: { inventory: true },
+      });
+      await tx.productVariant.update({
+        where: { id: variantId },
+        data: {
+          sku: input.sku,
+          weightGrams: input.weightGrams,
+          shippingWeightG: input.shippingWeightG,
+          priceCents: input.priceCents,
+          compareAtCents: input.compareAtCents,
+          costCents: input.costCents,
+          vatRateBps: input.vatRateBps,
+          barcode: input.barcode || null,
+          active: input.active,
+          sortOrder: input.sortOrder,
+        },
+      });
+      if (before.inventory)
+        await tx.inventory.update({
+          where: { id: before.inventory.id },
+          data: { lowStockThreshold: input.lowStockThreshold },
+        });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: "VARIANT_UPDATED",
+          entityType: "ProductVariant",
+          entityId: variantId,
+          before: {
+            sku: before.sku,
+            priceCents: before.priceCents,
+            weightGrams: before.weightGrams,
+            active: before.active,
+          },
+          after: {
+            sku: input.sku,
+            priceCents: input.priceCents,
+            weightGrams: input.weightGrams,
+            active: input.active,
+          },
+          ...meta,
+        },
+      });
+    });
+    revalidatePath(`/admin/products/${formData.get("productId")}`);
+    return { success: true as const };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
+export async function upsertNutritionAction(formData: FormData) {
+  const session = await requireAdmin("products");
+  try {
+    const productId = z.string().min(1).parse(formData.get("productId"));
+    const input = z
+      .object({
+        energyKj: z.coerce.number().int().min(0),
+        energyKcal: z.coerce.number().int().min(0),
+        fatG: z.coerce.number().min(0),
+        saturatedFatG: z.coerce.number().min(0),
+        carbohydratesG: z.coerce.number().min(0),
+        sugarsG: z.coerce.number().min(0),
+        fibreG: z.coerce.number().min(0),
+        proteinG: z.coerce.number().min(0),
+        saltG: z.coerce.number().min(0),
+        verified: z.coerce.boolean().default(false),
+      })
+      .parse(values(formData));
+    const { verified, ...nutrition } = input;
+    const meta = await requestMeta();
+    await db.$transaction(async (tx) => {
+      const before = await tx.nutritionData.findUnique({
+        where: { productId },
+      });
+      await tx.nutritionData.upsert({
+        where: { productId },
+        create: {
+          productId,
+          ...nutrition,
+          verifiedAt: verified ? new Date() : null,
+        },
+        update: { ...nutrition, verifiedAt: verified ? new Date() : null },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: "PRODUCT_NUTRITION_UPDATED",
+          entityType: "Product",
+          entityId: productId,
+          before: before ? { verified: Boolean(before.verifiedAt) } : undefined,
+          after: { verified },
+          ...meta,
+        },
+      });
+    });
+    revalidatePath(`/admin/products/${productId}`);
+    return { success: true as const };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
+export async function addProductImageAction(formData: FormData) {
+  const session = await requireAdmin("products");
+  try {
+    const input = z
+      .object({
+        productId: z.string().min(1),
+        url: z.string().url(),
+        altDe: z.string().trim().min(2).max(300),
+        altEn: z.string().trim().min(2).max(300),
+        sortOrder: z.coerce.number().int().min(0).max(1000),
+        isPrimary: z.coerce.boolean().default(false),
+      })
+      .parse(values(formData));
+    const meta = await requestMeta();
+    await db.$transaction(async (tx) => {
+      if (input.isPrimary)
+        await tx.productImage.updateMany({
+          where: { productId: input.productId },
+          data: { isPrimary: false },
+        });
+      const image = await tx.productImage.create({ data: input });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: "PRODUCT_IMAGE_ADDED",
+          entityType: "ProductImage",
+          entityId: image.id,
+          after: { productId: input.productId, isPrimary: input.isPrimary },
+          ...meta,
+        },
+      });
+    });
+    revalidatePath(`/admin/products/${input.productId}`);
+    return { success: true as const };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
 export async function adjustInventoryAction(formData: FormData) {
   const session = await requireAdmin("inventory");
   try {
@@ -399,6 +612,81 @@ export async function adjustInventoryAction(formData: FormData) {
             reason: input.reason,
             change: input.quantity,
           },
+          ...meta,
+        },
+      });
+    });
+    revalidatePath("/admin/inventory");
+    return { success: true as const };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
+export async function importInventoryCsvAction(formData: FormData) {
+  const session = await requireAdmin("inventory");
+  try {
+    const file = formData.get("file");
+    if (!(file instanceof File) || file.size === 0 || file.size > 1_000_000)
+      throw new Error("INVALID_INVENTORY_CSV");
+    const parsed = Papa.parse<Record<string, string>>(await file.text(), {
+      header: true,
+      skipEmptyLines: true,
+    });
+    if (parsed.errors.length) throw new Error("INVALID_INVENTORY_CSV");
+    const rows = z
+      .array(
+        z.object({
+          sku: z
+            .string()
+            .trim()
+            .min(3)
+            .transform((v) => v.toUpperCase()),
+          onHand: z.coerce.number().int().min(0),
+          lowStockThreshold: z.coerce.number().int().min(0),
+        }),
+      )
+      .min(1)
+      .max(500)
+      .parse(parsed.data);
+    const meta = await requestMeta();
+    await db.$transaction(async (tx) => {
+      for (const row of rows) {
+        const variant = await tx.productVariant.findUnique({
+          where: { sku: row.sku },
+          include: { inventory: true },
+        });
+        if (!variant?.inventory)
+          throw new Error(`INVENTORY_NOT_FOUND:${row.sku}`);
+        if (row.onHand < variant.inventory.reserved)
+          throw new Error(`ON_HAND_BELOW_RESERVED:${row.sku}`);
+        const change = row.onHand - variant.inventory.onHand;
+        await tx.inventory.update({
+          where: { id: variant.inventory.id },
+          data: {
+            onHand: row.onHand,
+            lowStockThreshold: row.lowStockThreshold,
+            version: { increment: 1 },
+          },
+        });
+        if (change !== 0)
+          await tx.inventoryAdjustment.create({
+            data: {
+              inventoryId: variant.inventory.id,
+              type: "CORRECTION",
+              quantity: change,
+              reason: "Stock count correction",
+              internalNote: `CSV import: ${file.name}`,
+              actorId: session.user.id,
+            },
+          });
+      }
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: "INVENTORY_CSV_IMPORTED",
+          entityType: "Inventory",
+          after: { rows: rows.length, fileName: file.name },
           ...meta,
         },
       });
@@ -887,6 +1175,46 @@ export async function requestCustomerAnonymisationAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/customers");
+    return { success: true as const };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
+export async function updateUserRoleAction(formData: FormData) {
+  const session = await requireAdmin("settings");
+  try {
+    const userId = z.string().min(1).parse(formData.get("userId"));
+    const role = z
+      .enum([
+        "CUSTOMER",
+        "WHOLESALE_CUSTOMER",
+        "CONTENT_EDITOR",
+        "ORDER_MANAGER",
+        "ADMIN",
+        "SUPER_ADMIN",
+      ])
+      .parse(formData.get("role"));
+    const meta = await requestMeta();
+    const before = await db.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { role: true },
+    });
+    await db.$transaction(async (tx) => {
+      await tx.user.update({ where: { id: userId }, data: { role } });
+      await tx.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: "USER_ROLE_CHANGED",
+          entityType: "User",
+          entityId: userId,
+          before: { role: before.role },
+          after: { role },
+          ...meta,
+        },
+      });
+    });
+    revalidatePath(`/admin/customers/${userId}`);
     return { success: true as const };
   } catch (error) {
     return actionError(error);

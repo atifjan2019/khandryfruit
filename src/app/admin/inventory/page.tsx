@@ -8,7 +8,10 @@ import {
   TextField,
 } from "@/components/admin/product-form";
 import { db } from "@/lib/db/client";
-import { adjustInventoryAction } from "@/server/actions/admin";
+import {
+  adjustInventoryAction,
+  importInventoryCsvAction,
+} from "@/server/actions/admin";
 import { requireAdmin } from "@/server/policies/authorization";
 export default async function InventoryPage({
   searchParams,
@@ -167,6 +170,20 @@ export default async function InventoryPage({
             />
             <TextField label="Internal note" name="internalNote" />
           </div>
+        </AdminSection>
+      </AdminForm>
+      <AdminForm
+        action={importInventoryCsvAction}
+        submitLabel="Import inventory CSV"
+      >
+        <AdminSection
+          title="CSV import"
+          description="Maximum 500 rows. Required headers: sku, onHand, lowStockThreshold. Every changed quantity creates inventory history."
+        >
+          <label className="admin-field wide">
+            <span>CSV file</span>
+            <input type="file" name="file" accept=".csv,text/csv" required />
+          </label>
         </AdminSection>
       </AdminForm>
     </div>

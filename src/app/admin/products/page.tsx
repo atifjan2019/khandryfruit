@@ -4,6 +4,8 @@ import { db } from "@/lib/db/client";
 import { formatMoney } from "@/lib/commerce/money";
 import { getProductReadiness } from "@/server/services/product-readiness";
 import { requireAdmin } from "@/server/policies/authorization";
+import { ConfirmForm } from "@/components/admin/admin-form";
+import { bulkProductAction } from "@/server/actions/admin";
 
 export default async function ProductsPage({
   searchParams,
@@ -39,7 +41,7 @@ export default async function ProductsPage({
         ]
       : undefined,
   };
-  const [products, count] = await Promise.all([
+  const [products, count, categories] = await Promise.all([
     db.product.findMany({
       where,
       include: {
@@ -58,6 +60,11 @@ export default async function ProductsPage({
       take,
     }),
     db.product.count({ where }),
+    db.category.findMany({
+      where: { active: true },
+      include: { translations: { where: { locale: "en" } } },
+      orderBy: { sortOrder: "asc" },
+    }),
   ]);
   const readiness = new Map(
     await Promise.all(
@@ -104,95 +111,131 @@ export default async function ProductsPage({
         </button>
         <Link href="/admin/products">Clear</Link>
       </form>
-      <div className="admin-table-wrap">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Status</th>
-              <th>Category</th>
-              <th>Variants</th>
-              <th>From</th>
-              <th>Available</th>
-              <th>Readiness</th>
-              <th>
-                <span className="sr-only">Actions</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => {
-              const name =
-                product.translations.find((item) => item.locale === "en")
-                  ?.name ??
-                product.translations.find((item) => item.locale === "de")
-                  ?.name ??
-                product.internalName;
-              const variants = product.variants.filter((item) => item.active);
-              const available = variants.reduce(
-                (sum, item) =>
-                  sum +
-                  Math.max(
-                    0,
-                    (item.inventory?.onHand ?? 0) -
-                      (item.inventory?.reserved ?? 0),
-                  ),
-                0,
-              );
-              const ready = readiness.get(product.id);
-              return (
-                <tr key={product.id}>
-                  <td>
-                    <strong>{name}</strong>
-                    <small>{product.internalName}</small>
-                  </td>
-                  <td>
-                    <span
-                      className={`status-pill status-${product.status.toLowerCase()}`}
-                    >
-                      {product.status}
-                    </span>
-                  </td>
-                  <td>
-                    {product.categories[0]?.category.translations[0]?.name ??
-                      "—"}
-                  </td>
-                  <td>{variants.length}</td>
-                  <td>
-                    {variants.length
-                      ? formatMoney(
-                          Math.min(...variants.map((item) => item.priceCents)),
-                          "en",
-                        )
-                      : "—"}
-                  </td>
-                  <td>{available}</td>
-                  <td>
-                    <div className="readiness-mini">
-                      <span style={{ width: `${ready?.score ?? 0}%` }} />
-                      <b>{ready?.score ?? 0}%</b>
-                    </div>
-                  </td>
-                  <td>
-                    <Link
-                      className="table-action"
-                      href={`/admin/products/${product.id}`}
-                    >
-                      Edit
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        {!products.length && (
-          <div className="admin-empty-state">
-            <h2>No products match these filters</h2>
-            <p>Clear filters or create a new draft product.</p>
-          </div>
-        )}
-      </div>
+      <ConfirmForm
+        action={bulkProductAction}
+        confirmMessage="Apply this bulk change to the selected products?"
+      >
+        <div className="admin-filterbar">
+          <select name="status">
+            <option value="">Keep current status</option>
+            <option value="DRAFT">Move to draft</option>
+            <option value="ARCHIVED">Archive</option>
+          </select>
+          <select name="categoryId">
+            <option value="">Keep current category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.translations[0]?.name ?? category.internalName}
+              </option>
+            ))}
+          </select>
+          <button className="button secondary" type="submit">
+            Apply to selected
+          </button>
+        </div>
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>
+                  <span className="sr-only">Select</span>
+                </th>
+                <th>Product</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Variants</th>
+                <th>From</th>
+                <th>Available</th>
+                <th>Readiness</th>
+                <th>
+                  <span className="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product) => {
+                const name =
+                  product.translations.find((item) => item.locale === "en")
+                    ?.name ??
+                  product.translations.find((item) => item.locale === "de")
+                    ?.name ??
+                  product.internalName;
+                const variants = product.variants.filter((item) => item.active);
+                const available = variants.reduce(
+                  (sum, item) =>
+                    sum +
+                    Math.max(
+                      0,
+                      (item.inventory?.onHand ?? 0) -
+                        (item.inventory?.reserved ?? 0),
+                    ),
+                  0,
+                );
+                const ready = readiness.get(product.id);
+                return (
+                  <tr key={product.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="productIds"
+                        value={product.id}
+                        aria-label={`Select ${name}`}
+                      />
+                    </td>
+                    <td>
+                      <strong>{name}</strong>
+                      <small>{product.internalName}</small>
+                    </td>
+                    <td>
+                      <span
+                        className={`status-pill status-${product.status.toLowerCase()}`}
+                      >
+                        {product.status}
+                      </span>
+                    </td>
+                    <td>
+                      {product.categories[0]?.category.translations[0]?.name ??
+                        "—"}
+                    </td>
+                    <td>{variants.length}</td>
+                    <td>
+                      {variants.length
+                        ? formatMoney(
+                            Math.min(
+                              ...variants.map((item) => item.priceCents),
+                            ),
+                            "en",
+                          )
+                        : "—"}
+                    </td>
+                    <td>{available}</td>
+                    <td>
+                      <div className="readiness-mini">
+                        <span style={{ width: `${ready?.score ?? 0}%` }} />
+                        <b>{ready?.score ?? 0}%</b>
+                      </div>
+                    </td>
+                    <td>
+                      <Link
+                        className="table-action"
+                        href={`/admin/products/${product.id}`}
+                      >
+                        Edit
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {!products.length && (
+            <div className="admin-empty-state">
+              <h2>No products match these filters</h2>
+              <p>Clear filters or create a new draft product.</p>
+            </div>
+          )}
+        </div>
+      </ConfirmForm>
       {count > take && (
         <nav className="admin-pagination" aria-label="Product pages">
           {Array.from({ length: Math.ceil(count / take) }, (_, index) => (

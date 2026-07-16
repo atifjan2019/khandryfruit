@@ -31,6 +31,14 @@ npm run dev
 
 Local seed accounts use `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, `SEED_CUSTOMER_EMAIL` and `SEED_CUSTOMER_PASSWORD`. They are development-only. Change/remove them before staging or production.
 
+## Administration
+
+`npm run db:seed` creates or updates the development administrator identified by `SEED_ADMIN_EMAIL` and assigns `SUPER_ADMIN`. Keep the password only in the ignored local environment file. Sign in through `/en/sign-in` or `/de/sign-in`, then open `/admin`; locale-prefixed `/en/admin/...` and `/de/admin/...` URLs redirect to the single protected admin namespace.
+
+Routes cover dashboard, products, categories, inventory, orders, customers, wholesale applications, gift boxes, coupons, reviews, bilingual content, settings and audit logs. Every page and mutation rechecks permissions on the server. `CONTENT_EDITOR` is limited to content/reviews, `ORDER_MANAGER` to orders/customers, `ADMIN` to day-to-day commerce, and `SUPER_ADMIN` additionally controls critical settings.
+
+The initial migration defines the commerce/auth domain. `20260715230000_admin_dashboard_fields` adds admin-required variant ordering, inventory notes, wholesale review fields, gift-box configuration records and search aliases. Apply migrations with `npm run db:deploy` before seeding.
+
 ## Better Auth on Vercel + Supabase
 
 Better Auth—not Supabase Auth—is the authentication authority. It stores `user`, `session`, `account` and `verification` tables in Supabase PostgreSQL. Set these Vercel variables:
@@ -66,4 +74,4 @@ npm run build
 npm run check
 ```
 
-See `DEPLOYMENT.md`, `ARCHITECTURE.md`, `SECURITY.md`, `TESTING.md`, `ASSUMPTIONS.md`, `CONTENT-REQUIREMENTS.md`, `LAUNCH-CHECKLIST.md` and `REQUIREMENTS-MATRIX.md`.
+See `DEPLOYMENT.md`, `SECURITY.md` and `TESTING.md`.
