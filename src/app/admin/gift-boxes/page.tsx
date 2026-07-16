@@ -45,6 +45,9 @@ export default async function GiftBoxesPage() {
               <th>Base price</th>
               <th>Status</th>
               <th>Configurations</th>
+              <th>
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -53,7 +56,6 @@ export default async function GiftBoxesPage() {
                 <td>
                   <strong>{b.nameEn}</strong>
                   <small>{b.nameDe}</small>
-                  <Link href={`/admin/gift-boxes/${b.id}`}>Edit</Link>
                 </td>
                 <td>{b.fixed ? "Fixed" : "Custom"}</td>
                 <td>{b.sizeName}</td>
@@ -64,6 +66,14 @@ export default async function GiftBoxesPage() {
                 <td>{formatMoney(b.basePriceCents, "en")}</td>
                 <td>{b.active ? "Active" : "Draft"}</td>
                 <td>{b._count.configurations}</td>
+                <td>
+                  <Link
+                    className="table-action"
+                    href={`/admin/gift-boxes/${b.id}`}
+                  >
+                    Edit
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -41,9 +41,7 @@ export default async function SystemHealthPage() {
     ],
     [
       "Cloudflare R2 storage",
-      Boolean(
-        env.CLOUDFLARE_R2_BUCKET && env.CLOUDFLARE_R2_ACCESS_KEY_ID,
-      ),
+      Boolean(env.CLOUDFLARE_R2_BUCKET && env.CLOUDFLARE_R2_ACCESS_KEY_ID),
       "COMMERCE_BLOCKER",
     ],
     [
@@ -73,7 +71,9 @@ export default async function SystemHealthPage() {
       <section className="admin-card">
         <header>
           <h2>Launch readiness</h2>
-          <span className="admin-status">
+          <span
+            className={`admin-status ${launch?.ready ? "is-positive" : "is-negative"}`}
+          >
             {launch?.ready
               ? "Ready"
               : `${launch?.blockerCount ?? "—"} blockers`}
@@ -87,7 +87,9 @@ export default async function SystemHealthPage() {
                 {check.severity} · {check.detail}
               </small>
             </span>
-            <span className="admin-status">
+            <span
+              className={`admin-status ${check.ready ? "is-positive" : "is-negative"}`}
+            >
               {check.ready ? "Ready" : "Blocked"}
             </span>
           </div>
@@ -107,7 +109,9 @@ export default async function SystemHealthPage() {
               <strong>{name}</strong>
               <small>{severity}</small>
             </span>
-            <span className="admin-status">
+            <span
+              className={`admin-status ${ok ? "is-positive" : severity === "WARNING" || severity === "OPTIONAL" ? "is-warning" : "is-negative"}`}
+            >
               {ok ? "Configured" : "Missing or invalid"}
             </span>
           </div>

@@ -308,6 +308,37 @@ export async function setProductStatusAction(formData: FormData) {
   }
 }
 
+// Wraps setProductStatusAction so the product editor gets persistent feedback:
+// the outcome is encoded as a `flash` query param that survives the redirect and
+// is rendered as a live region on the page.
+export async function changeProductStatusAction(formData: FormData) {
+  const productId = String(formData.get("productId") ?? "");
+  const status = String(formData.get("status") ?? "");
+  const result = await setProductStatusAction(formData);
+  const params = new URLSearchParams();
+  if (result.success) {
+    params.set(
+      "flash",
+      status === "ACTIVE"
+        ? "published"
+        : status === "ARCHIVED"
+          ? "archived"
+          : "unpublished",
+    );
+  } else if (result.error.code === "PUBLICATION_BLOCKED") {
+    const readiness = await getProductReadiness(productId);
+    params.set("flash", "blocked");
+    params.set("count", String(readiness?.blockers.length ?? 0));
+  } else {
+    params.set("flash", "error");
+  }
+  redirect(
+    productId
+      ? `/admin/products/${productId}?${params.toString()}`
+      : `/admin/products?${params.toString()}`,
+  );
+}
+
 export async function bulkProductAction(formData: FormData) {
   const session = await requireAdmin("products");
   try {

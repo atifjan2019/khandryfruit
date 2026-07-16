@@ -19,6 +19,9 @@
   --radius-lg: 1.75rem;
   --shadow: 0 20px 60px rgb(36 48 38 / 0.1);
   --container: 78rem;
+  --font-sans:
+    var(--font-poppins), "Poppins", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
 }
 
 * {
@@ -31,7 +34,7 @@ body {
   margin: 0;
   color: var(--charcoal);
   background: var(--cream);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.55;
 }
 a {
@@ -55,7 +58,7 @@ a {
 h1,
 h2,
 h3 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans);
   line-height: 1.06;
   margin-top: 0;
   letter-spacing: -0.025em;
@@ -125,9 +128,7 @@ p {
   border-radius: 50% 50% 46% 46%;
   color: var(--gold-light);
   background: var(--forest);
-  font:
-    700 1.45rem Georgia,
-    serif;
+  font: 700 1.45rem var(--font-sans);
   border: 1px solid var(--gold);
 }
 .brand span:last-child {
@@ -136,9 +137,7 @@ p {
   line-height: 1;
 }
 .brand strong {
-  font:
-    700 1.18rem Georgia,
-    serif;
+  font: 700 1.18rem var(--font-sans);
 }
 .brand small {
   color: var(--walnut);
@@ -375,9 +374,7 @@ p {
   font-size: 0.62rem;
 }
 .hero-label strong {
-  font:
-    700 1.4rem Georgia,
-    serif;
+  font: 700 1.4rem var(--font-sans);
 }
 .trust-strip {
   background: var(--ivory);
@@ -757,9 +754,7 @@ p {
   gap: 3rem;
 }
 .footer-grid h2 {
-  font:
-    800 0.75rem Arial,
-    sans-serif;
+  font: 800 0.75rem var(--font-sans);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--gold-light);
@@ -933,9 +928,7 @@ p {
   gap: 1rem;
 }
 .purchase-price strong {
-  font:
-    700 2rem Georgia,
-    serif;
+  font: 700 2rem var(--font-sans);
 }
 .purchase-price span {
   color: var(--muted);
@@ -1020,9 +1013,7 @@ p {
   font-size: 2rem;
 }
 .product-details h3 {
-  font:
-    800 0.8rem Arial,
-    sans-serif;
+  font: 800 0.8rem var(--font-sans);
   margin-top: 1.4rem;
 }
 .product-details p,
@@ -1385,9 +1376,7 @@ p {
   font-size: 0.75rem;
 }
 .metric-grid strong {
-  font:
-    700 2.4rem Georgia,
-    serif;
+  font: 700 2.4rem var(--font-sans);
 }
 .admin-panel {
   background: white;
@@ -1856,9 +1845,7 @@ p {
 }
 .admin-metric-grid strong {
   grid-column: 1 / -1;
-  font:
-    700 1.65rem Georgia,
-    serif;
+  font: 700 1.65rem var(--font-sans);
 }
 .admin-dashboard-grid {
   display: grid;
@@ -1882,9 +1869,7 @@ p {
 }
 .admin-card h2 {
   margin: 0;
-  font:
-    800 0.9rem Arial,
-    sans-serif;
+  font: 800 0.9rem var(--font-sans);
 }
 .admin-card header a {
   display: flex;
@@ -1924,6 +1909,70 @@ p {
   background: #edf1ec;
   font-size: 0.58rem;
   text-transform: uppercase;
+}
+.admin-status.is-positive {
+  background: #dff2e5;
+  color: #1d5f37;
+  font-weight: 800;
+}
+.admin-status.is-negative {
+  background: #fbe3e3;
+  color: #9a2a2a;
+  font-weight: 800;
+}
+.admin-status.is-warning {
+  background: #fbeecb;
+  color: #6f5210;
+  font-weight: 800;
+}
+/* Product lifecycle pills (Products list) — distinct per state, not colour-only:
+   the DRAFT/ACTIVE/ARCHIVED text label always accompanies the colour. */
+.status-pill {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #edf1ec;
+  color: var(--charcoal);
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.status-active {
+  background: #dff2e5;
+  color: #1d5f37;
+}
+.status-draft {
+  background: #fbeecb;
+  color: #6f5210;
+}
+.status-archived {
+  background: #ececec;
+  color: #4a4a4a;
+}
+.admin-flash {
+  margin-bottom: 1.5rem;
+  padding: 0.9rem 1.15rem;
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid transparent;
+  border-radius: 0.8rem;
+}
+.admin-flash strong {
+  font-size: 0.85rem;
+}
+.admin-flash span {
+  font-size: 0.78rem;
+}
+.admin-flash.error {
+  border-color: #e4c7c7;
+  background: #fbeeee;
+  color: var(--error);
+}
+.admin-flash.success {
+  border-color: #bfdcc9;
+  background: #e7f4ec;
+  color: var(--success);
 }
 .admin-empty {
   margin: 0;
@@ -2135,9 +2184,7 @@ p {
 }
 .admin-form-section > header h2 {
   margin: 0 0 0.2rem;
-  font:
-    800 0.9rem Arial,
-    sans-serif;
+  font: 800 0.9rem var(--font-sans);
 }
 .admin-form-section > header p {
   margin: 0;
@@ -2176,6 +2223,25 @@ p {
 .admin-field textarea {
   min-height: 0;
   resize: vertical;
+}
+.admin-field input[type="date"],
+.admin-field input[type="datetime-local"] {
+  color-scheme: light;
+  color: var(--charcoal);
+  font-family: var(--font-sans);
+}
+.admin-field input[type="date"]::-webkit-calendar-picker-indicator,
+.admin-field input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  padding: 0.15rem;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.admin-field input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.admin-field
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  background: var(--forest-soft);
 }
 .admin-checkbox {
   display: flex;
@@ -2257,9 +2323,7 @@ p {
   font-size: 0.72rem;
 }
 .admin-metric strong {
-  font:
-    700 1.65rem Georgia,
-    serif;
+  font: 700 1.65rem var(--font-sans);
 }
 .admin-pagination {
   margin-top: 1rem;
@@ -2294,9 +2358,7 @@ p {
 }
 .admin-empty-state h2 {
   margin-bottom: 0.3rem;
-  font:
-    800 1rem Arial,
-    sans-serif;
+  font: 800 1rem var(--font-sans);
 }
 .admin-empty-state p {
   margin: 0;
@@ -2317,9 +2379,7 @@ p {
 }
 .danger-zone h2 {
   margin: 0 0 0.2rem;
-  font:
-    800 0.9rem Arial,
-    sans-serif;
+  font: 800 0.9rem var(--font-sans);
   color: var(--error);
 }
 .danger-zone p {
@@ -2375,9 +2435,7 @@ p {
   gap: 0.9rem;
 }
 .readiness-card > div:first-child > strong {
-  font:
-    700 1.8rem Georgia,
-    serif;
+  font: 700 1.8rem var(--font-sans);
   color: var(--forest);
 }
 .readiness-card > div:first-child span {
@@ -2395,6 +2453,20 @@ p {
   padding-left: 1.1rem;
   color: var(--error);
   font-size: 0.75rem;
+}
+.readiness-blocker {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--error);
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.readiness-blocker:hover {
+  text-decoration-thickness: 2px;
 }
 .readiness-bar {
   height: 0.5rem;
@@ -3128,9 +3200,9 @@ p {
   margin-bottom: 1.15rem;
 }
 .admin-nav-group > p {
-  margin: 0 0 0.35rem 0.75rem;
-  color: #85a397;
-  font-size: 0.58rem;
+  margin: 0 0 0.4rem 0.75rem;
+  color: #a9c4b8;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -3373,9 +3445,7 @@ p {
 }
 .media-stat-grid strong {
   color: #20241f;
-  font:
-    700 1.35rem Georgia,
-    serif;
+  font: 700 1.35rem var(--font-sans);
 }
 .media-storage-error {
   margin-bottom: 1rem;
@@ -3554,9 +3624,7 @@ p {
   border-radius: 0.5rem;
   background: #eff2ed;
   color: var(--forest);
-  font:
-    800 0.62rem Arial,
-    sans-serif;
+  font: 800 0.62rem var(--font-sans);
   cursor: pointer;
 }
 .media-delete-button {

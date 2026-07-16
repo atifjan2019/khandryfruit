@@ -7,12 +7,13 @@ import {
   Checkbox,
 } from "@/components/admin/product-form";
 import { AdminForm, ConfirmForm } from "@/components/admin/admin-form";
+import { ReadinessBlockers } from "@/components/admin/readiness-blockers";
 import { db } from "@/lib/db/client";
 import { formatMoney, unitPricePerKg } from "@/lib/commerce/money";
 import {
   addProductImageAction,
+  changeProductStatusAction,
   createVariantAction,
-  setProductStatusAction,
   updateVariantAction,
   upsertNutritionAction,
   updateProductAction,
@@ -20,13 +21,42 @@ import {
 import { requireAdmin } from "@/server/policies/authorization";
 import { getProductReadiness } from "@/server/services/product-readiness";
 
+const PUBLISH_FLASH: Record<
+  string,
+  { tone: "error" | "success"; title: string; detail: string }
+> = {
+  published: {
+    tone: "success",
+    title: "Product published",
+    detail: "This product is now live in the catalogue.",
+  },
+  unpublished: {
+    tone: "success",
+    title: "Product unpublished",
+    detail: "This product has been removed from the public catalogue.",
+  },
+  archived: {
+    tone: "success",
+    title: "Product archived",
+    detail: "This product has left public catalogues; order history is intact.",
+  },
+  error: {
+    tone: "error",
+    title: "Status change failed",
+    detail: "The product status could not be updated. Please try again.",
+  },
+};
+
 export default async function EditProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ flash?: string; count?: string }>;
 }) {
   await requireAdmin("products");
   const { id } = await params;
+  const { flash, count } = await searchParams;
   const [product, categories, readiness] = await Promise.all([
     db.product.findUnique({
       where: { id },
@@ -51,8 +81,33 @@ export default async function EditProductPage({
   ]);
   if (!product || !readiness) notFound();
   const de = product.translations.find((item) => item.locale === "de");
+  const isActive = product.status === "ACTIVE";
+  const publishBlocked = !isActive && !readiness.ready;
+  const blockerCount = readiness.blockers.length;
+  const blockerLabel = `${blockerCount} blocker${blockerCount === 1 ? "" : "s"}`;
+  const notice = flash === "blocked" ? null : flash && PUBLISH_FLASH[flash];
   return (
     <div className="admin-page-v2">
+      {flash === "blocked" && (
+        <div className="admin-flash error" role="alert" aria-live="assertive">
+          <strong>Cannot publish</strong>
+          <span>
+            {count ?? blockerCount} requirement
+            {(count ?? String(blockerCount)) === "1" ? "" : "s"} unresolved.
+            Resolve the blockers listed below, then publish again.
+          </span>
+        </div>
+      )}
+      {notice && (
+        <div
+          className={`admin-flash ${notice.tone}`}
+          role={notice.tone === "error" ? "alert" : "status"}
+          aria-live={notice.tone === "error" ? "assertive" : "polite"}
+        >
+          <strong>{notice.title}</strong>
+          <span>{notice.detail}</span>
+        </div>
+      )}
       <div className="admin-page-heading">
         <div>
           <p className="eyebrow">{product.status}</p>
@@ -70,21 +125,36 @@ export default async function EditProductPage({
             </Link>
           )}
           <ConfirmForm
-            action={setProductStatusAction}
+            action={changeProductStatusAction}
             confirmMessage={
-              readiness.ready
-                ? "Publish this product?"
-                : "This product is not ready and publication will be rejected."
+              isActive
+                ? "Unpublish this product? It will leave public catalogues."
+                : readiness.ready
+                  ? "Publish this product?"
+                  : "This product is not ready and publication will be rejected. Continue anyway?"
             }
           >
             <input type="hidden" name="productId" value={product.id} />
             <input
               type="hidden"
               name="status"
-              value={product.status === "ACTIVE" ? "DRAFT" : "ACTIVE"}
+              value={isActive ? "DRAFT" : "ACTIVE"}
             />
-            <button className="button" type="submit">
-              {product.status === "ACTIVE" ? "Unpublish" : "Publish"}
+            <button
+              className={
+                isActive || publishBlocked ? "button secondary" : "button"
+              }
+              type="submit"
+              title={
+                publishBlocked
+                  ? `Resolve ${blockerLabel} to publish`
+                  : undefined
+              }
+              aria-describedby={
+                publishBlocked ? "readiness-summary" : undefined
+              }
+            >
+              {isActive ? "Unpublish" : "Publish"}
             </button>
           </ConfirmForm>
         </div>
@@ -94,24 +164,25 @@ export default async function EditProductPage({
           <strong>{readiness.score}%</strong>
           <span>
             <b>Product readiness</b>
-            <small>
+            <small id="readiness-summary">
               {readiness.ready
                 ? "All publication checks pass."
-                : `${readiness.blockers.length} blockers must be resolved.`}
+                : `${blockerLabel} must be resolved before publishing.`}
             </small>
           </span>
         </div>
-        <div className="readiness-bar">
+        <div
+          className="readiness-bar"
+          role="progressbar"
+          aria-valuenow={readiness.score}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`Product readiness ${readiness.score}%`}
+        >
           <span style={{ width: `${readiness.score}%` }} />
         </div>
         {readiness.blockers.length > 0 && (
-          <ul>
-            {readiness.blockers.map((blocker) => (
-              <li key={blocker}>
-                {blocker.replaceAll("_", " ").toLowerCase()}
-              </li>
-            ))}
-          </ul>
+          <ReadinessBlockers blockers={readiness.blockers} />
         )}
       </section>
       <ProductForm
@@ -121,6 +192,7 @@ export default async function EditProductPage({
       />
       <section className="admin-form standalone">
         <AdminSection
+          id="rf-variants"
           title="Variants, prices and inventory"
           description="Prices are stored in euro cents; unit prices are calculated from server-controlled values."
         >
@@ -335,6 +407,7 @@ export default async function EditProductPage({
         <AdminForm action={addProductImageAction} submitLabel="Add image">
           <input type="hidden" name="productId" value={product.id} />
           <AdminSection
+            id="rf-images"
             title="Product images"
             description="Use a trusted HTTPS image URL. Upload integration can replace this field later."
           >
@@ -385,6 +458,7 @@ export default async function EditProductPage({
       >
         <input type="hidden" name="productId" value={product.id} />
         <AdminSection
+          id="rf-nutrition"
           title="Nutrition per 100 g"
           description="Enter only verified supplier or laboratory data; never estimate food information."
         >
@@ -470,7 +544,7 @@ export default async function EditProductPage({
         </AdminSection>
       </AdminForm>
       <ConfirmForm
-        action={setProductStatusAction}
+        action={changeProductStatusAction}
         confirmMessage="Archive this product? It will leave public catalogues."
         className="danger-zone"
       >
