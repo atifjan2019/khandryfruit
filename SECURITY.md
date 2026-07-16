@@ -9,5 +9,5 @@
 - Security headers disable framing, MIME sniffing and unnecessary browser permissions. A restrictive CSP is enabled; replace its temporary inline-script allowance with a nonce-based policy after final analytics/payment domains are verified.
 - Server instrumentation records structured request failures. Log fields and common credential-shaped values are redacted; never pass request cookies, authorization headers or raw connection errors to the logger.
 - Rotate Better Auth, Stripe, AWS and cron secrets after any suspected exposure. Revoke sessions after auth-secret incidents.
-- Run `npm audit --audit-level=high` in CI. Current moderate issues must be reviewed before launch; do not use `npm audit fix --force` without regression testing.
+- Run `npm audit --audit-level=high` in CI. Current moderate issues are recorded in the [security dependency risk register](docs/security-risk-register.md) and must be reviewed again before launch; do not use `npm audit fix --force` without regression testing.
 - Privacy workflows must retain legally required invoice/order records while anonymising eligible profile data.

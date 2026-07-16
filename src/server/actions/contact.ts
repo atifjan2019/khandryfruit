@@ -39,7 +39,7 @@ export async function submitContactEnquiryAction(
       return { success: true, data: { enquiryId: "received" } };
     }
 
-    const rate = checkRateLimit(`contact:${meta.ipAddress}`, RATE_LIMIT);
+    const rate = await checkRateLimit(`contact:${meta.ipAddress}`, RATE_LIMIT);
     if (!rate.allowed)
       return failure(
         "RATE_LIMITED",

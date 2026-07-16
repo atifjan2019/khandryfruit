@@ -44,7 +44,7 @@ export async function submitWholesaleApplicationAction(
       return { success: true, data: { applicationId: "received" } };
     }
 
-    const rate = checkRateLimit(`wholesale:${meta.ipAddress}`, RATE_LIMIT);
+    const rate = await checkRateLimit(`wholesale:${meta.ipAddress}`, RATE_LIMIT);
     if (!rate.allowed)
       return failure(
         "RATE_LIMITED",

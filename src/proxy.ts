@@ -7,6 +7,8 @@ import { adminAreas, canAccessAdmin } from "@/config/admin";
 import { resolveLocalizedPathname } from "@/config/routes";
 import { routing } from "@/i18n/navigation";
 import { auth } from "@/lib/auth/auth";
+import { createCsp, securityHeaders } from "@/lib/security/csp";
+import { hasTrustedOrigin } from "@/lib/security/origin";
 
 const localeMiddleware = createMiddleware(routing);
 
@@ -45,7 +47,7 @@ function accessResponse(status: 401 | 403) {
   );
 }
 
-export default async function proxy(request: NextRequest) {
+async function routeRequest(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/admin")) {
     // Proxy provides the full-document access state. RSC navigations and
     // mutations continue to the layout/page/action checks so Next can return
@@ -79,6 +81,32 @@ export default async function proxy(request: NextRequest) {
   }
 
   return localeMiddleware(request);
+}
+
+export default async function proxy(request: NextRequest) {
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const policy = securityHeaders(nonce);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+  // Next parses the request CSP and automatically applies this nonce to its
+  // framework and hydration scripts. Enforcement remains separately staged.
+  requestHeaders.set("content-security-policy", createCsp(nonce, true));
+  const securedRequest = new NextRequest(request, { headers: requestHeaders });
+
+  let response: NextResponse;
+  if (!hasTrustedOrigin(securedRequest)) {
+    response = NextResponse.json(
+      { success: false, error: { code: "UNTRUSTED_ORIGIN" } },
+      { status: 403 },
+    );
+  } else {
+    response = await routeRequest(securedRequest);
+  }
+  response.headers.set("Content-Security-Policy", policy.enforced);
+  if (policy.reportOnly)
+    response.headers.set("Content-Security-Policy-Report-Only", policy.reportOnly);
+  response.headers.set("Cache-Control", response.headers.get("Cache-Control") ?? "private, no-store");
+  return response;
 }
 
 export const config = {

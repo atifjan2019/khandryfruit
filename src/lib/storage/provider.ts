@@ -1,47 +1,131 @@
 import "server-only";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { env } from "@/lib/env";
 
-const allowedTypes = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/avif",
-]);
+import { createHash, randomUUID } from "node:crypto";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
+import { env } from "@/lib/env";
+import { validateAndReencodeImage } from "@/lib/storage/image-validation";
+
+const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
+const MAX_BYTES = 8_000_000;
+
 export interface StorageProvider {
   createUpload(input: {
     fileName: string;
     mimeType: string;
     sizeBytes: number;
+    checksumSha256Base64: string;
   }): Promise<{ key: string; uploadUrl: string }>;
+  finalizeUpload(input: {
+    quarantineKey: string;
+    purpose: "products" | "gift-boxes" | "certificates" | "content";
+  }): Promise<{ key: string; contentType: string; checksumSha256: string }>;
 }
+
 export class S3StorageProvider implements StorageProvider {
   private readonly client = new S3Client({
     region: env.AWS_REGION,
     endpoint: env.AWS_S3_ENDPOINT || undefined,
     forcePathStyle: Boolean(env.AWS_S3_ENDPOINT),
   });
+
   async createUpload(input: {
     fileName: string;
     mimeType: string;
     sizeBytes: number;
+    checksumSha256Base64: string;
   }) {
     if (!env.AWS_S3_BUCKET) throw new Error("STORAGE_NOT_CONFIGURED");
-    if (!allowedTypes.has(input.mimeType) || input.sizeBytes > 8_000_000)
+    if (
+      !allowedTypes.has(input.mimeType) ||
+      input.sizeBytes < 1 ||
+      input.sizeBytes > MAX_BYTES ||
+      !/^[A-Za-z0-9+/]{43}=$/.test(input.checksumSha256Base64)
+    )
       throw new Error("INVALID_UPLOAD");
-    const extension = input.mimeType.split("/")[1].replace("jpeg", "jpg");
-    const key = `products/${new Date().getUTCFullYear()}/${crypto.randomUUID()}.${extension}`;
+    const key = `quarantine/${new Date().getUTCFullYear()}/${randomUUID()}`;
     const command = new PutObjectCommand({
       Bucket: env.AWS_S3_BUCKET,
       Key: key,
-      ContentType: input.mimeType,
+      ContentType: "application/octet-stream",
       ContentLength: input.sizeBytes,
-      Metadata: { originalName: input.fileName.slice(0, 100) },
+      ChecksumSHA256: input.checksumSha256Base64,
+      Metadata: { uploadType: "image" },
     });
     return {
       key,
       uploadUrl: await getSignedUrl(this.client, command, { expiresIn: 300 }),
     };
   }
+
+  async finalizeUpload(input: {
+    quarantineKey: string;
+    purpose: "products" | "gift-boxes" | "certificates" | "content";
+  }) {
+    if (!env.AWS_S3_BUCKET) throw new Error("STORAGE_NOT_CONFIGURED");
+    if (!/^quarantine\/\d{4}\/[0-9a-f-]{36}$/.test(input.quarantineKey))
+      throw new Error("INVALID_QUARANTINE_KEY");
+    try {
+      const object = await this.client.send(
+        new GetObjectCommand({ Bucket: env.AWS_S3_BUCKET, Key: input.quarantineKey }),
+      );
+      if (!object.Body || (object.ContentLength ?? MAX_BYTES + 1) > MAX_BYTES)
+        throw new Error("INVALID_UPLOAD");
+      const source = Buffer.from(await object.Body.transformToByteArray());
+      await scanForMalware(source);
+      const validated = await validateAndReencodeImage(source);
+      const checksum = createHash("sha256").update(validated.bytes).digest();
+      const key = `${input.purpose}/${new Date().getUTCFullYear()}/${randomUUID()}.webp`;
+      await this.client.send(
+        new PutObjectCommand({
+          Bucket: env.AWS_S3_BUCKET,
+          Key: key,
+          Body: validated.bytes,
+          ContentType: validated.contentType,
+          ContentLength: validated.bytes.byteLength,
+          ChecksumSHA256: checksum.toString("base64"),
+          Metadata: {
+            width: String(validated.width),
+            height: String(validated.height),
+            sourceFormat: validated.sourceFormat,
+            scanStatus: "clean",
+          },
+        }),
+      );
+      return {
+        key,
+        contentType: validated.contentType,
+        checksumSha256: checksum.toString("hex"),
+      };
+    } finally {
+      await this.client.send(
+        new DeleteObjectCommand({ Bucket: env.AWS_S3_BUCKET, Key: input.quarantineKey }),
+      );
+    }
+  }
+}
+
+async function scanForMalware(bytes: Buffer) {
+  if (!env.MALWARE_SCAN_URL || !env.MALWARE_SCAN_TOKEN) {
+    if (env.NODE_ENV === "production") throw new Error("MALWARE_SCANNER_NOT_CONFIGURED");
+    return;
+  }
+  const response = await fetch(env.MALWARE_SCAN_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.MALWARE_SCAN_TOKEN}`,
+      "Content-Type": "application/octet-stream",
+    },
+    body: new Uint8Array(bytes),
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!response.ok) throw new Error("MALWARE_SCAN_FAILED");
+  const result = (await response.json()) as { clean?: boolean };
+  if (result.clean !== true) throw new Error("MALWARE_DETECTED");
 }

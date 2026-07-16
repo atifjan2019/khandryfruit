@@ -39,6 +39,11 @@ const schema = z.object({
   TIKTOK_PIXEL_ID: z.string().optional(),
   SENTRY_DSN: optionalUrl,
   NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
+  UPSTASH_REDIS_REST_URL: optionalUrl,
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+  CSP_ENFORCE_STRICT: z.enum(["0", "1"]).default("0"),
+  MALWARE_SCAN_URL: optionalUrl,
+  MALWARE_SCAN_TOKEN: z.string().optional(),
 });
 
 const parsed = schema.safeParse(process.env);
@@ -100,6 +105,10 @@ export function productionEnvironmentIssues(
     ["NEXT_PUBLIC_SENTRY_DSN", source.NEXT_PUBLIC_SENTRY_DSN],
     ["NEXT_PUBLIC_GOOGLE_ANALYTICS_ID", source.GOOGLE_ANALYTICS_ID],
     ["GOOGLE_SITE_VERIFICATION", source.GOOGLE_SITE_VERIFICATION],
+    ["UPSTASH_REDIS_REST_URL", source.UPSTASH_REDIS_REST_URL],
+    ["UPSTASH_REDIS_REST_TOKEN", source.UPSTASH_REDIS_REST_TOKEN],
+    ["MALWARE_SCAN_URL", source.MALWARE_SCAN_URL],
+    ["MALWARE_SCAN_TOKEN", source.MALWARE_SCAN_TOKEN],
   ] as const;
   for (const [key, value] of required)
     if (!value) issues.push({ key, reason: "missing" });

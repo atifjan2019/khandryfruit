@@ -20,7 +20,7 @@ Supabase production connectivity, production migration deployment, live Stripe w
 
 ## Dependency audit
 
-`npm audit --omit=dev` reports seven moderate findings through Prisma’s development tooling and Next’s bundled PostCSS dependency. The offered automatic resolutions are breaking downgrades and were not applied. Recheck against upstream patched Prisma/Next releases before launch.
+`npm audit --omit=dev` initially reported eight moderate entries. A scoped override updated Prisma's transitive `@hono/node-server` from `1.19.11` to patched `1.19.13`, reducing the audit to five moderate entries. The remaining entries all propagate from Next's pinned PostCSS `8.4.31`; the application does not accept or stringify user-authored CSS, so reachability is low, but the risk remains tracked. npm's offered automatic resolution is a breaking downgrade and was not applied. See the [security dependency risk register](./security-risk-register.md) and recheck upstream Prisma/Next releases before launch.
 
 ## Local response sample
 

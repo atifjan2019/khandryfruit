@@ -47,7 +47,7 @@ export async function addCustomGiftBoxAction(
   const meta = await publicRequestMeta();
   const locale = extractLocale(rawInput);
   try {
-    const rate = checkRateLimit(`gift-box:${meta.ipAddress}`, RATE_LIMIT);
+    const rate = await checkRateLimit(`gift-box:${meta.ipAddress}`, RATE_LIMIT);
     if (!rate.allowed)
       return failure(
         "RATE_LIMITED",
@@ -101,7 +101,7 @@ export async function addFixedGiftBoxAction(
   const meta = await publicRequestMeta();
   const locale = extractLocale(rawInput);
   try {
-    const rate = checkRateLimit(`gift-box:${meta.ipAddress}`, RATE_LIMIT);
+    const rate = await checkRateLimit(`gift-box:${meta.ipAddress}`, RATE_LIMIT);
     if (!rate.allowed)
       return failure(
         "RATE_LIMITED",
