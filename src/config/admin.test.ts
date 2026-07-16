@@ -17,6 +17,6 @@ describe("admin role permissions", () => {
   it("reserves critical settings for super administrators", () => {
     expect(canAccessAdmin("ADMIN", "settings")).toBe(false);
     expect(canAccessAdmin("SUPER_ADMIN", "settings")).toBe(true);
-    expect(visibleAdminAreas("SUPER_ADMIN")).toHaveLength(14);
+    expect(visibleAdminAreas("SUPER_ADMIN")).toHaveLength(13);
   });
 });

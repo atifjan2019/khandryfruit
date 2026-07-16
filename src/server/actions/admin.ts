@@ -63,6 +63,7 @@ function actionError(error: unknown) {
 
 export async function createProductAction(formData: FormData) {
   const session = await requireAdmin("products");
+  let productId: string;
   try {
     const input = adminProductSchema.parse(values(formData));
     const meta = await requestMeta();
@@ -134,11 +135,12 @@ export async function createProductAction(formData: FormData) {
       });
       return created;
     });
-    revalidatePath("/admin/products");
-    redirect(`/admin/products/${product.id}`);
+    productId = product.id;
   } catch (error) {
     return actionError(error);
   }
+  revalidatePath("/admin/products");
+  redirect(`/admin/products/${productId}`);
 }
 
 export async function updateProductAction(formData: FormData) {
