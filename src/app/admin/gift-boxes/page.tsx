@@ -29,7 +29,9 @@ export default async function GiftBoxesPage() {
             capacity controls.
           </p>
         </div>
-        <Link className="button" href="/admin/gift-boxes/new">New gift box</Link>
+        <Link className="button" href="/admin/gift-boxes/new">
+          New gift box
+        </Link>
       </div>
       <div className="admin-table-wrap">
         <table className="admin-table">

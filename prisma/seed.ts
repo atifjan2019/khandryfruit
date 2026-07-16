@@ -8,10 +8,15 @@ import { placeholderCopy } from "../src/lib/i18n/content";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error("DATABASE_URL is required for seeding");
+if (process.env.NODE_ENV === "production")
+  throw new Error(
+    "Development seed is disabled in production. Use npm run db:seed:production.",
+  );
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 
 const auth = betterAuth({
   secret:
+    process.env.AUTH_SECRET ??
     process.env.BETTER_AUTH_SECRET ??
     "development-only-seed-secret-at-least-32-chars",
   database: prismaAdapter(db, { provider: "postgresql" }),
@@ -433,7 +438,16 @@ async function seedOperations() {
 async function seedStorefrontFeatures() {
   // Build-your-own box size templates (fixed: false).
   const templates = [
-    ["gift-box-small", "Kleine Geschenkbox", "Small Gift Box", "SMALL", 3, 2, 3, 399],
+    [
+      "gift-box-small",
+      "Kleine Geschenkbox",
+      "Small Gift Box",
+      "SMALL",
+      3,
+      2,
+      3,
+      399,
+    ],
     [
       "gift-box-medium",
       "Mittlere Geschenkbox",
@@ -444,9 +458,27 @@ async function seedStorefrontFeatures() {
       5,
       599,
     ],
-    ["gift-box-large", "Große Geschenkbox", "Large Gift Box", "LARGE", 8, 4, 8, 799],
+    [
+      "gift-box-large",
+      "Große Geschenkbox",
+      "Large Gift Box",
+      "LARGE",
+      8,
+      4,
+      8,
+      799,
+    ],
   ] as const;
-  for (const [id, nameDe, nameEn, sizeName, capacity, min, max, price] of templates)
+  for (const [
+    id,
+    nameDe,
+    nameEn,
+    sizeName,
+    capacity,
+    min,
+    max,
+    price,
+  ] of templates)
     await db.giftBox.upsert({
       where: { id },
       update: {},
@@ -561,7 +593,15 @@ async function seedStorefrontFeatures() {
       2,
     ],
   ] as const;
-  for (const [id, nameDe, nameEn, descDe, descEn, price, sortOrder] of packaging)
+  for (const [
+    id,
+    nameDe,
+    nameEn,
+    descDe,
+    descEn,
+    price,
+    sortOrder,
+  ] of packaging)
     await db.giftPackagingOption.upsert({
       where: { id },
       update: {},
@@ -579,7 +619,11 @@ async function seedStorefrontFeatures() {
 
   // One sample wholesale application for admin-side development.
   const sampleEmail = "development-wholesale@khandryfruit.local";
-  if (!(await db.wholesaleApplication.findFirst({ where: { email: sampleEmail } })))
+  if (
+    !(await db.wholesaleApplication.findFirst({
+      where: { email: sampleEmail },
+    }))
+  )
     await db.wholesaleApplication.create({
       data: {
         companyName: "Development Feinkost GmbH",

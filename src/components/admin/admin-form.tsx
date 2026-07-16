@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Result = {
@@ -18,18 +18,29 @@ export function AdminForm({
   className?: string;
 }) {
   const [pending, setPending] = useState(false);
+  const [dirty, setDirty] = useState(false);
   const [result, setResult] = useState<Result>();
   const router = useRouter();
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
   return (
     <form
       className={className}
+      onChange={() => setDirty(true)}
       action={async (formData) => {
         setPending(true);
         setResult(undefined);
         const response = await action(formData);
         setResult(response || undefined);
         setPending(false);
-        if (response?.success) router.refresh();
+        if (response?.success) {
+          setDirty(false);
+          router.refresh();
+        }
       }}
     >
       {children}

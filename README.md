@@ -35,7 +35,9 @@ Local seed accounts use `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, `SEED_CUSTOME
 
 `npm run db:seed` creates or updates the development administrator identified by `SEED_ADMIN_EMAIL` and assigns `SUPER_ADMIN`. Keep the password only in the ignored local environment file. Sign in through `/en/sign-in` or `/de/sign-in`, then open `/admin`; locale-prefixed `/en/admin/...` and `/de/admin/...` URLs redirect to the single protected admin namespace.
 
-Routes cover dashboard, products, categories, inventory, orders, customers, wholesale applications, gift boxes, coupons, reviews, bilingual content, settings and audit logs. Every page and mutation rechecks permissions on the server. `CONTENT_EDITOR` is limited to content/reviews, `ORDER_MANAGER` to orders/customers, `ADMIN` to day-to-day commerce, and `SUPER_ADMIN` additionally controls critical settings.
+Routes cover dashboard, products, categories, inventory, orders, customers, wholesale applications, contact enquiries, gift boxes, packaging, coupons, reviews, bilingual content, blog, recipes, FAQs, legal content, settings, audit logs and system health. Every page and mutation rechecks permissions on the server. `CONTENT_EDITOR` is limited to publishing areas, `ORDER_MANAGER` to orders/customers/contact enquiries, `ADMIN` to day-to-day commerce and business settings, and `SUPER_ADMIN` additionally controls roles, audit logs and system health.
+
+Run the non-mutating admin browser smoke suite with `npm run test:e2e`. Anonymous route protection always runs. To enable authenticated route coverage, set `E2E_ADMIN_EMAIL`, `E2E_ADMIN_PASSWORD`, `E2E_CUSTOMER_EMAIL` and `E2E_CUSTOMER_PASSWORD` to dedicated test accounts; seed credentials are intentionally not assumed to match a shared or production database.
 
 The initial migration defines the commerce/auth domain. `20260715230000_admin_dashboard_fields` adds admin-required variant ordering, inventory notes, wholesale review fields, gift-box configuration records and search aliases. Apply migrations with `npm run db:deploy` before seeding.
 
@@ -60,8 +62,8 @@ Better Auth—not Supabase Auth—is the authentication authority. It stores `us
 ```text
 DATABASE_URL=<Supabase transaction pooler URL>
 DIRECT_URL=<Supabase direct/session URL>
-BETTER_AUTH_SECRET=<openssl rand -base64 32>
-BETTER_AUTH_URL=https://your-domain.example
+AUTH_SECRET=<openssl rand -base64 32>
+AUTH_URL=https://your-domain.example
 NEXT_PUBLIC_SITE_URL=https://your-domain.example
 ```
 
@@ -89,3 +91,5 @@ npm run check
 ```
 
 See `DEPLOYMENT.md`, `SECURITY.md` and `TESTING.md`.
+
+The controlled production procedure and rollback checklist are in [`docs/production-deployment.md`](docs/production-deployment.md). Production migrations and seeds are deliberately excluded from the Vercel build command.

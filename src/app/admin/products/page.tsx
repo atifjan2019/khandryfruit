@@ -86,6 +86,12 @@ export default async function ProductsPage({
           </p>
         </div>
         <div className="admin-heading-actions">
+          <Link
+            className="button secondary"
+            href="/admin/products/publication-preview"
+          >
+            Publication preview
+          </Link>
           <Link className="button secondary" href="/admin/products/export">
             <Download size={17} /> Export CSV
           </Link>

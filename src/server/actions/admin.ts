@@ -1433,20 +1433,38 @@ export async function upsertPackagingAction(formData: FormData) {
       })
       .parse(values(formData));
     const active = formData.get("active") === "true";
+    const {
+      packagingId,
+      nameDe,
+      nameEn,
+      descriptionDe,
+      descriptionEn,
+      priceCents,
+      sortOrder,
+    } = input;
+    const data = {
+      nameDe,
+      nameEn,
+      descriptionDe,
+      descriptionEn,
+      priceCents,
+      sortOrder,
+      active,
+    };
     const meta = await requestMeta();
-    const before = input.packagingId
+    const before = packagingId
       ? await db.giftPackagingOption.findUnique({
-          where: { id: input.packagingId },
+          where: { id: packagingId },
         })
       : null;
     const saved = await db.$transaction(async (tx) => {
-      const option = input.packagingId
+      const option = packagingId
         ? await tx.giftPackagingOption.update({
-            where: { id: input.packagingId },
-            data: { ...input, packagingId: undefined, active },
+            where: { id: packagingId },
+            data,
           })
         : await tx.giftPackagingOption.create({
-            data: { ...input, packagingId: undefined, active },
+            data,
           });
       await tx.auditLog.create({
         data: {

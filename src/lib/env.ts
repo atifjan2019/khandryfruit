@@ -13,6 +13,8 @@ const schema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   BETTER_AUTH_SECRET: z.string().min(32).optional(),
   BETTER_AUTH_URL: optionalUrl,
+  AUTH_SECRET: z.string().min(32).optional(),
+  AUTH_URL: optionalUrl,
   STRIPE_SECRET_KEY: z.string().startsWith("sk_").optional(),
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith("pk_").optional(),
   STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
@@ -31,10 +33,12 @@ const schema = z.object({
     .default("4917621809185"),
   CRON_SECRET: z.string().min(24).optional(),
   GOOGLE_ANALYTICS_ID: z.string().optional(),
+  NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string().optional(),
   GOOGLE_SITE_VERIFICATION: z.string().optional(),
   META_PIXEL_ID: z.string().optional(),
   TIKTOK_PIXEL_ID: z.string().optional(),
   SENTRY_DSN: optionalUrl,
+  NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
 });
 
 const parsed = schema.safeParse(process.env);
@@ -45,31 +49,111 @@ if (!parsed.success) {
   );
 }
 
-export const env = parsed.data;
+export const env = {
+  ...parsed.data,
+  BETTER_AUTH_SECRET: parsed.data.AUTH_SECRET ?? parsed.data.BETTER_AUTH_SECRET,
+  BETTER_AUTH_URL: parsed.data.AUTH_URL ?? parsed.data.BETTER_AUTH_URL,
+  GOOGLE_ANALYTICS_ID:
+    parsed.data.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ??
+    parsed.data.GOOGLE_ANALYTICS_ID,
+};
+
+export type ProductionEnvironmentIssue = {
+  key: string;
+  reason: string;
+};
+
+function hasSsl(url: string | undefined) {
+  if (!url) return false;
+  try {
+    const mode = new URL(url).searchParams.get("sslmode");
+    return mode === "require" || mode === "verify-full";
+  } catch {
+    return false;
+  }
+}
+
+export function productionEnvironmentIssues(
+  source: typeof env = env,
+): ProductionEnvironmentIssue[] {
+  const issues: ProductionEnvironmentIssue[] = [];
+  const required = [
+    ["DATABASE_URL", source.DATABASE_URL],
+    ["DIRECT_URL", source.DIRECT_URL],
+    ["AUTH_SECRET", source.BETTER_AUTH_SECRET],
+    ["AUTH_URL", source.BETTER_AUTH_URL],
+    ["NEXT_PUBLIC_SITE_URL", source.NEXT_PUBLIC_SITE_URL],
+    ["STRIPE_SECRET_KEY", source.STRIPE_SECRET_KEY],
+    [
+      "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+      source.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    ],
+    ["STRIPE_WEBHOOK_SECRET", source.STRIPE_WEBHOOK_SECRET],
+    ["ADMIN_EMAIL", source.ADMIN_EMAIL],
+    ["AWS_REGION", source.AWS_REGION],
+    ["AWS_ACCESS_KEY_ID", source.AWS_ACCESS_KEY_ID],
+    ["AWS_SECRET_ACCESS_KEY", source.AWS_SECRET_ACCESS_KEY],
+    ["AWS_SES_FROM_EMAIL", source.AWS_SES_FROM_EMAIL],
+    ["AWS_S3_BUCKET", source.AWS_S3_BUCKET],
+    ["CRON_SECRET", source.CRON_SECRET],
+    ["SENTRY_DSN", source.SENTRY_DSN],
+    ["NEXT_PUBLIC_SENTRY_DSN", source.NEXT_PUBLIC_SENTRY_DSN],
+    ["NEXT_PUBLIC_GOOGLE_ANALYTICS_ID", source.GOOGLE_ANALYTICS_ID],
+    ["GOOGLE_SITE_VERIFICATION", source.GOOGLE_SITE_VERIFICATION],
+  ] as const;
+  for (const [key, value] of required)
+    if (!value) issues.push({ key, reason: "missing" });
+
+  if (source.DATABASE_URL && !hasSsl(source.DATABASE_URL))
+    issues.push({
+      key: "DATABASE_URL",
+      reason: "sslmode=require or verify-full is required",
+    });
+  if (source.DIRECT_URL && !hasSsl(source.DIRECT_URL))
+    issues.push({
+      key: "DIRECT_URL",
+      reason: "sslmode=require or verify-full is required",
+    });
+  if (!source.NEXT_PUBLIC_SITE_URL.startsWith("https://"))
+    issues.push({ key: "NEXT_PUBLIC_SITE_URL", reason: "must use HTTPS" });
+  if (source.BETTER_AUTH_URL && !source.BETTER_AUTH_URL.startsWith("https://"))
+    issues.push({ key: "AUTH_URL", reason: "must use HTTPS" });
+  if (
+    source.STRIPE_SECRET_KEY &&
+    !source.STRIPE_SECRET_KEY.startsWith("sk_live_")
+  )
+    issues.push({ key: "STRIPE_SECRET_KEY", reason: "must be a live key" });
+  if (
+    source.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY &&
+    !source.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.startsWith("pk_live_")
+  )
+    issues.push({
+      key: "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+      reason: "must be a live key",
+    });
+  if (
+    source.ADMIN_EMAIL === "orders@example.com" ||
+    source.ADMIN_EMAIL.endsWith("@example.com")
+  )
+    issues.push({
+      key: "ADMIN_EMAIL",
+      reason: "placeholder addresses are forbidden",
+    });
+  if (source.AWS_SES_FROM_EMAIL?.endsWith("@example.com"))
+    issues.push({
+      key: "AWS_SES_FROM_EMAIL",
+      reason: "placeholder addresses are forbidden",
+    });
+  return issues;
+}
 
 export function assertProductionEnvironment() {
   if (env.NODE_ENV !== "production") return;
-
-  const missing = [
-    ["DATABASE_URL", env.DATABASE_URL],
-    ["BETTER_AUTH_SECRET", env.BETTER_AUTH_SECRET],
-    ["STRIPE_SECRET_KEY", env.STRIPE_SECRET_KEY],
-    ["STRIPE_WEBHOOK_SECRET", env.STRIPE_WEBHOOK_SECRET],
-    ["AWS_SES_FROM_EMAIL", env.AWS_SES_FROM_EMAIL],
-  ].filter(([, value]) => !value);
-
-  if (missing.length) {
+  const issues = productionEnvironmentIssues();
+  if (issues.length)
     throw new Error(
-      `Missing production variables: ${missing.map(([key]) => key).join(", ")}`,
+      `Production environment is not launch-safe: ${issues
+        .map(({ key, reason }) => `${key} (${reason})`)
+        .join(", ")}`,
     );
-  }
-
-  if (
-    env.ADMIN_EMAIL === "orders@example.com" ||
-    env.STRIPE_SECRET_KEY?.startsWith("sk_test_")
-  ) {
-    throw new Error(
-      "Production launch guard rejected development email or Stripe test credentials.",
-    );
-  }
 }

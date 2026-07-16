@@ -14,11 +14,12 @@ import {
 import { db } from "@/lib/db/client";
 import { formatMoney } from "@/lib/commerce/money";
 import { countBlockedProducts } from "@/server/services/product-readiness";
+import { canAccessAdmin } from "@/config/admin";
+import { requireAdmin } from "@/server/policies/authorization";
 
 export default async function AdminPage() {
-  await import("@/server/policies/authorization").then(({ requireAdmin }) =>
-    requireAdmin("dashboard"),
-  );
+  const session = await requireAdmin("dashboard");
+  const role = String(session.user.role);
   const [
     paidTotals,
     paidOrders,
@@ -91,11 +92,13 @@ export default async function AdminPage() {
         },
       },
     }),
-    db.auditLog.findMany({
-      take: 6,
-      orderBy: { createdAt: "desc" },
-      include: { actor: true },
-    }),
+    canAccessAdmin(role, "audit-logs")
+      ? db.auditLog.findMany({
+          take: 6,
+          orderBy: { createdAt: "desc" },
+          include: { actor: true },
+        })
+      : Promise.resolve([]),
     db.orderItem.groupBy({
       by: ["productId", "productName"],
       _sum: { quantity: true, lineTotalCents: true },
@@ -138,9 +141,11 @@ export default async function AdminPage() {
             analytics are shown.
           </p>
         </div>
-        <Link className="button" href="/admin/products/new">
-          Add product
-        </Link>
+        {canAccessAdmin(role, "products") && (
+          <Link className="button" href="/admin/products/new">
+            Add product
+          </Link>
+        )}
       </div>
       <div className="admin-metric-grid">
         {metrics.map(([label, value, Icon]) => (
@@ -251,23 +256,25 @@ export default async function AdminPage() {
             </div>
           ))}
         </AdminTable>
-        <AdminTable
-          title="Recent audit activity"
-          href="/admin/audit-logs"
-          empty="No sensitive admin actions recorded yet."
-        >
-          {audits.map((item) => (
-            <div className="admin-list-row" key={item.id}>
-              <span>
-                <strong>{item.action.replaceAll("_", " ")}</strong>
-                <small>
-                  {item.actor?.name ?? "System"} · {item.entityType}
-                </small>
-              </span>
-              <time>{item.createdAt.toLocaleDateString("en-DE")}</time>
-            </div>
-          ))}
-        </AdminTable>
+        {canAccessAdmin(role, "audit-logs") && (
+          <AdminTable
+            title="Recent audit activity"
+            href="/admin/audit-logs"
+            empty="No sensitive admin actions recorded yet."
+          >
+            {audits.map((item) => (
+              <div className="admin-list-row" key={item.id}>
+                <span>
+                  <strong>{item.action.replaceAll("_", " ")}</strong>
+                  <small>
+                    {item.actor?.name ?? "System"} · {item.entityType}
+                  </small>
+                </span>
+                <time>{item.createdAt.toLocaleDateString("en-DE")}</time>
+              </div>
+            ))}
+          </AdminTable>
+        )}
       </div>
     </div>
   );

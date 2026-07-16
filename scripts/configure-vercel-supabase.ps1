@@ -45,12 +45,12 @@ function New-RandomSecret {
 }
 
 function Set-VercelSecret([string]$Name, [string]$Value) {
-  $Value | npx --yes vercel@latest env add $Name production,preview --force --sensitive | Out-Host
+  $Value | npx --yes vercel@latest env add $Name production --force --sensitive | Out-Host
   if ($LASTEXITCODE -ne 0) { throw "Failed to configure $Name" }
 }
 
 function Set-VercelPublic([string]$Name, [string]$Value) {
-  $Value | npx --yes vercel@latest env add $Name production,preview --force --no-sensitive | Out-Host
+  $Value | npx --yes vercel@latest env add $Name production --force --no-sensitive | Out-Host
   if ($LASTEXITCODE -ne 0) { throw "Failed to configure $Name" }
 }
 
@@ -59,10 +59,8 @@ $cronSecret = New-RandomSecret
 
 Set-VercelSecret "DATABASE_URL" $databaseUrl
 Set-VercelSecret "DIRECT_URL" $directUrl
-Set-VercelSecret "BETTER_AUTH_SECRET" $authSecret
 Set-VercelSecret "AUTH_SECRET" $authSecret
 Set-VercelSecret "CRON_SECRET" $cronSecret
-Set-VercelPublic "BETTER_AUTH_URL" $siteUrl
 Set-VercelPublic "AUTH_URL" $siteUrl
 Set-VercelPublic "NEXT_PUBLIC_SITE_URL" $siteUrl
 Set-VercelPublic "NEXT_PUBLIC_DEFAULT_LOCALE" "de"
@@ -74,5 +72,6 @@ $directUrl = $null
 $authSecret = $null
 $cronSecret = $null
 
-Write-Host "Vercel database and Better Auth variables configured for Production and Preview." -ForegroundColor Green
+Write-Host "Vercel database and Better Auth variables configured for Production only." -ForegroundColor Green
+Write-Host "Configure Preview separately with isolated database and test integrations." -ForegroundColor Yellow
 Write-Host "No database password was written to the repository." -ForegroundColor Green
