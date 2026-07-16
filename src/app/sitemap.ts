@@ -4,6 +4,7 @@ import { getProducts } from "@/server/repositories/catalogue";
 const paths = [
   "",
   "/shop",
+  "/bestsellers",
   "/our-story",
   "/sourcing",
   "/recipes",
@@ -39,20 +40,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     })),
   );
-  const localizedEntries: MetadataRoute.Sitemap = (["de", "en"] as const).flatMap(
-    (locale) =>
-      localizedKeys.map((key) => ({
-        url: `${base}/${locale}${localizedPath(key, locale)}`,
-        lastModified: new Date(),
-        changeFrequency: "monthly" as const,
-        priority: 0.7,
-        alternates: {
-          languages: {
-            de: `${base}/de${localizedPath(key, "de")}`,
-            en: `${base}/en${localizedPath(key, "en")}`,
-          },
+  const localizedEntries: MetadataRoute.Sitemap = (
+    ["de", "en"] as const
+  ).flatMap((locale) =>
+    localizedKeys.map((key) => ({
+      url: `${base}/${locale}${localizedPath(key, locale)}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+      alternates: {
+        languages: {
+          de: `${base}/de${localizedPath(key, "de")}`,
+          en: `${base}/en${localizedPath(key, "en")}`,
         },
-      })),
+      },
+    })),
   );
   // A build-time database hiccup must not fail the whole deployment; the
   // sitemap then simply omits product URLs until the next revalidation.

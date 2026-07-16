@@ -12,26 +12,6 @@ const pages: Record<
     noindex?: boolean;
   }
 > = {
-  bestsellers: {
-    de: [
-      "Bestseller",
-      "Unsere als Bestseller markierten Entwicklungsprodukte. Echte Verkaufsdaten ersetzen diese Auswahl nach dem Start.",
-    ],
-    en: [
-      "Bestsellers",
-      "Development products currently marked as bestsellers. Genuine sales data will replace this selection after launch.",
-    ],
-  },
-  "our-story": {
-    de: [
-      "Unsere Geschichte",
-      "Khan Dry Fruit präsentiert ausgewählte afghanische Trockenfrüchte in Duisburg. Die vollständige Unternehmensgeschichte wird nach Freigabe durch Shoaib Khan Safi veröffentlicht.",
-    ],
-    en: [
-      "Our story",
-      "Khan Dry Fruit presents selected Afghan dry fruits in Duisburg. The complete company story will be published after approval by Shoaib Khan Safi.",
-    ],
-  },
   sourcing: {
     de: [
       "Herkunft & Qualität",
@@ -40,16 +20,6 @@ const pages: Record<
     en: [
       "Sourcing & quality",
       "Confirmed examples: figs from Kandahar, peaches from Logar, raisins from Kabul and mulberries from Shamali. Further claims require evidence.",
-    ],
-  },
-  recipes: {
-    de: [
-      "Rezepte & Verwendung",
-      "Servierideen und Rezepte folgen nach fachlicher Inhaltsprüfung. Es werden keine medizinischen Wirkversprechen veröffentlicht.",
-    ],
-    en: [
-      "Recipes & uses",
-      "Serving ideas and recipes will follow editorial review. No medical outcome claims will be published.",
     ],
   },
   blog: {
