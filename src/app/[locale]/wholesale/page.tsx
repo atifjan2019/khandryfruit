@@ -1,5 +1,18 @@
 import type { Metadata } from "next";
-import { ChevronRight } from "lucide-react";
+import {
+  Boxes,
+  Candy,
+  ChevronRight,
+  Coffee,
+  Croissant,
+  Gift,
+  Phone,
+  ReceiptText,
+  ShoppingBag,
+  Store,
+  Truck,
+  UtensilsCrossed,
+} from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -12,14 +25,14 @@ import { getProducts } from "@/server/repositories/catalogue";
 import { getSession } from "@/server/policies/authorization";
 
 const CUSTOMER_KEYS = [
-  "grocery",
-  "retail",
-  "restaurant",
-  "cafe",
-  "bakery",
-  "confectioner",
-  "corporate",
-  "bulk",
+  { key: "grocery", icon: Store },
+  { key: "retail", icon: ShoppingBag },
+  { key: "restaurant", icon: UtensilsCrossed },
+  { key: "cafe", icon: Coffee },
+  { key: "bakery", icon: Croissant },
+  { key: "confectioner", icon: Candy },
+  { key: "corporate", icon: Gift },
+  { key: "bulk", icon: Boxes },
 ] as const;
 
 const PROCESS_STEPS = [1, 2, 3, 4] as const;
@@ -119,7 +132,7 @@ export default async function WholesalePage({
   };
 
   return (
-    <div className="page-shell container">
+    <div className="wholesale-page">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -132,169 +145,230 @@ export default async function WholesalePage({
           __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <nav className="breadcrumbs" aria-label={tProduct("breadcrumbs")}>
-        <Link href="/" locale={locale}>
-          {tCommon("breadcrumbHome")}
-        </Link>
-        <ChevronRight size={14} />
-        <span>{tNav("wholesale")}</span>
-      </nav>
+
       <header className="wholesale-hero">
-        <div>
-          <p className="eyebrow">{t("eyebrow")}</p>
-          <h1>{t("title")}</h1>
-          <p className="lead-copy">{t("lead")}</p>
-          <div className="content-actions">
-            <a className="button" href="#apply">
-              {t("ctaButton")}
-            </a>
-            <Link
-              className="button secondary"
-              href={localizedPath("contact", locale)}
-              locale={locale}
-            >
-              {t("contactCta")}
+        <div className="container">
+          <nav className="breadcrumbs" aria-label={tProduct("breadcrumbs")}>
+            <Link href="/" locale={locale}>
+              {tCommon("breadcrumbHome")}
             </Link>
+            <ChevronRight size={14} />
+            <span>{tNav("wholesale")}</span>
+          </nav>
+          <div className="wholesale-hero-grid">
+            <div>
+              <p className="eyebrow gold">{t("eyebrow")}</p>
+              <h1>{t("title")}</h1>
+              <p className="lead-copy">{t("lead")}</p>
+              <div className="content-actions">
+                <a className="button" href="#apply">
+                  {t("ctaButton")}
+                </a>
+                <Link
+                  className="button secondary"
+                  href={localizedPath("contact", locale)}
+                  locale={locale}
+                >
+                  {t("contactCta")}
+                </Link>
+              </div>
+            </div>
+            <figure className="wholesale-hero-photo">
+              <Image
+                src="/images/products/almonds.webp"
+                alt={
+                  locale === "de"
+                    ? "Mandeln in Großgebinde-Menge"
+                    : "Almonds in bulk quantity"
+                }
+                fill
+                sizes="(max-width: 900px) 100vw, 42vw"
+                priority
+              />
+            </figure>
           </div>
         </div>
-        <figure className="wholesale-hero-photo">
-          <Image
-            src="/images/products/almonds.webp"
-            alt={
-              locale === "de"
-                ? "Mandeln in Großgebinde-Menge"
-                : "Almonds in bulk quantity"
-            }
-            fill
-            sizes="(max-width: 900px) 100vw, 45vw"
-            priority
-          />
-        </figure>
       </header>
+
       <section className="section">
-        <div className="section-heading">
-          <h2>{t("introTitle")}</h2>
+        <div className="wholesale-intro container">
+          <div>
+            <div className="section-heading">
+              <h2>{t("introTitle")}</h2>
+            </div>
+            <p className="lead-copy">{t("introBody1")}</p>
+            <p>{t("introBody2")}</p>
+          </div>
+          <figure className="wholesale-intro-photo">
+            <Image
+              src="/images/products/figs.webp"
+              alt={
+                locale === "de"
+                  ? "Getrocknete Feigen aus Kandahar"
+                  : "Dried figs from Kandahar"
+              }
+              fill
+              sizes="(max-width: 900px) 100vw, 38vw"
+            />
+          </figure>
         </div>
-        <p className="lead-copy">{t("introBody1")}</p>
-        <p>{t("introBody2")}</p>
       </section>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("categoriesTitle")}</h2>
+
+      <section className="section wholesale-band">
+        <div className="container">
+          <div className="section-heading">
+            <h2>{t("categoriesTitle")}</h2>
+          </div>
+          <p>{t("categoriesLead")}</p>
+          {categoryCards.length > 0 ? (
+            <div className="wholesale-range">
+              {categoryCards.map((product) => (
+                <figure key={product.category}>
+                  <Image
+                    src={product.image}
+                    alt={product.imageAlt}
+                    fill
+                    sizes="(max-width: 760px) 50vw, 25vw"
+                  />
+                  <figcaption>{product.category}</figcaption>
+                </figure>
+              ))}
+            </div>
+          ) : (
+            categories.length > 0 && (
+              <ul className="pill-list">
+                {categories.map((category) => (
+                  <li key={category}>{category}</li>
+                ))}
+              </ul>
+            )
+          )}
         </div>
-        <p>{t("categoriesLead")}</p>
-        {categoryCards.length > 0 ? (
-          <div className="wholesale-range">
-            {categoryCards.map((product) => (
-              <figure key={product.category}>
-                <Image
-                  src={product.image}
-                  alt={product.imageAlt}
-                  fill
-                  sizes="(max-width: 760px) 50vw, 22vw"
-                />
-                <figcaption>{product.category}</figcaption>
-              </figure>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <h2>{t("customersTitle")}</h2>
+          </div>
+          <p>{t("customersLead")}</p>
+          <div className="wholesale-customers">
+            {CUSTOMER_KEYS.map(({ key, icon: Icon }) => (
+              <div key={key}>
+                <span className="wholesale-customer-icon">
+                  <Icon size={19} />
+                </span>
+                <h3>{t(`customers.${key}`)}</h3>
+              </div>
             ))}
           </div>
-        ) : (
-          categories.length > 0 && (
-            <ul className="pill-list">
-              {categories.map((category) => (
-                <li key={category}>{category}</li>
-              ))}
-            </ul>
-          )
-        )}
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("customersTitle")}</h2>
         </div>
-        <p>{t("customersLead")}</p>
-        <div className="feature-grid">
-          {CUSTOMER_KEYS.map((key) => (
-            <div className="feature-card" key={key}>
-              <h3>{t(`customers.${key}`)}</h3>
+      </section>
+
+      <section className="section wholesale-band-ivory">
+        <div className="container">
+          <div className="section-heading">
+            <h2>{t("processTitle")}</h2>
+          </div>
+          <ol className="wholesale-steps">
+            {PROCESS_STEPS.map((step) => (
+              <li key={step}>
+                <span className="wholesale-step-number">{step}</span>
+                {/* The number renders as the marker, so strip it from the title. */}
+                <h3>
+                  {t(`process.step${step}Title`).replace(/^\d+\.\s*/, "")}
+                </h3>
+                <p>{t(`process.step${step}Body`)}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wholesale-info container">
+          <div>
+            <span className="wholesale-customer-icon">
+              <Truck size={19} />
+            </span>
+            <h2>{t("deliveryTitle")}</h2>
+            <p>{t("deliveryBody")}</p>
+          </div>
+          <div>
+            <span className="wholesale-customer-icon">
+              <ReceiptText size={19} />
+            </span>
+            <h2>{t("pricingTitle")}</h2>
+            <p>{t("pricingBody1")}</p>
+            <p>{t("pricingBody2")}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section wholesale-band">
+        <div className="container">
+          <div className="section-heading">
+            <h2>{t("faqTitle")}</h2>
+          </div>
+          <div className="faq-list">
+            {faqEntries.map((entry) => (
+              <details key={entry.question}>
+                <summary>{entry.question}</summary>
+                <p>{entry.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-cta">
+            <div>
+              <h2>{t("ctaTitle")}</h2>
+              <p>{t("ctaBody")}</p>
             </div>
-          ))}
-        </div>
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("processTitle")}</h2>
-        </div>
-        <div className="steps-grid">
-          {PROCESS_STEPS.map((step) => (
-            <div className="feature-card" key={step}>
-              <h3>{t(`process.step${step}Title`)}</h3>
-              <p>{t(`process.step${step}Body`)}</p>
+            <a className="button light" href="#apply">
+              {t("ctaButton")}
+            </a>
+          </div>
+          <div className="wholesale-contact">
+            <div>
+              <h2>{t("contactTitle")}</h2>
+              <p>{t("contactBody")}</p>
             </div>
-          ))}
+            <div className="content-actions">
+              <a
+                className="button secondary"
+                href={`tel:${siteConfig.phoneHref}`}
+              >
+                <Phone size={16} /> {siteConfig.phoneDisplay}
+              </a>
+              <Link
+                className="button secondary"
+                href={localizedPath("contact", locale)}
+                locale={locale}
+              >
+                {t("contactCta")}
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("deliveryTitle")}</h2>
-        </div>
-        <p>{t("deliveryBody")}</p>
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("pricingTitle")}</h2>
-        </div>
-        <p>{t("pricingBody1")}</p>
-        <p>{t("pricingBody2")}</p>
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("faqTitle")}</h2>
-        </div>
-        <div className="faq-list">
-          {faqEntries.map((entry) => (
-            <details key={entry.question}>
-              <summary>{entry.question}</summary>
-              <p>{entry.answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-      <div className="section-cta">
-        <div>
-          <h2>{t("ctaTitle")}</h2>
-          <p>{t("ctaBody")}</p>
-        </div>
-        <a className="button light" href="#apply">
-          {t("ctaButton")}
-        </a>
-      </div>
-      <section className="section">
-        <div className="section-heading">
-          <h2>{t("contactTitle")}</h2>
-        </div>
-        <p>{t("contactBody")}</p>
-        <div className="content-actions">
-          <Link
-            className="button secondary"
-            href={localizedPath("contact", locale)}
+
+      <section className="section wholesale-band" id="apply">
+        <div className="container">
+          <div className="section-heading">
+            <h2>{t("applyTitle")}</h2>
+          </div>
+          <p>{t("applyLead")}</p>
+          <p className="muted">{tCommon("requiredFieldsNote")}</p>
+          <WholesaleForm
             locale={locale}
-          >
-            {t("contactCta")}
-          </Link>
-          <a href={`tel:${siteConfig.phoneHref}`}>{siteConfig.phoneDisplay}</a>
+            productOptions={productOptions}
+            isAuthenticated={isAuthenticated}
+          />
         </div>
-      </section>
-      <section className="section" id="apply">
-        <div className="section-heading">
-          <h2>{t("applyTitle")}</h2>
-        </div>
-        <p>{t("applyLead")}</p>
-        <p className="muted">{tCommon("requiredFieldsNote")}</p>
-        <WholesaleForm
-          locale={locale}
-          productOptions={productOptions}
-          isAuthenticated={isAuthenticated}
-        />
       </section>
     </div>
   );
