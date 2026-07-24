@@ -528,3 +528,22 @@ export async function markConfigurationsOrdered(configurationIds: string[]) {
     data: { status: "ORDERED" },
   });
 }
+
+/**
+ * Returns the configuration IDs that can no longer be priced — because they
+ * were already ordered, expired, or removed. A cart that still references one
+ * (e.g. after a completed or abandoned checkout) uses this to prune the stale
+ * line instead of failing to price the whole cart.
+ */
+export async function findUnavailableConfigurationIds(
+  configurationIds: string[],
+): Promise<string[]> {
+  if (configurationIds.length === 0) return [];
+  if (!env.DATABASE_URL) return [];
+  const available = await db.giftBoxConfiguration.findMany({
+    where: { id: { in: configurationIds }, status: "IN_CART" },
+    select: { id: true },
+  });
+  const availableIds = new Set(available.map((row) => row.id));
+  return configurationIds.filter((id) => !availableIds.has(id));
+}

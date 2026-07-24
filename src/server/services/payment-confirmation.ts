@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@generated/prisma/client";
 
 import { logger } from "@/lib/logging/logger";
+import { recordCouponRedemption } from "@/server/services/coupon";
 
 /**
  * Marks an order paid and converts its stock reservations into a real sale.
@@ -53,6 +54,15 @@ export async function confirmOrderPayment(
         data: { convertedAt: new Date() },
       });
     }
+
+    // A redeemed coupon is only counted once the order is actually paid.
+    if (order.couponCode)
+      await recordCouponRedemption(tx, {
+        code: order.couponCode,
+        orderId: order.id,
+        userId: order.userId,
+        amountCents: order.discountCents,
+      });
 
     await tx.order.update({
       where: { id: orderId },

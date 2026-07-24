@@ -44,7 +44,7 @@ export function buildWholesaleReceivedEmail(input: {
   return {
     to: input.to,
     locale,
-    subject: t("subject"),
+    subject: t("subject", { reference: input.reference }),
     text: toText(paragraphs, locale),
     html: layout(locale, paragraphs.map(escapeHtml)),
   };
@@ -58,28 +58,136 @@ export function buildWholesaleAdminEmail(input: {
   email: string;
   phone: string;
   businessType: string;
+  businessAddress?: string;
   city: string;
+  postalCode?: string;
   countryCode: string;
+  vatId?: string;
+  website?: string;
   monthlyOrderVolume: string;
+  productsOfInterest?: string[];
+  deliveryCountries?: string[];
+  preferredContactMethod?: string;
+  message?: string;
   applicationId: string;
+  adminUrl?: string;
 }): EmailMessage {
   const locale = input.locale ?? "de";
   const t = (key: string, vars?: Record<string, string>) =>
     translate(locale, `emails.wholesaleAdmin.${key}`, vars);
-  const details = [
-    `${input.companyName} (${input.businessType})`,
-    `${input.contactName} · ${input.email} · ${input.phone}`,
-    `${input.city}, ${input.countryCode}`,
-    `Volume: ${input.monthlyOrderVolume}`,
-    `ID: ${input.applicationId}`,
+  // Reuse the wholesale-form field labels so the email stays in sync.
+  const fieldLabel = (key: string) => translate(locale, `wholesaleForm.${key}`);
+  // Map an enum code to its option label, falling back to the raw code.
+  const optionLabel = (group: string, value: string) => {
+    const key = `wholesaleForm.${group}.${value}`;
+    const label = translate(locale, key);
+    return label === key ? value : label;
+  };
+
+  const location = [input.postalCode, input.city].filter(Boolean).join(" ");
+  const rows: DetailRow[] = [
+    { label: fieldLabel("companyName"), value: input.companyName },
+    {
+      label: fieldLabel("businessType"),
+      value: optionLabel("businessTypes", input.businessType),
+    },
+    { label: fieldLabel("contactName"), value: input.contactName },
+    {
+      label: fieldLabel("email"),
+      value: input.email,
+      href: `mailto:${input.email}`,
+    },
+    {
+      label: fieldLabel("phone"),
+      value: input.phone,
+      href: `tel:${input.phone}`,
+    },
+    ...(input.businessAddress
+      ? [{ label: fieldLabel("businessAddress"), value: input.businessAddress }]
+      : []),
+    ...(location ? [{ label: fieldLabel("city"), value: location }] : []),
+    {
+      label: fieldLabel("country"),
+      value: optionLabel("countries", input.countryCode),
+    },
+    ...(input.vatId
+      ? [{ label: fieldLabel("vatId"), value: input.vatId }]
+      : []),
+    ...(input.website
+      ? [
+          {
+            label: fieldLabel("website"),
+            value: input.website,
+            href: input.website,
+          },
+        ]
+      : []),
+    {
+      label: fieldLabel("monthlyOrderVolume"),
+      value: optionLabel("volumes", input.monthlyOrderVolume),
+    },
+    ...(input.productsOfInterest?.length
+      ? [
+          {
+            label: fieldLabel("productsOfInterest"),
+            value: input.productsOfInterest.join(", "),
+          },
+        ]
+      : []),
+    ...(input.deliveryCountries?.length
+      ? [
+          {
+            label: fieldLabel("deliveryCountries"),
+            value: input.deliveryCountries
+              .map((code) => optionLabel("countries", code))
+              .join(", "),
+          },
+        ]
+      : []),
+    ...(input.preferredContactMethod
+      ? [
+          {
+            label: fieldLabel("preferredContactMethod"),
+            value: optionLabel("contactMethods", input.preferredContactMethod),
+          },
+        ]
+      : []),
+    ...(input.message
+      ? [
+          {
+            label: fieldLabel("message"),
+            value: input.message,
+            multiline: true,
+          },
+        ]
+      : []),
+    { label: t("idLabel"), value: input.applicationId },
   ];
-  const paragraphs = [t("intro"), ...details, t("action")];
+  const detail = detailBlock(rows);
+  const footer = translate(locale, "emails.footer");
+
+  const text = [
+    t("intro"),
+    detail.text,
+    ...(input.adminUrl
+      ? [`${t("openAdmin")} ${input.adminUrl}`]
+      : [t("action")]),
+    footer,
+  ].join("\n\n");
+
+  const actionHtml = input.adminUrl
+    ? `<p style="margin:1.25rem 0"><a href="${escapeHtml(input.adminUrl)}" style="display:inline-block;background:#315b3b;color:#fff;text-decoration:none;padding:.6rem 1.1rem;border-radius:.5rem;font-weight:700">${escapeHtml(t("openAdmin"))}</a></p>`
+    : `<p>${escapeHtml(t("action"))}</p>`;
+  const html = `<div style="font-family:Georgia,serif;max-width:36rem;margin:0 auto;color:#28251f"><h2 style="color:#315b3b">${escapeHtml(
+    siteConfig.name,
+  )}</h2><p>${escapeHtml(t("intro"))}</p>${detail.html}${actionHtml}<hr style="border:none;border-top:1px solid #ddd;margin:1.5rem 0"><p style="font-size:.8rem;color:#75643d">${escapeHtml(footer)}</p></div>`;
+
   return {
     to: input.to,
     locale,
     subject: t("subject", { company: input.companyName }),
-    text: toText(paragraphs, locale),
-    html: layout(locale, paragraphs.map(escapeHtml)),
+    text,
+    html,
   };
 }
 
@@ -167,32 +275,122 @@ export function hasOrderStatusEmail(locale: AppLocale, status: string) {
   );
 }
 
+/** Label/value pair for the contact-admin detail table. */
+type DetailRow = {
+  label: string;
+  value: string;
+  href?: string;
+  multiline?: boolean;
+};
+
+/** Renders labelled rows as an HTML table and a plain-text block. */
+function detailBlock(rows: DetailRow[]) {
+  const html = `<table style="width:100%;border-collapse:collapse;font-size:.92rem;margin:1rem 0">${rows
+    .map((row) => {
+      const valueHtml = row.href
+        ? `<a href="${escapeHtml(row.href)}" style="color:#315b3b">${escapeHtml(row.value)}</a>`
+        : row.multiline
+          ? escapeHtml(row.value).replaceAll("\n", "<br>")
+          : escapeHtml(row.value);
+      return `<tr><td style="padding:.5rem .9rem .5rem 0;color:#75643d;font-weight:700;vertical-align:top;white-space:nowrap;border-bottom:1px solid #eee">${escapeHtml(
+        row.label,
+      )}</td><td style="padding:.5rem 0;vertical-align:top;border-bottom:1px solid #eee">${valueHtml}</td></tr>`;
+    })
+    .join("")}</table>`;
+  const text = rows
+    .map((row) =>
+      row.multiline
+        ? `${row.label}:\n${row.value}`
+        : `${row.label}: ${row.value}`,
+    )
+    .join("\n");
+  return { html, text };
+}
+
 export function buildContactAdminEmail(input: {
   to: string;
   locale?: AppLocale;
   name: string;
   email: string;
+  phone?: string;
   type: string;
   subject: string;
+  message?: string;
   orderNumber?: string;
+  preferredContactMethod?: string;
   enquiryId: string;
+  adminUrl?: string;
 }): EmailMessage {
   const locale = input.locale ?? "de";
   const t = (key: string, vars?: Record<string, string>) =>
     translate(locale, `emails.contactAdmin.${key}`, vars);
+  // Reuse the visible contact-form field labels so both stay in sync.
+  const fieldLabel = (key: string) => translate(locale, `contact.form.${key}`);
   const typeLabel = translate(locale, `contact.form.types.${input.type}`);
-  const details = [
-    `${input.name} · ${input.email}`,
-    `${typeLabel}${input.orderNumber ? ` · ${input.orderNumber}` : ""}`,
-    `ID: ${input.enquiryId}`,
+  const methodLabel = input.preferredContactMethod
+    ? translate(locale, `contact.form.methods.${input.preferredContactMethod}`)
+    : undefined;
+
+  const rows: DetailRow[] = [
+    { label: fieldLabel("name"), value: input.name },
+    {
+      label: fieldLabel("email"),
+      value: input.email,
+      href: `mailto:${input.email}`,
+    },
+    ...(input.phone
+      ? [
+          {
+            label: fieldLabel("phone"),
+            value: input.phone,
+            href: `tel:${input.phone}`,
+          },
+        ]
+      : []),
+    { label: fieldLabel("type"), value: typeLabel },
+    ...(input.orderNumber
+      ? [{ label: fieldLabel("orderNumber"), value: input.orderNumber }]
+      : []),
+    ...(methodLabel
+      ? [{ label: fieldLabel("preferredContactMethod"), value: methodLabel }]
+      : []),
+    { label: fieldLabel("subject"), value: input.subject },
+    ...(input.message
+      ? [
+          {
+            label: fieldLabel("message"),
+            value: input.message,
+            multiline: true,
+          },
+        ]
+      : []),
+    { label: t("idLabel"), value: input.enquiryId },
   ];
-  const paragraphs = [t("intro"), ...details, t("action")];
+  const detail = detailBlock(rows);
+  const footer = translate(locale, "emails.footer");
+
+  const text = [
+    t("intro"),
+    detail.text,
+    ...(input.adminUrl
+      ? [`${t("openAdmin")} ${input.adminUrl}`]
+      : [t("action")]),
+    footer,
+  ].join("\n\n");
+
+  const actionHtml = input.adminUrl
+    ? `<p style="margin:1.25rem 0"><a href="${escapeHtml(input.adminUrl)}" style="display:inline-block;background:#315b3b;color:#fff;text-decoration:none;padding:.6rem 1.1rem;border-radius:.5rem;font-weight:700">${escapeHtml(t("openAdmin"))}</a></p>`
+    : `<p>${escapeHtml(t("action"))}</p>`;
+  const html = `<div style="font-family:Georgia,serif;max-width:36rem;margin:0 auto;color:#28251f"><h2 style="color:#315b3b">${escapeHtml(
+    siteConfig.name,
+  )}</h2><p>${escapeHtml(t("intro"))}</p>${detail.html}${actionHtml}<hr style="border:none;border-top:1px solid #ddd;margin:1.5rem 0"><p style="font-size:.8rem;color:#75643d">${escapeHtml(footer)}</p></div>`;
+
   return {
     to: input.to,
     locale,
     subject: t("subject", { subject: input.subject }),
-    text: toText(paragraphs, locale),
-    html: layout(locale, paragraphs.map(escapeHtml)),
+    text,
+    html,
   };
 }
 
@@ -207,10 +405,15 @@ export type OrderEmailLine = {
 export type OrderEmailTotals = {
   subtotal: string;
   discount?: string;
+  /** Coupon code shown alongside the discount, e.g. "Discount (DEV10)". */
+  couponCode?: string;
   shipping: string;
   tax: string;
   total: string;
 };
+
+const discountLabel = (totals: OrderEmailTotals, base: string) =>
+  totals.couponCode ? `${base} (${totals.couponCode})` : base;
 
 /** Line-item table matching the plain layout — no images, no external assets. */
 function lineTable(
@@ -233,7 +436,9 @@ function lineTable(
   const summaryRow = (label: string, value: string, bold = false) =>
     `<tr><td style="padding:.25rem 0;${bold ? "font-weight:700" : "color:#75643d"}">${label}</td><td style="padding:.25rem 0;text-align:right;${bold ? "font-weight:700" : ""}">${escapeHtml(value)}</td></tr>`;
   return `<table style="width:100%;border-collapse:collapse;font-size:.9rem;margin:1rem 0">${rows}${
-    totals.discount ? summaryRow(t("discount"), `−${totals.discount}`) : ""
+    totals.discount
+      ? summaryRow(discountLabel(totals, t("discount")), `−${totals.discount}`)
+      : ""
   }${summaryRow(t("subtotal"), totals.subtotal)}${summaryRow(t("shipping"), totals.shipping)}${summaryRow(t("tax"), totals.tax)}${summaryRow(t("total"), totals.total, true)}</table>`;
 }
 
@@ -252,7 +457,9 @@ function lineText(
   return [
     items,
     `  ${t("subtotal")}: ${totals.subtotal}`,
-    ...(totals.discount ? [`  ${t("discount")}: −${totals.discount}`] : []),
+    ...(totals.discount
+      ? [`  ${discountLabel(totals, t("discount"))}: −${totals.discount}`]
+      : []),
     `  ${t("shipping")}: ${totals.shipping}`,
     `  ${t("tax")}: ${totals.tax}`,
     `  ${t("total")}: ${totals.total}`,

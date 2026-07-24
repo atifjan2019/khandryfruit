@@ -13,11 +13,9 @@ export async function Header({ locale }: { locale: AppLocale }) {
   const de = locale === "de";
   const nav = [
     ["/shop", t("shop")],
-    ["/bestsellers", t("bestsellers")],
     [localizedPath("giftBoxes", locale), t("giftBoxes")],
     [localizedPath("wholesale", locale), t("wholesale")],
     ["/our-story", t("story")],
-    ["/recipes", t("recipes")],
     [localizedPath("contact", locale), t("contact")],
   ] as const;
   // One definition renders both the desktop bar and the mobile drawer, so the

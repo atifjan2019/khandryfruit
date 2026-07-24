@@ -203,15 +203,25 @@ async function sendWholesaleEmails(
     await provider.send(
       buildWholesaleAdminEmail({
         to: env.ADMIN_EMAIL,
+        locale,
         companyName: input.companyName,
         contactName: input.contactName,
         email: input.email,
         phone: input.phone,
         businessType: input.businessType,
+        businessAddress: input.businessAddress,
         city: input.city,
+        postalCode: input.postalCode,
         countryCode: input.countryCode,
+        vatId: input.vatId,
+        website: input.website,
         monthlyOrderVolume: input.monthlyOrderVolume,
+        productsOfInterest: input.productsOfInterest,
+        deliveryCountries: input.deliveryCountries,
+        preferredContactMethod: input.preferredContactMethod,
+        message: input.message,
         applicationId,
+        adminUrl: `${env.NEXT_PUBLIC_SITE_URL}/admin/wholesale/${applicationId}`,
       }),
     );
   } catch {

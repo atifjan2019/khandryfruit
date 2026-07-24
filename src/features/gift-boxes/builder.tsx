@@ -37,12 +37,15 @@ export function GiftBoxBuilder({
   products,
   packaging,
   initial,
+  onAdded,
 }: {
   locale: AppLocale;
   templates: GiftBoxBuilderTemplate[];
   products: GiftBoxBuilderProduct[];
   packaging: GiftBoxPackagingChoice[];
   initial: BuilderInitialState | null;
+  /** Called once the box has been added to the cart. */
+  onAdded?: () => void;
 }) {
   const t = useTranslations("giftBoxBuilder");
   const tOccasions = useTranslations("giftBoxes.occasions");
@@ -145,6 +148,12 @@ export function GiftBoxBuilder({
       if (initial?.replaceConfigurationId)
         removeGiftBox(initial.replaceConfigurationId);
       addGiftBox(result.data);
+      // When embedded (onAdded provided) the host decides what happens next —
+      // typically a redirect to the cart — so skip the standalone success panel.
+      if (onAdded) {
+        onAdded();
+        return;
+      }
       setAdded(true);
     } finally {
       setPending(false);

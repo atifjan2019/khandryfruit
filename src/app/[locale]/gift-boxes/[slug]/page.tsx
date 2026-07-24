@@ -3,13 +3,15 @@ import { Gift } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { localizedHref, localizedPath } from "@/config/routes";
+import { localizedPath } from "@/config/routes";
 import { isLocale } from "@/config/site";
-import { FixedGiftBoxPurchase } from "@/features/gift-boxes/fixed-box-purchase";
-import { formatMoney } from "@/lib/commerce/money";
+import { GiftBoxDetailMain } from "@/features/gift-boxes/gift-box-detail-main";
+import { initialStateFromGiftBox } from "@/features/gift-boxes/prefill";
 import { giftOccasionValues } from "@/lib/validation/schemas";
 import { Link } from "@/i18n/navigation";
 import {
+  getBuilderProducts,
+  getBuilderTemplates,
   getGiftBoxBySlug,
   getPackagingOptions,
 } from "@/server/repositories/gift-boxes";
@@ -47,15 +49,20 @@ export default async function GiftBoxDetailPage({
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
-  const [t, tCommon, box, packaging] = await Promise.all([
+  const [t, tCommon, box, packaging, templates, products] = await Promise.all([
     getTranslations("giftBoxes"),
     getTranslations("common"),
     getGiftBoxBySlug(locale, slug),
     getPackagingOptions(locale),
+    getBuilderTemplates(locale),
+    getBuilderProducts(locale),
   ]);
   if (!box) notFound();
   if (process.env.NODE_ENV === "production" && box.status !== "ACTIVE")
     notFound();
+
+  // Pre-computed so the inline builder starts from this box's contents.
+  const builderInitial = initialStateFromGiftBox(box, templates);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const productSchema =
@@ -91,75 +98,62 @@ export default async function GiftBoxDetailPage({
         <span>{box.name}</span>
       </nav>
 
-      <div className="product-main">
-        <div className="product-gallery">
-          <div className="gift-box-visual">
-            {box.imageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={box.imageUrl} alt={box.name} />
-            ) : (
-              <Gift size={72} aria-hidden="true" />
-            )}
-          </div>
-        </div>
-        <div className="product-info">
-          {box.status === "DRAFT" && (
-            <span className="draft-badge">{tCommon("draftBadge")}</span>
-          )}
-          <div className="occasion-chips">
-            {box.occasions.map((value) => (
-              <span key={value}>
-                {(giftOccasionValues as readonly string[]).includes(value)
-                  ? t(`occasions.${value}`)
-                  : value}
-              </span>
-            ))}
-          </div>
-          <h1>{box.name}</h1>
-          <p className="product-lead">{box.description}</p>
-
-          <section aria-labelledby="box-contents">
-            <h2 id="box-contents">{t("detail.contentsTitle")}</h2>
-            <ul className="cart-gift-contents">
-              {box.items.map((item) => (
-                <li key={item.variantId}>
-                  {item.quantity} × {item.productName} (
-                  {item.weightGrams >= 1000
-                    ? `${item.weightGrams / 1000} kg`
-                    : `${item.weightGrams} g`}
-                  )
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <div className="purchase-panel">
-            <div className="purchase-price">
-              <strong>{formatMoney(box.priceCents, locale)}</strong>
-              <span className="muted">{t("detail.priceNote")}</span>
+      <GiftBoxDetailMain
+        locale={locale}
+        slug={box.slug}
+        available={box.available}
+        basePriceCents={box.priceCents}
+        packaging={packaging}
+        templates={templates}
+        products={products}
+        initial={builderInitial}
+        boxName={box.name}
+        gallery={
+          <div className="product-gallery">
+            <div className="gift-box-visual">
+              {box.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={box.imageUrl} alt={box.name} />
+              ) : (
+                <Gift size={72} aria-hidden="true" />
+              )}
             </div>
-            <p className="stock-line">
-              {box.available ? tCommon("inStock") : t("detail.outOfStock")}
-            </p>
-            <FixedGiftBoxPurchase
-              locale={locale}
-              slug={box.slug}
-              available={box.available}
-              basePriceCents={box.priceCents}
-              packaging={packaging}
-            />
           </div>
+        }
+        summary={
+          <>
+            {box.status === "DRAFT" && (
+              <span className="draft-badge">{tCommon("draftBadge")}</span>
+            )}
+            <div className="occasion-chips">
+              {box.occasions.map((value) => (
+                <span key={value}>
+                  {(giftOccasionValues as readonly string[]).includes(value)
+                    ? t(`occasions.${value}`)
+                    : value}
+                </span>
+              ))}
+            </div>
+            <h1>{box.name}</h1>
+            <p className="product-lead">{box.description}</p>
 
-          {/* Swap or add products: opens the builder pre-filled with this
-              box's contents, rather than duplicating the picker here. */}
-          <a
-            className="button secondary full"
-            href={`${localizedHref("giftBoxBuilder", locale)}?from=${encodeURIComponent(box.slug)}`}
-          >
-            {t("detail.customise")}
-          </a>
-          <p className="muted small-note">{t("detail.customiseHint")}</p>
-
+            <section aria-labelledby="box-contents">
+              <h2 id="box-contents">{t("detail.contentsTitle")}</h2>
+              <ul className="cart-gift-contents">
+                {box.items.map((item) => (
+                  <li key={item.variantId}>
+                    {item.quantity} × {item.productName} (
+                    {item.weightGrams >= 1000
+                      ? `${item.weightGrams / 1000} kg`
+                      : `${item.weightGrams} g`}
+                    )
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </>
+        }
+        backLink={
           <Link
             className="text-link"
             href={localizedPath("giftBoxes", locale)}
@@ -167,8 +161,8 @@ export default async function GiftBoxDetailPage({
           >
             ← {t("detail.backToCatalogue")}
           </Link>
-        </div>
-      </div>
+        }
+      />
 
       {productSchema && (
         <script

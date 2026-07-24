@@ -39,6 +39,20 @@ import { requireAdmin } from "@/server/policies/authorization";
 import { isSafeUrl } from "@/lib/security/safe-url";
 import { getProductReadiness } from "@/server/services/product-readiness";
 
+/**
+ * Refresh every public storefront page after a catalogue change.
+ *
+ * Product, variant, inventory, category, gift-box and packaging edits are shown
+ * on the shop, home, product, category and gift-box pages. Those pages are
+ * cached, so without this a change like toggling "bestseller" would not appear
+ * to customers until the cache expired. Revalidating the `[locale]` layout
+ * covers the whole storefront in both languages and leaves the admin tree
+ * (a separate layout) untouched.
+ */
+function revalidateStorefront() {
+  revalidatePath("/[locale]", "layout");
+}
+
 /** The order detail route accepts both the short number and the cuid. */
 async function revalidateOrder(orderId: string) {
   const order = await db.order.findUnique({
@@ -197,6 +211,7 @@ export async function createProductAction(formData: FormData) {
     return actionError(error);
   }
   revalidatePath("/admin/products");
+  revalidateStorefront();
   redirect(`/admin/products/${productId}`);
 }
 
@@ -324,6 +339,7 @@ export async function updateProductAction(formData: FormData) {
       });
     });
     revalidatePath(`/admin/products/${productId}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -375,7 +391,9 @@ async function setProductStatusAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/products");
+    revalidateStorefront();
     revalidatePath(`/admin/products/${productId}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -466,6 +484,7 @@ export async function bulkProductAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/products");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -516,6 +535,7 @@ export async function createVariantAction(formData: FormData) {
       return created;
     });
     revalidatePath(`/admin/products/${input.productId}`);
+    revalidateStorefront();
     return { success: true as const, data: { id: variant.id } };
   } catch (error) {
     return actionError(error);
@@ -578,6 +598,7 @@ export async function updateVariantAction(formData: FormData) {
       });
     });
     revalidatePath(`/admin/products/${formData.get("productId")}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -630,6 +651,7 @@ export async function upsertNutritionAction(formData: FormData) {
       });
     });
     revalidatePath(`/admin/products/${productId}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -669,6 +691,7 @@ export async function addProductImageAction(formData: FormData) {
       });
     });
     revalidatePath(`/admin/products/${input.productId}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -724,6 +747,7 @@ export async function adjustInventoryAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/inventory");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -799,6 +823,7 @@ export async function importInventoryCsvAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/inventory");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -849,6 +874,7 @@ export async function createCategoryAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/categories");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -906,7 +932,9 @@ export async function updateCategoryAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/categories");
+    revalidateStorefront();
     revalidatePath("/admin/inventory");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -935,6 +963,7 @@ export async function archiveCategoryAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/categories");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -1255,6 +1284,7 @@ export async function createGiftBoxAction(formData: FormData) {
       },
     });
     revalidatePath("/admin/gift-boxes");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -1302,7 +1332,9 @@ export async function updateGiftBoxAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/gift-boxes");
+    revalidateStorefront();
     revalidatePath(`/admin/gift-boxes/${id}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -1333,6 +1365,7 @@ export async function deleteGiftBoxAction(formData: FormData) {
       });
     });
     revalidatePath("/admin/gift-boxes");
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -1385,6 +1418,7 @@ export async function addGiftBoxItemAction(formData: FormData) {
       });
     });
     revalidatePath(`/admin/gift-boxes/${input.giftBoxId}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -1422,6 +1456,7 @@ export async function removeGiftBoxItemAction(formData: FormData) {
       });
     });
     revalidatePath(`/admin/gift-boxes/${input.giftBoxId}`);
+    revalidateStorefront();
     return { success: true as const };
   } catch (error) {
     return actionError(error);
@@ -1670,38 +1705,6 @@ export async function updateUserRoleAction(formData: FormData) {
   }
 }
 
-export async function moderateReviewAction(formData: FormData) {
-  const session = await requireAdmin("reviews");
-  try {
-    const reviewId = z.string().min(1).parse(formData.get("reviewId"));
-    const status = z
-      .enum(["APPROVED", "REJECTED", "SPAM"])
-      .parse(formData.get("status"));
-    const meta = await requestMeta();
-    const before = await db.review.findUniqueOrThrow({
-      where: { id: reviewId },
-    });
-    await db.$transaction(async (tx) => {
-      await tx.review.update({ where: { id: reviewId }, data: { status } });
-      await tx.auditLog.create({
-        data: {
-          actorId: session.user.id,
-          action: "REVIEW_MODERATED",
-          entityType: "Review",
-          entityId: reviewId,
-          before: { status: before.status },
-          after: { status },
-          ...meta,
-        },
-      });
-    });
-    revalidatePath("/admin/reviews");
-    return { success: true as const };
-  } catch (error) {
-    return actionError(error);
-  }
-}
-
 export async function updateLegalDocumentAction(formData: FormData) {
   const session = await requireAdmin("content", { recent: true });
   try {
@@ -1823,54 +1826,6 @@ export async function updateSettingAction(formData: FormData) {
   }
 }
 
-export async function updateContactEnquiryAction(formData: FormData) {
-  const session = await requireAdmin("contact-enquiries");
-  try {
-    const input = z
-      .object({
-        enquiryId: z.string().min(1),
-        status: z.enum([
-          "NEW",
-          "IN_PROGRESS",
-          "WAITING_FOR_CUSTOMER",
-          "RESOLVED",
-          "SPAM",
-        ]),
-      })
-      .parse(values(formData));
-    const meta = await requestMeta();
-    const before = await db.contactEnquiry.findUniqueOrThrow({
-      where: { id: input.enquiryId },
-      select: { status: true, resolvedAt: true },
-    });
-    await db.$transaction(async (tx) => {
-      await tx.contactEnquiry.update({
-        where: { id: input.enquiryId },
-        data: {
-          status: input.status,
-          resolvedAt: input.status === "RESOLVED" ? new Date() : null,
-        },
-      });
-      await tx.auditLog.create({
-        data: {
-          actorId: session.user.id,
-          action: "CONTACT_ENQUIRY_STATUS_CHANGED",
-          entityType: "ContactEnquiry",
-          entityId: input.enquiryId,
-          before: { status: before.status },
-          after: { status: input.status },
-          ...meta,
-        },
-      });
-    });
-    revalidatePath("/admin/contact-enquiries");
-    revalidatePath(`/admin/contact-enquiries/${input.enquiryId}`);
-    return { success: true as const };
-  } catch (error) {
-    return actionError(error);
-  }
-}
-
 export async function upsertPackagingAction(formData: FormData) {
   const session = await requireAdmin("packaging");
   try {
@@ -1935,6 +1890,7 @@ export async function upsertPackagingAction(formData: FormData) {
       return option;
     });
     revalidatePath("/admin/packaging");
+    revalidateStorefront();
     return { success: true as const, id: saved.id };
   } catch (error) {
     return actionError(error);

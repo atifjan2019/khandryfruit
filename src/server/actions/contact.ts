@@ -156,12 +156,17 @@ async function sendContactEmails(
     await provider.send(
       buildContactAdminEmail({
         to: env.ADMIN_EMAIL,
+        locale,
         name: input.name,
         email: input.email,
+        phone: input.phone,
         type: input.type,
         subject: input.subject,
+        message: input.message,
         orderNumber: input.orderNumber,
+        preferredContactMethod: input.preferredContactMethod,
         enquiryId,
+        adminUrl: `${env.NEXT_PUBLIC_SITE_URL}/admin/contact-enquiries/${enquiryId}`,
       }),
     );
   } catch {

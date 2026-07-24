@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { AppLocale } from "@/config/site";
@@ -33,6 +33,18 @@ export function ProductCard({
         />
         {product.status === "DRAFT" && (
           <span className="draft-badge">{t("draft")}</span>
+        )}
+        {product.bestseller && (
+          <span
+            className={[
+              "bestseller-chip",
+              product.status === "DRAFT" && "below-draft",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <Star size={12} aria-hidden="true" /> {t("bestseller")}
+          </span>
         )}
         {product.originRegion && (
           <span className="origin-chip">{product.originRegion}</span>

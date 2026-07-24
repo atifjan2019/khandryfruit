@@ -1,25 +1,23 @@
 import Link from "next/link";
+import { Mail } from "lucide-react";
 
 import { db } from "@/lib/db/client";
 import { requireAdmin } from "@/server/policies/authorization";
 
-const statuses = [
-  "NEW",
-  "IN_PROGRESS",
-  "WAITING_FOR_CUSTOMER",
-  "RESOLVED",
-  "SPAM",
-];
+const TYPE_LABELS: Record<string, string> = {
+  GENERAL: "General question",
+  ORDER: "Existing order",
+  PRODUCT: "Product information",
+  DELIVERY: "Delivery question",
+  WHOLESALE: "Wholesale",
+  GIFT_BOXES: "Gift boxes",
+  RETURNS: "Returns",
+  OTHER: "Other",
+};
 
-export default async function ContactEnquiriesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ status?: string }>;
-}) {
+export default async function ContactEnquiriesPage() {
   await requireAdmin("contact-enquiries");
-  const { status = "" } = await searchParams;
   const enquiries = await db.contactEnquiry.findMany({
-    where: statuses.includes(status) ? { status } : undefined,
     orderBy: { createdAt: "desc" },
     take: 100,
   });
@@ -29,28 +27,22 @@ export default async function ContactEnquiriesPage({
         <div>
           <p className="eyebrow">Customer support</p>
           <h1>Contact enquiries</h1>
-          <p>Customer messages and their internal handling status.</p>
+          <p>Messages sent through the website contact form.</p>
         </div>
+        <span className="admin-muted-label">
+          {enquiries.length} {enquiries.length === 1 ? "message" : "messages"}
+        </span>
       </div>
-      <form className="admin-filterbar">
-        <select name="status" defaultValue={status}>
-          <option value="">All statuses</option>
-          {statuses.map((value) => (
-            <option key={value}>{value}</option>
-          ))}
-        </select>
-        <button className="button">Apply</button>
-      </form>
       <div className="admin-table-wrap">
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>From</th>
+              <th>Subject</th>
               <th>Type</th>
               <th>Order</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th />
+              <th>Received</th>
+              <th className="is-actions">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -60,15 +52,30 @@ export default async function ContactEnquiriesPage({
                   <strong>{enquiry.name}</strong>
                   <small>{enquiry.email}</small>
                 </td>
-                <td>{enquiry.type}</td>
+                <td>{enquiry.subject || "—"}</td>
+                <td>{TYPE_LABELS[enquiry.type] ?? enquiry.type}</td>
                 <td>{enquiry.orderNumber ?? "—"}</td>
                 <td>
-                  <span className="admin-status">{enquiry.status}</span>
+                  {enquiry.createdAt.toLocaleString("en-GB", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                    hour12: true,
+                  })}
                 </td>
-                <td>{enquiry.createdAt.toLocaleDateString("en-GB")}</td>
-                <td>
-                  <Link href={`/admin/contact-enquiries/${enquiry.id}`}>
-                    Review
+                <td className="is-actions">
+                  <a
+                    className="table-action"
+                    href={`mailto:${enquiry.email}?subject=${encodeURIComponent(
+                      `Re: ${enquiry.subject || "Your enquiry"}`,
+                    )}`}
+                  >
+                    <Mail size={13} aria-hidden="true" /> Reply
+                  </a>
+                  <Link
+                    className="table-action"
+                    href={`/admin/contact-enquiries/${enquiry.id}`}
+                  >
+                    Open
                   </Link>
                 </td>
               </tr>
@@ -76,7 +83,7 @@ export default async function ContactEnquiriesPage({
           </tbody>
         </table>
         {!enquiries.length && (
-          <p className="admin-empty">No contact enquiries match this filter.</p>
+          <p className="admin-empty">No contact enquiries yet.</p>
         )}
       </div>
     </div>

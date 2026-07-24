@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { isLocale, type AppLocale } from "@/config/site";
+import { ClearCartOnSuccess } from "@/features/order/clear-cart-on-success";
 import { PendingPaymentRefresh } from "@/features/order/pending-payment-refresh";
 import { formatAddressLines, formatOrderNumber } from "@/lib/commerce/address";
 import { readGiftBoxContents } from "@/lib/commerce/gift-box";
@@ -83,6 +84,7 @@ export default async function OrderSuccessPage({
 
   return (
     <div className="page-shell order-page container">
+      {paid && <ClearCartOnSuccess />}
       {!paid && !failed && <PendingPaymentRefresh />}
 
       <OrderHero order={order} locale={locale} paid={paid} failed={failed} />

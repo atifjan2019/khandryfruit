@@ -16,11 +16,10 @@ function textValue(value: unknown) {
 }
 export default async function ContentPage() {
   await requireAdmin("content");
-  const [legal, pages, posts, recipes] = await Promise.all([
+  const [legal, pages, posts] = await Promise.all([
     db.legalDocument.findMany({ orderBy: [{ key: "asc" }, { locale: "asc" }] }),
     db.contentPage.count(),
     db.blogPost.count(),
-    db.recipe.count(),
   ]);
   return (
     <div className="admin-page-v2">
@@ -42,10 +41,6 @@ export default async function ContentPage() {
         <div className="admin-metric">
           <span>Blog posts</span>
           <strong>{posts}</strong>
-        </div>
-        <div className="admin-metric">
-          <span>Recipes</span>
-          <strong>{recipes}</strong>
         </div>
         <div className="admin-metric">
           <span>Legal documents</span>

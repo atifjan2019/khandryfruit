@@ -14,6 +14,8 @@ import { checkRateLimit } from "@/lib/rate-limit";
 import { rejectUntrustedOrigin } from "@/lib/security/origin";
 import { trustedClientIp } from "@/lib/security/client-ip";
 import { releaseOrderReservations } from "@/server/services/stock-reservations";
+import { resolveCoupon } from "@/server/services/coupon";
+import { getSession } from "@/server/policies/authorization";
 
 const CHECKOUT_RATE_LIMIT = { limit: 10, windowMs: 10 * 60_000 };
 
@@ -71,6 +73,26 @@ export async function POST(request: Request) {
       input.countryCode,
       giftBoxLines,
     );
+    // Re-validate any coupon server-side against the freshly-priced subtotal.
+    // The browser's claimed discount is never trusted.
+    let appliedCoupon: { code: string; discountCents: number } | null = null;
+    if (input.couponCode) {
+      const resolved = await resolveCoupon(
+        input.couponCode,
+        calculation.subtotalCents,
+      );
+      if (!resolved.ok) return fail("COUPON_INVALID", resolved.reason, 400);
+      calculation.discountCents = resolved.discountCents;
+      if (resolved.freeShipping) calculation.shippingCents = 0;
+      calculation.totalCents =
+        calculation.subtotalCents -
+        calculation.discountCents +
+        calculation.shippingCents;
+      appliedCoupon = {
+        code: resolved.code,
+        discountCents: resolved.discountCents,
+      };
+    }
     // Every physical variant that ships — standard lines plus gift-box
     // contents — must be published and gets one aggregated reservation.
     const reservationNeeds = new Map<string, number>();
@@ -107,13 +129,19 @@ export async function POST(request: Request) {
     const accessTokenHash = createHash("sha256")
       .update(accessToken)
       .digest("hex");
+    // Link the order to the buyer when they are signed in, so it shows up in
+    // their account order history. Guests stay null and rely on the access
+    // token in the confirmation URL instead.
+    const authSession = await getSession();
     // `number` is assigned by the database sequence — see schema default.
     const order = await db.$transaction(
       async (tx) => {
         const created = await tx.order.create({
           data: {
+            userId: authSession?.user.id ?? null,
             email: input.email,
             locale: input.locale,
+            couponCode: appliedCoupon?.code ?? null,
             subtotalCents: calculation.subtotalCents,
             discountCents: calculation.discountCents,
             shippingCents: calculation.shippingCents,
@@ -245,11 +273,52 @@ export async function POST(request: Request) {
                 },
               },
             })),
+            // Shipping is billed as its own line so Stripe charges exactly the
+            // order total. Omitted when free (subtotal threshold or a free-
+            // shipping coupon set shippingCents to 0 above).
+            ...(calculation.shippingCents > 0
+              ? [
+                  {
+                    quantity: 1,
+                    price_data: {
+                      currency: "eur",
+                      unit_amount: calculation.shippingCents,
+                      product_data: {
+                        name:
+                          input.locale === "de"
+                            ? "Versand – Standard Deutschland"
+                            : "Shipping – Germany standard",
+                      },
+                    },
+                  },
+                ]
+              : []),
           ],
+          // A one-off Stripe coupon carries the discount onto the payment and
+          // the Stripe receipt. A fixed amount_off reduces the order total by
+          // the same cents regardless of how Stripe spreads it across lines,
+          // so the charged total still matches the order.
+          ...(appliedCoupon && appliedCoupon.discountCents > 0
+            ? {
+                discounts: [
+                  {
+                    coupon: (
+                      await getStripe().coupons.create({
+                        amount_off: appliedCoupon.discountCents,
+                        currency: "eur",
+                        duration: "once",
+                        name: `Coupon ${appliedCoupon.code}`,
+                      })
+                    ).id,
+                  },
+                ],
+              }
+            : {}),
           metadata: {
             orderId: order.id,
             orderNumber: order.number,
             correlationId,
+            couponCode: appliedCoupon?.code ?? "",
           },
           success_url: `${env.NEXT_PUBLIC_SITE_URL}/${input.locale}/order/success?order=${order.number}&access=${accessToken}&session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${env.NEXT_PUBLIC_SITE_URL}/${input.locale}/order/cancelled?order=${order.number}`,

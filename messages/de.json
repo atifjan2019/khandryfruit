@@ -1,7 +1,6 @@
 {
   "nav": {
     "shop": "Shop",
-    "bestsellers": "Bestseller",
     "giftBoxes": "Geschenkboxen",
     "wholesale": "Großhandel",
     "story": "Unsere Geschichte",
@@ -328,7 +327,10 @@
       "backToCatalogue": "Alle Geschenkboxen",
       "priceNote": "Preis inkl. MwSt., soweit anwendbar, zzgl. Versand.",
       "customise": "Diese Box anpassen",
-      "customiseHint": "Öffnet den Konfigurator mit diesen Produkten bereits ausgewählt – Artikel tauschen, Größe ändern oder ergänzen."
+      "customiseHint": "Verpackung wählen, Artikel tauschen oder Größe ändern und in den Warenkorb legen.",
+      "customiseBack": "Zurück zur Standardbox",
+      "customiseHeading": "{name} anpassen",
+      "customiseLead": "Artikel tauschen, Boxgröße ändern, Verpackung wählen und eine Nachricht hinzufügen. Die Preise aktualisieren sich live und werden auf unserem Server geprüft."
     },
     "empty": {
       "title": "Noch keine Geschenkboxen verfügbar",
@@ -400,6 +402,8 @@
     "title": "Kontakt",
     "lead": "Ob Frage zu Ihrer Bestellung, zu unseren Produkten oder eine Handelsanfrage – wir helfen gerne weiter, auf Deutsch oder Englisch.",
     "channels": {
+      "title": "Direkt erreichen",
+      "lead": "Lieber sprechen? Nutzen Sie einen der Kanäle unten – wir antworten auf Deutsch oder Englisch.",
       "phoneTitle": "Telefon",
       "whatsappTitle": "WhatsApp",
       "whatsappCta": "WhatsApp-Chat starten",
@@ -498,7 +502,7 @@
   "emails": {
     "footer": "Khan Dry Fruit · Duisburg · Bei Fragen antworten Sie einfach auf diese E-Mail.",
     "wholesaleReceived": {
-      "subject": "Ihre Großhandelsbewerbung ist bei uns eingegangen",
+      "subject": "Ihre Großhandelsbewerbung ist bei uns eingegangen – Referenz {reference}",
       "greeting": "Guten Tag {name},",
       "intro": "vielen Dank für Ihr Interesse an einem Handelskonto bei Khan Dry Fruit. Ihre Bewerbung für {company} ist bei uns eingegangen und wird persönlich geprüft.",
       "timeline": "In der Regel hören Sie innerhalb weniger Werktage von uns. Falls wir weitere Informationen benötigen, melden wir uns über Ihren bevorzugten Kontaktweg.",
@@ -509,6 +513,8 @@
     "wholesaleAdmin": {
       "subject": "Neue Großhandelsbewerbung: {company}",
       "intro": "Eine neue Großhandelsbewerbung wurde eingereicht.",
+      "idLabel": "Bewerbungs-ID",
+      "openAdmin": "Bewerbung im Adminbereich öffnen →",
       "action": "Prüfen Sie sie im Adminbereich unter Großhandel."
     },
     "contactReceived": {
@@ -522,6 +528,8 @@
     "contactAdmin": {
       "subject": "Neue Kontaktanfrage: {subject}",
       "intro": "Eine neue Kontaktanfrage wurde eingereicht.",
+      "idLabel": "Anfrage-ID",
+      "openAdmin": "Anfrage im Adminbereich öffnen →",
       "action": "Die Details finden Sie im Adminbereich."
     },
     "orderStatus": {

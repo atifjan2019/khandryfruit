@@ -53,75 +53,49 @@ export default async function ContactPage({
   const whatsappHref = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
     t("channels.whatsappMessage"),
   )}`;
+  const channels = [
+    {
+      key: "phone",
+      icon: Phone,
+      title: t("channels.phoneTitle"),
+      href: `tel:${siteConfig.phoneHref}`,
+      value: siteConfig.phoneDisplay,
+    },
+    {
+      key: "whatsapp",
+      icon: MessageCircle,
+      title: t("channels.whatsappTitle"),
+      href: whatsappHref,
+      value: t("channels.whatsappCta"),
+      external: true,
+      aria: t("channels.whatsappAria"),
+    },
+    {
+      key: "email",
+      icon: Mail,
+      title: t("channels.emailTitle"),
+      href: emailConfigured ? `mailto:${env.ADMIN_EMAIL}` : undefined,
+      value: emailConfigured ? env.ADMIN_EMAIL : t("channels.emailPending"),
+      note: emailConfigured ? t("channels.emailNote") : undefined,
+      pending: !emailConfigured,
+    },
+    {
+      key: "social",
+      icon: AtSign,
+      title: t("channels.socialTitle"),
+      value: siteConfig.socialHandle,
+    },
+  ];
+
   return (
-    <div className="page-shell container">
-      <header className="page-hero">
+    <div className="page-shell contact-page container">
+      <header className="page-hero contact-hero">
         <p className="eyebrow">{t("eyebrow")}</p>
         <h1>{t("title")}</h1>
         <p className="lead-copy">{t("lead")}</p>
       </header>
 
-      <section>
-        <div className="contact-channels">
-          <div className="channel-card">
-            <h3>
-              <Phone size={18} aria-hidden="true" /> {t("channels.phoneTitle")}
-            </h3>
-            <a href={`tel:${siteConfig.phoneHref}`}>
-              {siteConfig.phoneDisplay}
-            </a>
-          </div>
-          <div className="channel-card">
-            <h3>
-              <MessageCircle size={18} aria-hidden="true" />{" "}
-              {t("channels.whatsappTitle")}
-            </h3>
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={t("channels.whatsappAria")}
-            >
-              {t("channels.whatsappCta")}
-            </a>
-          </div>
-          <div className="channel-card">
-            <h3>
-              <Mail size={18} aria-hidden="true" /> {t("channels.emailTitle")}
-            </h3>
-            {emailConfigured ? (
-              <>
-                <a href={`mailto:${env.ADMIN_EMAIL}`}>{env.ADMIN_EMAIL}</a>
-                <small>{t("channels.emailNote")}</small>
-              </>
-            ) : (
-              <p className="pending-note">{t("channels.emailPending")}</p>
-            )}
-          </div>
-          <div className="channel-card">
-            <h3>
-              <MapPin size={18} aria-hidden="true" />{" "}
-              {t("channels.addressTitle")}
-            </h3>
-            <p className="pending-note">{t("channels.addressPending")}</p>
-          </div>
-          <div className="channel-card">
-            <h3>
-              <Clock size={18} aria-hidden="true" /> {t("channels.hoursTitle")}
-            </h3>
-            <p className="pending-note">{t("channels.hoursPending")}</p>
-          </div>
-          <div className="channel-card">
-            <h3>
-              <AtSign size={18} aria-hidden="true" />{" "}
-              {t("channels.socialTitle")}
-            </h3>
-            <p>{siteConfig.socialHandle}</p>
-          </div>
-        </div>
-      </section>
-
-      <section>
+      <section className="contact-options">
         <div className="section-heading">
           <h2>{t("options.title")}</h2>
         </div>
@@ -148,11 +122,80 @@ export default async function ContactPage({
         </div>
       </section>
 
-      <section>
-        <h2>{t("formTitle")}</h2>
-        <p>{t("formLead")}</p>
-        <p className="muted">{common("requiredFieldsNote")}</p>
-        <ContactForm locale={locale} />
+      <section className="contact-layout">
+        <aside className="contact-info">
+          <div className="contact-info-head">
+            <h2>{t("channels.title")}</h2>
+            <p>{t("channels.lead")}</p>
+          </div>
+          <ul className="contact-info-list">
+            {channels.map((channel) => {
+              const Icon = channel.icon;
+              return (
+                <li className="contact-info-row" key={channel.key}>
+                  <span className="contact-info-icon" aria-hidden="true">
+                    <Icon size={18} />
+                  </span>
+                  <div className="contact-info-body">
+                    <span className="contact-info-label">{channel.title}</span>
+                    {channel.href ? (
+                      <a
+                        href={channel.href}
+                        {...(channel.external
+                          ? {
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                              "aria-label": channel.aria,
+                            }
+                          : {})}
+                      >
+                        {channel.value}
+                      </a>
+                    ) : channel.pending ? (
+                      <small className="contact-info-pending">
+                        {channel.value}
+                      </small>
+                    ) : (
+                      <span className="contact-info-value">
+                        {channel.value}
+                      </span>
+                    )}
+                    {channel.note && (
+                      <small className="contact-info-note">
+                        {channel.note}
+                      </small>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="contact-info-pending-group">
+            <div className="contact-pending-item">
+              <MapPin size={16} aria-hidden="true" />
+              <div>
+                <strong>{t("channels.addressTitle")}</strong>
+                <span>{t("channels.addressPending")}</span>
+              </div>
+            </div>
+            <div className="contact-pending-item">
+              <Clock size={16} aria-hidden="true" />
+              <div>
+                <strong>{t("channels.hoursTitle")}</strong>
+                <span>{t("channels.hoursPending")}</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div className="contact-form-card">
+          <div className="contact-form-head">
+            <h2>{t("formTitle")}</h2>
+            <p>{t("formLead")}</p>
+            <p className="muted">{common("requiredFieldsNote")}</p>
+          </div>
+          <ContactForm locale={locale} />
+        </div>
       </section>
     </div>
   );

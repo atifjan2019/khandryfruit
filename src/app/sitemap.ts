@@ -4,10 +4,8 @@ import { getProducts } from "@/server/repositories/catalogue";
 const paths = [
   "",
   "/shop",
-  "/bestsellers",
   "/our-story",
   "/sourcing",
-  "/recipes",
   "/blog",
   "/faq",
   "/shipping",

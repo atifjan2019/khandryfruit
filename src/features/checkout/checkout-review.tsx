@@ -1,12 +1,18 @@
 "use client";
 
-import { useState, type InputHTMLAttributes } from "react";
-import { LockKeyhole } from "lucide-react";
+import { useEffect, useState, type InputHTMLAttributes } from "react";
+import { LockKeyhole, Tag, X } from "lucide-react";
 import Image from "next/image";
 import type { AppLocale } from "@/config/site";
 import { useCart } from "@/features/cart/store";
 import { formatMoney } from "@/lib/commerce/money";
 import { localiseCheckoutError } from "@/lib/i18n/content";
+import {
+  previewCartAction,
+  previewCouponAction,
+  type CartPreview,
+  type CouponPreview,
+} from "@/server/actions/checkout";
 
 function Field({
   id,
@@ -54,12 +60,21 @@ type AddressField = keyof typeof emptyAddress;
 export function CheckoutReview({ locale }: { locale: AppLocale }) {
   const items = useCart((state) => state.items);
   const giftBoxes = useCart((state) => state.giftBoxes);
+  const removeGiftBox = useCart((state) => state.removeGiftBox);
   const de = locale === "de";
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState(emptyAddress);
   const [accepted, setAccepted] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [couponPending, setCouponPending] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  // The applied coupon; totals come from the server so the client never
+  // computes a discount itself.
+  const [coupon, setCoupon] = useState<(CouponPreview & { ok: true }) | null>(
+    null,
+  );
   const setField = (field: AddressField) => (value: string) =>
     setAddress((current) => ({ ...current, [field]: value }));
   // Mirrors checkoutAddressSchema so the button only submits shippable input.
@@ -70,6 +85,98 @@ export function CheckoutReview({ locale }: { locale: AppLocale }) {
     /^\d{5}$/.test(address.postalCode.trim()) &&
     address.city.trim().length >= 2 &&
     (!address.phone.trim() || /^\+[1-9]\d{7,14}$/.test(address.phone.trim()));
+  // Client-side estimate shown instantly; the server re-prices for real below.
+  const itemsSubtotal =
+    items.reduce((sum, item) => sum + item.unitPriceCents * item.quantity, 0) +
+    giftBoxes.reduce((sum, box) => sum + box.totalCents * box.quantity, 0);
+
+  const cartPayload = () => ({
+    lines: items.map(({ variantId, quantity }) => ({ variantId, quantity })),
+    giftBoxes: giftBoxes.map(({ configurationId, quantity }) => ({
+      configurationId,
+      quantity,
+    })),
+  });
+
+  // Authoritative shipping / VAT / total (same pricing as the checkout route),
+  // used for the no-coupon breakdown; the coupon preview supersedes it.
+  const [priced, setPriced] = useState<(CartPreview & { ok: true }) | null>(
+    null,
+  );
+  useEffect(() => {
+    // Empty cart renders the empty state below, so a stale price is never shown.
+    if (!items.length && !giftBoxes.length) return;
+    let active = true;
+    previewCartAction({
+      locale,
+      lines: items.map(({ variantId, quantity }) => ({ variantId, quantity })),
+      giftBoxes: giftBoxes.map(({ configurationId, quantity }) => ({
+        configurationId,
+        quantity,
+      })),
+    })
+      .then((result) => {
+        if (!active) return;
+        // Prune gift boxes the server can no longer price so they can't block
+        // checkout; removing them re-runs this effect to price what remains.
+        if (result.unavailableGiftBoxIds.length) {
+          result.unavailableGiftBoxIds.forEach(removeGiftBox);
+          return;
+        }
+        setPriced(result.ok ? result : null);
+      })
+      .catch(() => {
+        if (active) setPriced(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [items, giftBoxes, locale, removeGiftBox]);
+
+  // Coupon preview wins (it reflects the discount); otherwise the server cart
+  // price; otherwise the instant client estimate.
+  const summarySubtotalCents =
+    coupon?.subtotalCents ?? priced?.subtotalCents ?? itemsSubtotal;
+  const summaryShippingCents = coupon
+    ? coupon.shippingCents
+    : (priced?.shippingCents ?? null);
+  const summaryTotalCents =
+    coupon?.totalCents ?? priced?.totalCents ?? itemsSubtotal;
+  const summaryHasRealTotal = Boolean(coupon || priced);
+
+  const applyCoupon = async () => {
+    const code = couponCode.trim();
+    if (!code) return;
+    setCouponPending(true);
+    setCouponError("");
+    try {
+      const result = await previewCouponAction({
+        locale,
+        code,
+        ...cartPayload(),
+      });
+      if (result.ok) {
+        setCoupon(result);
+        setCouponError("");
+      } else {
+        setCoupon(null);
+        setCouponError(result.reason);
+      }
+    } catch {
+      setCouponError(
+        de ? "Code konnte nicht geprüft werden." : "Could not check the code.",
+      );
+    } finally {
+      setCouponPending(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
   const startCheckout = async () => {
     setPending(true);
     setError("");
@@ -84,14 +191,8 @@ export function CheckoutReview({ locale }: { locale: AppLocale }) {
           shippingAddress: address,
           shippingMethodId: "de-standard",
           legalAccepted: accepted,
-          lines: items.map(({ variantId, quantity }) => ({
-            variantId,
-            quantity,
-          })),
-          giftBoxes: giftBoxes.map(({ configurationId, quantity }) => ({
-            configurationId,
-            quantity,
-          })),
+          ...(coupon ? { couponCode: coupon.code } : {}),
+          ...cartPayload(),
         }),
       });
       const result = (await response.json()) as {
@@ -223,6 +324,73 @@ export function CheckoutReview({ locale }: { locale: AppLocale }) {
           </span>
           <b>{de ? "berechnet" : "calculated"}</b>
         </div>
+        <h2>{de ? "Gutschein" : "Coupon"}</h2>
+        <div className="coupon-box">
+          {coupon ? (
+            <div className="coupon-applied">
+              <span>
+                <Tag size={16} /> <strong>{coupon.code}</strong>
+                <small>
+                  {coupon.freeShipping
+                    ? de
+                      ? "Kostenloser Versand"
+                      : "Free shipping"
+                    : `−${formatMoney(coupon.discountCents, locale)}`}
+                </small>
+              </span>
+              <button
+                type="button"
+                className="coupon-remove"
+                onClick={removeCoupon}
+                aria-label={de ? "Gutschein entfernen" : "Remove coupon"}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div className="coupon-entry">
+              <Tag size={17} className="coupon-icon" aria-hidden="true" />
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(event) =>
+                  setCouponCode(event.target.value.toUpperCase())
+                }
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applyCoupon();
+                  }
+                }}
+                placeholder={
+                  de ? "Gutscheincode eingeben" : "Enter coupon code"
+                }
+                autoComplete="off"
+                maxLength={32}
+              />
+              <button
+                type="button"
+                className="button secondary"
+                onClick={applyCoupon}
+                disabled={couponPending || !couponCode.trim()}
+              >
+                {couponPending
+                  ? de
+                    ? "Prüfen…"
+                    : "Checking…"
+                  : de
+                    ? "Anwenden"
+                    : "Apply"}
+              </button>
+            </div>
+          )}
+          {couponError && (
+            <p className="coupon-error" role="alert">
+              {couponError}
+            </p>
+          )}
+        </div>
+
         <label className="consent-row">
           <input
             type="checkbox"
@@ -284,10 +452,64 @@ export function CheckoutReview({ locale }: { locale: AppLocale }) {
             </strong>
           </div>
         ))}
-        <p className="muted">
+
+        <dl className="review-summary">
+          <div>
+            <dt>{de ? "Zwischensumme" : "Subtotal"}</dt>
+            <dd>{formatMoney(summarySubtotalCents, locale)}</dd>
+          </div>
+          {coupon && (
+            <div className="review-discount">
+              <dt>
+                {de ? "Rabatt" : "Discount"} · {coupon.code}
+              </dt>
+              <dd>
+                {coupon.freeShipping && coupon.discountCents === 0
+                  ? de
+                    ? "Gratis Versand"
+                    : "Free shipping"
+                  : `−${formatMoney(coupon.discountCents, locale)}`}
+              </dd>
+            </div>
+          )}
+          <div>
+            <dt>{de ? "Versand" : "Shipping"}</dt>
+            <dd>
+              {summaryShippingCents === null
+                ? de
+                  ? "Wird berechnet…"
+                  : "Calculating…"
+                : summaryShippingCents === 0
+                  ? de
+                    ? "Kostenlos"
+                    : "Free"
+                  : formatMoney(summaryShippingCents, locale)}
+            </dd>
+          </div>
+          {priced && (
+            <div>
+              <dt>{de ? "Enthaltene MwSt." : "Included VAT"}</dt>
+              <dd>{formatMoney(priced.taxCents, locale)}</dd>
+            </div>
+          )}
+          <div className="review-total">
+            <dt>
+              {summaryHasRealTotal
+                ? de
+                  ? "Gesamt"
+                  : "Total"
+                : de
+                  ? "Vorläufig gesamt"
+                  : "Estimated total"}
+            </dt>
+            <dd>{formatMoney(summaryTotalCents, locale)}</dd>
+          </div>
+        </dl>
+
+        <p className="muted small">
           {de
-            ? "Der endgültige Gesamtbetrag erscheint nach der serverseitigen Prüfung."
-            : "The final total appears after secure server validation."}
+            ? "Alle Beträge werden vor der Zahlung serverseitig geprüft."
+            : "All amounts are verified on the server before payment."}
         </p>
       </aside>
     </div>

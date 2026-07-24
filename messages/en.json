@@ -1,7 +1,6 @@
 {
   "nav": {
     "shop": "Shop",
-    "bestsellers": "Bestsellers",
     "giftBoxes": "Gift Boxes",
     "wholesale": "Wholesale",
     "story": "Our Story",
@@ -328,7 +327,10 @@
       "backToCatalogue": "All gift boxes",
       "priceNote": "Price incl. VAT where applicable, plus shipping.",
       "customise": "Customise this box",
-      "customiseHint": "Opens the builder with these products already selected — swap items, change the size or add more."
+      "customiseHint": "Pick your packaging, swap items or change the size, then add to your cart.",
+      "customiseBack": "Back to the standard box",
+      "customiseHeading": "Customise {name}",
+      "customiseLead": "Swap items, change the box size, choose packaging and add a message. Prices update as you go and are verified on our server."
     },
     "empty": {
       "title": "No gift boxes available yet",
@@ -400,6 +402,8 @@
     "title": "Contact us",
     "lead": "Whether it's a question about your order, our products or a trade enquiry – we're happy to help, in German or English.",
     "channels": {
+      "title": "Reach us directly",
+      "lead": "Prefer to talk? Use any of the channels below — we answer in German or English.",
       "phoneTitle": "Phone",
       "whatsappTitle": "WhatsApp",
       "whatsappCta": "Start WhatsApp chat",
@@ -498,7 +502,7 @@
   "emails": {
     "footer": "Khan Dry Fruit · Duisburg · Simply reply to this email if you have questions.",
     "wholesaleReceived": {
-      "subject": "We have received your wholesale application",
+      "subject": "We have received your wholesale application – reference {reference}",
       "greeting": "Hello {name},",
       "intro": "thank you for your interest in a trade account with Khan Dry Fruit. We have received your application for {company} and will review it personally.",
       "timeline": "You will normally hear from us within a few working days. If we need further information, we will contact you via your preferred contact method.",
@@ -509,6 +513,8 @@
     "wholesaleAdmin": {
       "subject": "New wholesale application: {company}",
       "intro": "A new wholesale application has been submitted.",
+      "idLabel": "Application ID",
+      "openAdmin": "Open application in the admin area →",
       "action": "Review it in the admin area under Wholesale."
     },
     "contactReceived": {
@@ -522,6 +528,8 @@
     "contactAdmin": {
       "subject": "New contact enquiry: {subject}",
       "intro": "A new contact enquiry has been submitted.",
+      "idLabel": "Enquiry ID",
+      "openAdmin": "Open enquiry in the admin area →",
       "action": "Details are available in the admin area."
     },
     "orderStatus": {

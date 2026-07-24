@@ -314,3 +314,35 @@ describe("new order admin email", () => {
     expect(mail.text).not.toContain("emails.order");
   });
 });
+
+describe("order email discount", () => {
+  it("labels the discount with the coupon code when present", () => {
+    const mail = buildOrderReceiptEmail({
+      locale: "en",
+      to: "a@b.c",
+      customerName: "Alex",
+      orderNumber: "#0001",
+      orderDate: "",
+      lines: LINES,
+      totals: { ...TOTALS, discount: "€5.00", couponCode: "DEV10" },
+      deliveryAddress: ADDRESS,
+    });
+    expect(mail.text).toContain("Discount (DEV10)");
+    expect(mail.text).toContain("−€5.00");
+  });
+
+  it("omits the code when the coupon is absent", () => {
+    const mail = buildOrderReceiptEmail({
+      locale: "en",
+      to: "a@b.c",
+      customerName: "Alex",
+      orderNumber: "#0001",
+      orderDate: "",
+      lines: LINES,
+      totals: { ...TOTALS, discount: "€5.00" },
+      deliveryAddress: ADDRESS,
+    });
+    expect(mail.text).toContain("Discount");
+    expect(mail.text).not.toContain("Discount (");
+  });
+});

@@ -8,6 +8,7 @@ import {
   GiftBoxBuilder,
   type BuilderInitialState,
 } from "@/features/gift-boxes/builder";
+import { initialStateFromGiftBox } from "@/features/gift-boxes/prefill";
 import { db } from "@/lib/db/client";
 import { env } from "@/lib/env";
 import {
@@ -55,31 +56,7 @@ async function loadStateFromGiftBox(
     getGiftBoxBySlug(locale, slug),
     getBuilderTemplates(locale),
   ]);
-  if (!box?.items.length || !templates.length) return null;
-
-  const unitsNeeded = box.items.reduce((sum, item) => sum + item.quantity, 0);
-  const bySize = templates.find(
-    (template) => template.sizeName === box.sizeName,
-  );
-  const template =
-    bySize && bySize.capacityUnits >= unitsNeeded
-      ? bySize
-      : [...templates]
-          .sort((a, b) => a.capacityUnits - b.capacityUnits)
-          .find((entry) => entry.capacityUnits >= unitsNeeded);
-  if (!template) return null;
-
-  return {
-    replaceConfigurationId: null,
-    giftBoxId: template.id,
-    packagingOptionId: null,
-    occasion: null,
-    giftMessage: "",
-    items: box.items.map((item) => ({
-      variantId: item.variantId,
-      quantity: item.quantity,
-    })),
-  };
+  return box ? initialStateFromGiftBox(box, templates) : null;
 }
 
 async function loadInitialState(

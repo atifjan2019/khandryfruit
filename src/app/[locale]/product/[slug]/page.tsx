@@ -126,7 +126,7 @@ export default async function ProductPage({
               href="https://wa.me/4917621809185"
               target="_blank"
               rel="noreferrer"
-            >
+            > 
               <MessageCircle size={17} /> {t("askQuestion")}
             </a>
           </div>

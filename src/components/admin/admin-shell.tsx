@@ -46,10 +46,8 @@ const nav: Record<
   "gift-boxes": { label: "Gift boxes", icon: Gift },
   packaging: { label: "Packaging", icon: PackageOpen },
   coupons: { label: "Coupons", icon: TicketPercent },
-  reviews: { label: "Reviews", icon: MessageSquareText },
   content: { label: "Content", icon: FileText },
   blog: { label: "Blog", icon: FileText },
-  recipes: { label: "Recipes", icon: FileText },
   faqs: { label: "FAQs", icon: MessageSquareText },
   legal: { label: "Legal", icon: FileText },
   settings: { label: "Settings", icon: Settings },
@@ -59,8 +57,8 @@ const nav: Record<
 };
 
 // High-frequency operational items only. Structural, publishing and
-// configuration areas (categories, packaging, coupons, content, blog, recipes,
-// legal, FAQs, media, audit logs, system health) are reachable from the
+// configuration areas (categories, packaging, coupons, content, blog, legal,
+// FAQs, media, audit logs, system health) are reachable from the
 // Settings page instead of the sidebar. Their routes are unchanged, so
 // existing links and bookmarks still resolve.
 const navGroups: Array<{
@@ -84,7 +82,7 @@ const navGroups: Array<{
   },
   {
     label: "Customers",
-    areas: ["customers", "wholesale", "contact-enquiries", "reviews"],
+    areas: ["customers", "wholesale", "contact-enquiries"],
   },
 ];
 

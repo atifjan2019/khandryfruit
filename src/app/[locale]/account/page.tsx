@@ -114,36 +114,43 @@ export default async function Page({
           locale={locale}
           enabled={Boolean(session.user.twoFactorEnabled)}
         />
-        {[
+        {(
           [
-            de ? "Bestellungen" : "Orders",
-            de
-              ? "Bestellverlauf und Status ansehen"
-              : "View order history and status",
-          ],
-          [
-            de ? "Adressen" : "Addresses",
-            de
-              ? "Liefer- und Rechnungsadressen verwalten"
-              : "Manage shipping and billing addresses",
-          ],
-          [
-            de ? "Profil & Sicherheit" : "Profile & security",
-            de
-              ? "Kontodaten und Passwort verwalten"
-              : "Manage profile and password",
-          ],
-          [
-            de ? "Datenschutz" : "Privacy",
-            de
-              ? "Datenexport oder Löschung anfragen"
-              : "Request export or deletion",
-          ],
-        ].map(([title, body]) => (
+            {
+              title: de ? "Bestellungen" : "Orders",
+              body: de
+                ? "Bestellverlauf und Status ansehen"
+                : "View order history and status",
+              href: "/account/orders",
+            },
+            {
+              title: de ? "Adressen" : "Addresses",
+              body: de
+                ? "Liefer- und Rechnungsadressen verwalten"
+                : "Manage shipping and billing addresses",
+            },
+            {
+              title: de ? "Profil & Sicherheit" : "Profile & security",
+              body: de
+                ? "Kontodaten und Passwort verwalten"
+                : "Manage profile and password",
+            },
+            {
+              title: de ? "Datenschutz" : "Privacy",
+              body: de
+                ? "Datenexport oder Löschung anfragen"
+                : "Request export or deletion",
+            },
+          ] as Array<{ title: string; body: string; href?: string }>
+        ).map(({ title, body, href }) => (
           <section className="account-card" key={title}>
             <h2>{title}</h2>
             <p>{body}</p>
-            <button className="text-link">{de ? "Öffnen" : "Open"} →</button>
+            {href && (
+              <Link className="text-link" href={href} locale={locale}>
+                {de ? "Öffnen" : "Open"} →
+              </Link>
+            )}
           </section>
         ))}
         <WholesaleStatusCard

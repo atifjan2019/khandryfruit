@@ -11,11 +11,20 @@ export function AdminForm({
   children,
   submitLabel = "Save changes",
   className = "admin-form",
+  onSuccess,
+  confirmMessage,
+  submitClassName = "button",
 }: {
   action: (formData: FormData) => Promise<Result | void>;
   children: React.ReactNode;
   submitLabel?: string;
   className?: string;
+  /** Runs after a successful save — e.g. to close a modal. */
+  onSuccess?: () => void;
+  /** When set, ask for confirmation before submitting (e.g. destructive ops). */
+  confirmMessage?: string;
+  /** Overrides the submit button class, e.g. for a danger action. */
+  submitClassName?: string;
 }) {
   const [pending, setPending] = useState(false);
   const [dirty, setDirty] = useState(false);
@@ -32,6 +41,7 @@ export function AdminForm({
       className={className}
       onChange={() => setDirty(true)}
       action={async (formData) => {
+        if (confirmMessage && !window.confirm(confirmMessage)) return;
         setPending(true);
         setResult(undefined);
         const response = await action(formData);
@@ -40,6 +50,7 @@ export function AdminForm({
         if (response?.success) {
           setDirty(false);
           router.refresh();
+          onSuccess?.();
         }
       }}
     >
@@ -67,7 +78,7 @@ export function AdminForm({
           Changes saved successfully.
         </div>
       )}
-      <button className="button" type="submit" disabled={pending}>
+      <button className={submitClassName} type="submit" disabled={pending}>
         {pending ? "Saving…" : submitLabel}
       </button>
     </form>

@@ -47,3 +47,52 @@ export async function getOrderForAccessToken(
 export type CustomerOrder = NonNullable<
   Awaited<ReturnType<typeof getOrderForAccessToken>>
 >;
+
+/**
+ * Orders belonging to a signed-in customer, newest first, for the account
+ * order-history list. Scoped by userId, so it only ever returns the caller's
+ * own orders.
+ */
+export async function getOrdersForUser(userId: string) {
+  if (!process.env.DATABASE_URL) return [];
+  return db.order.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      number: true,
+      createdAt: true,
+      status: true,
+      paymentStatus: true,
+      totalCents: true,
+      currency: true,
+      _count: { select: { items: true, giftBoxOrderItems: true } },
+    },
+  });
+}
+
+export type CustomerOrderSummary = Awaited<
+  ReturnType<typeof getOrdersForUser>
+>[number];
+
+/**
+ * A single order for the signed-in customer, or null when it does not belong
+ * to them. The ownership check (order.userId === userId) is what lets the
+ * account order page trust the order number taken from the URL.
+ */
+export async function getOrderForUser(userId: string, orderNumber: string) {
+  if (!orderNumber) return null;
+  if (!process.env.DATABASE_URL) return null;
+  const order = await db.order.findUnique({
+    where: { number: orderNumber },
+    include: {
+      items: true,
+      addresses: true,
+      giftBoxOrderItems: true,
+      payments: { include: { refunds: true } },
+      shipments: true,
+    },
+  });
+  if (!order || order.userId !== userId) return null;
+  return order;
+}

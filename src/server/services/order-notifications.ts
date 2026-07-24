@@ -129,7 +129,10 @@ export async function sendOrderConfirmationEmails(orderId: string) {
     const totals = {
       subtotal: money(order.subtotalCents),
       ...(order.discountCents > 0
-        ? { discount: money(order.discountCents) }
+        ? {
+            discount: money(order.discountCents),
+            ...(order.couponCode ? { couponCode: order.couponCode } : {}),
+          }
         : {}),
       shipping:
         order.shippingCents === 0
